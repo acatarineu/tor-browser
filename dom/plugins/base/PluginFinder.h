@@ -89,6 +89,7 @@ class PluginFinder final : public nsIRunnable, public nsIAsyncShutdownBlocker {
 
   nsresult DeterminePluginDirs();
 
+  bool GhettoBlacklist(nsIFile* pluginFile);
   nsresult ScanPluginsDirectory(nsIFile* aPluginsDir, bool* aPluginsChanged);
   nsresult FindPlugins();
 
