@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if ! [[ -z $(git status -s) ]]; then
+    echo "Please stash or commit your local repo changes (including untracked files)"
+    exit 1
+fi
+
+new_branch_name=tmp_$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 16 | head -n 1)
+
+git checkout -b "$new_branch_name"
+
+first_tb_commit=$(git log -500 --format='oneline' | grep "TB3: Tor Browser's official .mozconfigs." \
+                                        | head -1 | cut -d ' ' -f 1)
+
+# Squash all commits
+git reset --soft "$first_tb_commit"; git add -A; git commit --amend -m "Tor Browser squashed patches"
+
+# Remove torbutton submodule and commit the folder directly
+
+# read -p "First TB commit? ($first_tb_commit):" user_first_commit
+# first_tb_commit=${user_first_commit:-$first_tb_commit}
+
+# read -p "Last TB commit? (HEAD):" user_last_commit
+# last_tb_commit=${user_last_commit:-$(git rev-parse HEAD)}
+
+# new_branch_name=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 16 | head -n 1)
+# read -p "New branch name? ($new_branch_name):" user_new_branch_name
+# new_branch_name=${user_new_branch_name:-$new_branch_name}
+
+# read -p "Where to cherry-pick? ($first_tb_commit~1):" base_commit
+# base_commit=${base_commit:-"$first_tb_commit~1"}
+
+
+# read -p "Will cherry-pick $first_tb_commit..$last_tb_commit onto $base_commit, in a new branch called $new_branch_name name. Is that correct (n)?"
+# if [[ $REPLY =~ ^[Yy]$ ]]
+# then
+#     git checkout "$base_commit" -b "$new_branch_name"
+#     git cherry-pick "$first_tb_commit"~1.."$last_tb_commit"
+#     # for commit in $(git rev-list --reverse  "$first_tb_commit".."$last_tb_commit")
+#     # do
+#     #     git cherry-pick "$commit"
+#     # done
+# fi
