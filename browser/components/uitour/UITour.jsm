@@ -63,6 +63,28 @@ ChromeUtils.defineModuleGetter(
 // See LOG_LEVELS in Console.jsm. Common examples: "All", "Info", "Warn", & "Error".
 const PREF_LOG_LEVEL = "browser.uitour.loglevel";
 
+const TOR_BROWSER_PAGE_ACTIONS_ALLOWED = new Set([
+  "showInfo",  // restricted to TOR_BROWSER_TARGETS_ALLOWED
+  "showMenu",  // restricted to TOR_BROWSER_MENUS_ALLOWED
+  "hideMenu",  // restricted to TOR_BROWSER_MENUS_ALLOWED
+  "showHighlight", // restricted to TOR_BROWSER_TARGETS_ALLOWED
+  "hideHighlight", // restricted to TOR_BROWSER_TARGETS_ALLOWED
+  "openPreferences",
+  "closeTab",
+  "torBrowserOpenSecurityLevelPanel",
+]);
+
+const TOR_BROWSER_TARGETS_ALLOWED = new Set([
+  "torBrowser-newIdentityButton",
+  "torBrowser-circuitDisplay",
+  "torBrowser-circuitDisplay-diagram",
+  "torBrowser-circuitDisplay-newCircuitButton",
+]);
+
+const TOR_BROWSER_MENUS_ALLOWED = new Set([
+  "controlCenter",
+]);
+
 const BACKGROUND_PAGE_ACTIONS_ALLOWED = new Set([
   "forceShowReaderIcon",
   "getConfiguration",
@@ -106,6 +128,17 @@ var UITour = {
 
   highlightEffects: ["random", "wobble", "zoom", "color"],
   targets: new Map([
+    ["torBrowser-circuitDisplay", {
+      query: "#identity-icon",
+    }],
+    ["torBrowser-circuitDisplay-diagram",
+      torBrowserCircuitDisplayTarget("circuit-display-nodes")],
+    ["torBrowser-circuitDisplay-newCircuitButton",
+      torBrowserCircuitDisplayTarget("circuit-reload-button")],
+    ["torBrowser-newIdentityButton", {
+      query: "#new-identity-button",
+    }],
+
     [
       "accountStatus",
       {
@@ -353,6 +386,11 @@ var UITour = {
       !BACKGROUND_PAGE_ACTIONS_ALLOWED.has(action)
     ) {
       log.warn("Ignoring disallowed action from a hidden page:", action);
+      return false;
+    }
+
+    if (!TOR_BROWSER_PAGE_ACTIONS_ALLOWED.has(action)) {
+      log.warn("Ignoring disallowed action:", action);
       return false;
     }
 
@@ -690,6 +728,14 @@ var UITour = {
         this.showProtectionReport(window, browser);
         break;
       }
+
+      case "torBrowserOpenSecurityLevelPanel": {
+        let securityLevelButton =
+                      window.document.getElementById("security-level-button");
+        if (securityLevelButton)
+	  securityLevelButton.click();
+        break;
+      }
     }
 
     // For performance reasons, only call initForBrowser if we did something
@@ -870,6 +916,14 @@ var UITour = {
           ["ViewShowing", this.onPageActionPanelSubviewShowing],
         ],
       },
+      {
+        name: "controlCenter",
+        node: aWindow.gIdentityHandler._identityPopup,
+        events: [
+          ["popuphidden", this.onPanelHidden],
+          ["popuphiding", this.onControlCenterHiding],
+        ],
+      },
     ];
     for (let panel of panels) {
       // Ensure the menu panel is hidden and clean up panel listeners after calling hideMenu.
@@ -905,10 +959,7 @@ var UITour = {
 
   // This function is copied to UITourListener.
   isSafeScheme(aURI) {
-    let allowedSchemes = new Set(["https", "about"]);
-    if (!Services.prefs.getBoolPref("browser.uitour.requireSecure")) {
-      allowedSchemes.add("http");
-    }
+    let allowedSchemes = new Set(["about", "https"]);
 
     if (!allowedSchemes.has(aURI.scheme)) {
       log.error("Unsafe scheme:", aURI.scheme);
@@ -957,7 +1008,10 @@ var UITour = {
       return Promise.reject("Invalid target name specified");
     }
 
-    let targetObject = this.targets.get(aTargetName);
+    let targetObject;
+    if (TOR_BROWSER_TARGETS_ALLOWED.has(aTargetName)) {
+      targetObject = this.targets.get(aTargetName);
+    }
     if (!targetObject) {
       log.warn(
         "getTarget: The specified target name is not in the allowed set"
@@ -1432,6 +1486,10 @@ var UITour = {
   },
 
   showMenu(aWindow, aMenuName, aOpenCallback = null, aOptions = {}) {
+    if (!TOR_BROWSER_MENUS_ALLOWED.has(aMenuName)) {
+      return;
+    }
+
     log.debug("showMenu:", aMenuName);
     function openMenuButton(aMenuBtn) {
       if (!aMenuBtn || !aMenuBtn.hasMenu() || aMenuBtn.open) {
@@ -1479,6 +1537,31 @@ var UITour = {
     } else if (aMenuName == "bookmarks") {
       let menuBtn = aWindow.document.getElementById("bookmarks-menu-button");
       openMenuButton(menuBtn);
+    } else if (aMenuName == "controlCenter") {
+      let popup = aWindow.gIdentityHandler._identityPopup;
+
+      // Add the listener even if the panel is already open since it will still
+      // only get registered once even if it was UITour that opened it.
+      popup.addEventListener("popuphiding", this.onControlCenterHiding);
+      popup.addEventListener("popuphidden", this.onPanelHidden);
+
+      popup.setAttribute("noautohide", "true");
+      this.clearAvailableTargetsCache();
+
+      if (popup.state == "open") {
+        if (aOpenCallback) {
+          aOpenCallback();
+        }
+        return;
+      }
+
+      this.recreatePopup(popup);
+
+      // Open the control center
+      if (aOpenCallback) {
+        popup.addEventListener("popupshown", aOpenCallback, { once: true });
+      }
+      aWindow.document.getElementById("identity-box").click();
     } else if (aMenuName == "pocket") {
       let pageAction = PageActions.actionForID("pocket");
       if (!pageAction) {
@@ -1522,6 +1605,9 @@ var UITour = {
     } else if (aMenuName == "bookmarks") {
       let menuBtn = aWindow.document.getElementById("bookmarks-menu-button");
       closeMenuButton(menuBtn);
+    } else if (aMenuName == "controlCenter") {
+      let panel = aWindow.gIdentityHandler._identityPopup;
+      panel.hidePopup();
     } else if (aMenuName == "urlbar") {
       aWindow.gURLBar.view.close();
     } else if (aMenuName == "pageActionPanel") {
@@ -1616,6 +1702,12 @@ var UITour = {
       false,
       UITour.targetIsInPageActionPanel
     );
+  },
+
+  onControlCenterHiding(aEvent) {
+    UITour._hideAnnotationsForPanel(aEvent, true, aTarget => {
+      return aTarget.targetName.startsWith("controlCenter-");
+    });
   },
 
   onPanelHidden(aEvent) {
@@ -2038,6 +2130,20 @@ var UITour = {
     }
   },
 };
+
+function torBrowserCircuitDisplayTarget(aElemID) {
+  return {
+    infoPanelPosition: "rightcenter topleft",
+    query(aDocument) {
+      let popup = aDocument.defaultView.gIdentityHandler._identityPopup;
+      if (popup.state != "open") {
+        return null;
+      }
+      let element = aDocument.getElementById(aElemID);
+      return UITour.isElementVisible(element) ? element : null;
+    },
+  };
+}
 
 UITour.init();
 

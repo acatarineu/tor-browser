@@ -31,12 +31,6 @@ ChromeUtils.defineModuleGetter(
 
 ChromeUtils.defineModuleGetter(
   this,
-  "AboutNewTab",
-  "resource:///modules/AboutNewTab.jsm"
-);
-
-ChromeUtils.defineModuleGetter(
-  this,
   "E10SUtils",
   "resource://gre/modules/E10SUtils.jsm"
 );
@@ -97,19 +91,6 @@ let ACTORS = {
       },
     },
     matches: ["about:logins", "about:logins?*"],
-  },
-
-  AboutNewTab: {
-    child: {
-      moduleURI: "resource:///actors/AboutNewTabChild.jsm",
-      events: {
-        DOMContentLoaded: {},
-      },
-    },
-    // The wildcard on about:newtab is for the ?endpoint query parameter
-    // that is used for snippets debugging.
-    matches: ["about:home", "about:welcome", "about:newtab*"],
-    remoteTypes: ["privilegedabout"],
   },
 
   AboutPlugins: {
@@ -543,6 +524,22 @@ let LEGACY_ACTORS = {
   },
 };
 
+if (AppConstants.TOR_BROWSER_UPDATE) {
+  LEGACY_ACTORS["AboutTBUpdate"] = {
+    child: {
+      module: "resource:///actors/AboutTBUpdateChild.jsm",
+      events: {
+        "AboutTBUpdateLoad": {wantUntrusted: true},
+        "pagehide": {capture: true},
+      },
+      matches: ["about:tbupdate"],
+      messages: [
+        "AboutTBUpdate:Update",
+      ],
+    }
+  };
+}
+
 (function earlyBlankFirstPaint() {
   if (
     AppConstants.platform == "macosx" ||
@@ -730,6 +727,11 @@ if (AppConstants.MOZ_CRASHREPORTER) {
   });
 }
 
+if (AppConstants.TOR_BROWSER_UPDATE) {
+  XPCOMUtils.defineLazyModuleGetter(this, "AboutTBUpdate",
+                                    "resource:///modules/AboutTBUpdate.jsm");
+}
+
 XPCOMUtils.defineLazyGetter(this, "gBrandBundle", function() {
   return Services.strings.createBundle(
     "chrome://branding/locale/brand.properties"
@@ -752,6 +754,7 @@ const global = this;
 
 const listeners = {
   observers: {
+    "update-downloading": ["UpdateListener"],
     "update-staged": ["UpdateListener"],
     "update-downloaded": ["UpdateListener"],
     "update-available": ["UpdateListener"],
@@ -1675,8 +1678,6 @@ BrowserGlue.prototype = {
 
   // the first browser window has finished initializing
   _onFirstWindowLoaded: function BG__onFirstWindowLoaded(aWindow) {
-    AboutNewTab.init();
-
     TabCrashHandler.init();
 
     ProcessHangMonitor.init();
@@ -2018,6 +2019,9 @@ BrowserGlue.prototype = {
     const ID = "screenshots@mozilla.org";
     const _checkScreenshotsPref = async () => {
       let addon = await AddonManager.getAddonByID(ID);
+      if (!addon) {
+        return;
+      }
       let disabled = Services.prefs.getBoolPref(PREF, false);
       if (disabled) {
         await addon.disable({ allowSystemAddons: true });
@@ -2034,6 +2038,9 @@ BrowserGlue.prototype = {
     const ID = "webcompat-reporter@mozilla.org";
     Services.prefs.addObserver(PREF, async () => {
       let addon = await AddonManager.getAddonByID(ID);
+      if (!addon) {
+        return;
+      }
       let enabled = Services.prefs.getBoolPref(PREF, false);
       if (enabled && !addon.isActive) {
         await addon.enable({ allowSystemAddons: true });
@@ -2111,7 +2118,11 @@ BrowserGlue.prototype = {
       );
       AddonManager.getAddonsByIDs(disabledAddons).then(addons => {
         for (let addon of addons) {
-          if (addon.signedState <= AddonManager.SIGNEDSTATE_MISSING) {
+          // We don't need a false notification that our extensions are
+          // disabled. Even if they lack Mozilla's blessing they are enabled
+          // nevertheless.
+          if ((addon.signedState <= AddonManager.SIGNEDSTATE_MISSING) &&
+              (addon.id !== "https-everywhere-eff@eff.org")) {
             this._notifyUnsignedAddonsDisabled();
             break;
           }
@@ -2129,6 +2140,10 @@ BrowserGlue.prototype = {
         "resource:///modules/AsanReporter.jsm"
       );
       AsanReporter.init();
+    }
+
+    if (AppConstants.TOR_BROWSER_UPDATE) {
+      AboutTBUpdate.init();
     }
 
     Sanitizer.onStartup();
@@ -3323,17 +3338,6 @@ BrowserGlue.prototype = {
         "browser.livebookmarks.migrationAttemptsLeft",
         5
       );
-    }
-
-    if (currentUIVersion < 76) {
-      // Clear old onboarding prefs from profile (bug 1462415)
-      let onboardingPrefs = Services.prefs.getBranch("browser.onboarding.");
-      if (onboardingPrefs) {
-        let onboardingPrefsArray = onboardingPrefs.getChildList("");
-        for (let item of onboardingPrefsArray) {
-          Services.prefs.clearUserPref("browser.onboarding." + item);
-        }
-      }
     }
 
     if (currentUIVersion < 77) {
@@ -5071,12 +5075,7 @@ var AboutHomeStartupCache = {
       return { pageInputStream: null, scriptInputStream: null };
     }
 
-    let state = AboutNewTab.activityStream.store.getState();
-    return new Promise(resolve => {
-      this._cacheDeferred = resolve;
-      this.log.trace("Parent received cache streams.");
-      this._procManager.sendAsyncMessage(this.CACHE_REQUEST_MESSAGE, { state });
-    });
+    return { pageInputStream: null, scriptInputStream: null };
   },
 
   /**
