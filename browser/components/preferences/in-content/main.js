@@ -208,7 +208,7 @@ function getBundleForLocales(newLocales) {
   }
   return new Localization([
     "browser/preferences/preferences.ftl",
-    "branding/brand.ftl",
+    "branding/tor-browser-brand.ftl",
   ], generateBundles);
 }
 
