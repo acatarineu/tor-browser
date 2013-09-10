@@ -69,6 +69,16 @@
   color: #30e60b;
 }
 
+%ifdef MOZ_OFFICIAL_BRANDING
+#identity-box[pageproxystate="valid"].chromeUI > #identity-icon-labels {
+  color: #420C5D;
+}
+
+toolbar[brighttext] #identity-box[pageproxystate="valid"].chromeUI > #identity-icon-labels {
+  color: #CC80FF;
+}
+%endif
+
 #identity-box[pageproxystate="valid"].chromeUI > #identity-icon-labels,
 .urlbar-label {
   opacity: .6;

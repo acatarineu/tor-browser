@@ -61,7 +61,7 @@ describe("RemoteL10n", () => {
         "browser/newtab/asrouter.ftl",
         "browser/branding/brandings.ftl",
         "browser/branding/sync-brand.ftl",
-        "branding/brand.ftl",
+        "branding/tor-browser-brand.ftl",
       ]);
       assert.isFunction(args[1]);
     });
@@ -76,7 +76,7 @@ describe("RemoteL10n", () => {
         "browser/newtab/asrouter.ftl",
         "browser/branding/brandings.ftl",
         "browser/branding/sync-brand.ftl",
-        "branding/brand.ftl",
+        "branding/tor-browser-brand.ftl",
       ]);
       assert.isUndefined(args[1]);
     });
