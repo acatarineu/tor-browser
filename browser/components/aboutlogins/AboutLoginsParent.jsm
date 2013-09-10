@@ -632,7 +632,7 @@ var AboutLogins = {
           );
         },
       ],
-      extraFtl: ["branding/brand.ftl", "browser/branding/sync-brand.ftl"],
+      extraFtl: ["branding/tor-browser-brand.ftl", "browser/branding/sync-brand.ftl"],
     });
   },
 
