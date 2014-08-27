@@ -319,6 +319,9 @@ pref("browser.download.panel.shown", true);
 // Treat .onions as secure
 pref("dom.securecontext.whitelist_onions", true);
 
+// Block Components.interfaces from content
+pref("dom.use_components_shim", false);
+
 #ifdef TOR_BROWSER_VERSION
 #expand pref("torbrowser.version", __TOR_BROWSER_VERSION__);
 #endif
