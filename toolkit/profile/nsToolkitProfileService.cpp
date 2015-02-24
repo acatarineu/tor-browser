@@ -1099,9 +1099,10 @@ nsToolkitProfileService::SelectStartupProfile(
   mUpdateChannel = aUpdateChannel;
 
   bool wasDefault;
+  ProfileStatus profileStatus;
   nsresult rv =
       SelectStartupProfile(&argc, argv.get(), aIsResetting, aRootDir, aLocalDir,
-                           aProfile, aDidCreate, &wasDefault);
+                           aProfile, aDidCreate, &wasDefault, profileStatus);
 
   // Since we were called outside of the normal startup path complete any
   // startup tasks.
@@ -1134,7 +1135,8 @@ nsToolkitProfileService::SelectStartupProfile(
 nsresult nsToolkitProfileService::SelectStartupProfile(
     int* aArgc, char* aArgv[], bool aIsResetting, nsIFile** aRootDir,
     nsIFile** aLocalDir, nsIToolkitProfile** aProfile, bool* aDidCreate,
-    bool* aWasDefaultSelection) {
+    bool* aWasDefaultSelection, ProfileStatus& aProfileStatus) {
+  aProfileStatus = PROFILE_STATUS_OK;
   if (mStartupProfileSelected) {
     return NS_ERROR_ALREADY_INITIALIZED;
   }
@@ -1233,6 +1235,17 @@ nsresult nsToolkitProfileService::SelectStartupProfile(
     return NS_ERROR_FAILURE;
   }
   if (ar) {
+    nsCOMPtr<nsIToolkitProfile> profile;
+    rv = GetProfileByName(nsDependentCString(arg), getter_AddRefs(profile));
+    if (NS_SUCCEEDED(rv)) {
+      aProfileStatus = CheckProfileWriteAccess(profile);
+      if (PROFILE_STATUS_OK != aProfileStatus) {
+        profile->GetRootDir(aRootDir);
+        profile->GetLocalDir(aLocalDir);
+        return NS_ERROR_FAILURE;
+      }
+    }
+
     nsCOMPtr<nsIFile> lf;
     rv = XRE_GetFileFromPath(arg, getter_AddRefs(lf));
     NS_ENSURE_SUCCESS(rv, rv);
@@ -1257,6 +1270,13 @@ nsresult nsToolkitProfileService::SelectStartupProfile(
     }
 
     mStartupReason = NS_LITERAL_STRING("argument-profile");
+
+    aProfileStatus = CheckProfileWriteAccess(lf);
+    if (PROFILE_STATUS_OK != aProfileStatus) {
+      NS_ADDREF(*aRootDir = lf);
+      NS_ADDREF(*aLocalDir = lf);
+      return NS_ERROR_FAILURE;
+    }
 
     // If a profile path is specified directly on the command line, then
     // assume that the temp directory is the same as the given directory.
@@ -1973,4 +1993,48 @@ nsresult XRE_GetFileFromPath(const char* aPath, nsIFile** aResult) {
 #else
 #  error Platform-specific logic needed here.
 #endif
+}
+
+// Check for write permission to the profile directory by trying to create a
+// new file (after ensuring that no file with the same name exists).
+ProfileStatus nsToolkitProfileService::CheckProfileWriteAccess(
+    nsIFile* aProfileDir) {
+#if defined(XP_UNIX)
+  NS_NAMED_LITERAL_STRING(writeTestFileName, ".parentwritetest");
+#else
+  NS_NAMED_LITERAL_STRING(writeTestFileName, "parent.writetest");
+#endif
+
+  nsCOMPtr<nsIFile> writeTestFile;
+  nsresult rv = aProfileDir->Clone(getter_AddRefs(writeTestFile));
+  if (NS_SUCCEEDED(rv)) rv = writeTestFile->Append(writeTestFileName);
+
+  if (NS_SUCCEEDED(rv)) {
+    bool doesExist = false;
+    rv = writeTestFile->Exists(&doesExist);
+    if (NS_SUCCEEDED(rv) && doesExist) rv = writeTestFile->Remove(true);
+  }
+
+  if (NS_SUCCEEDED(rv)) {
+    rv = writeTestFile->Create(nsIFile::NORMAL_FILE_TYPE, 0666);
+    (void)writeTestFile->Remove(true);
+  }
+
+  ProfileStatus status =
+      NS_SUCCEEDED(rv) ? PROFILE_STATUS_OK : PROFILE_STATUS_OTHER_ERROR;
+  if (NS_ERROR_FILE_ACCESS_DENIED == rv)
+    status = PROFILE_STATUS_ACCESS_DENIED;
+  else if (NS_ERROR_FILE_READ_ONLY == rv)
+    status = PROFILE_STATUS_READ_ONLY;
+
+  return status;
+}
+
+ProfileStatus nsToolkitProfileService::CheckProfileWriteAccess(
+    nsIToolkitProfile* aProfile) {
+  nsCOMPtr<nsIFile> profileDir;
+  nsresult rv = aProfile->GetRootDir(getter_AddRefs(profileDir));
+  if (NS_FAILED(rv)) return PROFILE_STATUS_OTHER_ERROR;
+
+  return CheckProfileWriteAccess(profileDir);
 }
