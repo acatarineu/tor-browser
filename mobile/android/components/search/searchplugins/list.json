@@ -1,32 +1,32 @@
 {
   "default": {
     "searchDefault": "DuckDuckGo",
-    "searchOrder": ["Google", "Bing"],
+    "searchOrder": ["DuckDuckGo", "Google"],
     "visibleDefaultEngines": [
-      "google", "bing", "amazondotcom", "ddg", "twitter", "wikipedia"
+      "ddg", "google", "bing", "amazondotcom", "twitter", "wikipedia"
     ]
   },
   "regionOverrides": {
     "US": {
-      "google": "google-2018"
+      "ddg": "duckduckgo"
     },
     "KZ": {
-      "google": "google-nocodes"
+      "ddg": "duckduckgo"
     },
     "BY": {
-      "google": "google-nocodes"
+      "ddg": "duckduckgo"
     },
     "RU": {
-      "google": "google-nocodes"
+      "ddg": "duckduckgo"
     },
     "TR": {
-      "google": "google-nocodes"
+      "ddg": "duckduckgo"
     },
     "UA": {
-      "google": "google-nocodes"
+      "ddg": "duckduckgo"
     },
     "CN": {
-      "google": "google-nocodes"
+      "ddg": "duckduckgo"
     }
   },
   "locales": {
