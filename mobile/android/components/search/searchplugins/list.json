@@ -1,7 +1,7 @@
 {
   "default": {
     "searchDefault": "DuckDuckGo",
-    "searchOrder": ["Google", "Bing"],
+    "searchOrder": ["DuckDuckGo", "Google"],
     "visibleDefaultEngines": [
       "google", "bing", "amazondotcom", "ddg", "twitter", "wikipedia"
     ]
