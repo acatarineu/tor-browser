@@ -303,8 +303,6 @@ public class BrowserApp extends GeckoApp
 
     private ReadingListHelper mReadingListHelper;
 
-    private AccountsHelper mAccountsHelper;
-
     private ExtensionPermissionsHelper mExtensionPermissionsHelper;
 
     // The tab to be selected on editing mode exit.
@@ -835,7 +833,6 @@ public class BrowserApp extends GeckoApp
 
         mSharedPreferencesHelper = new SharedPreferencesHelper(appContext);
         mReadingListHelper = new ReadingListHelper(appContext, profile);
-        mAccountsHelper = new AccountsHelper(appContext, profile);
         mExtensionPermissionsHelper = new ExtensionPermissionsHelper(this);
 
         if (AppConstants.MOZ_ANDROID_BEAM) {
@@ -1569,11 +1566,6 @@ public class BrowserApp extends GeckoApp
         if (mReadingListHelper != null) {
             mReadingListHelper.uninit();
             mReadingListHelper = null;
-        }
-
-        if (mAccountsHelper != null) {
-            mAccountsHelper.uninit();
-            mAccountsHelper = null;
         }
 
         if (mExtensionPermissionsHelper != null) {
