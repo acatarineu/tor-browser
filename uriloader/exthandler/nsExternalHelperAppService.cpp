@@ -131,6 +131,9 @@ static const char NEVER_ASK_FOR_SAVE_TO_DISK_PREF[] =
 static const char NEVER_ASK_FOR_OPEN_FILE_PREF[] =
     "browser.helperApps.neverAsk.openFile";
 
+static const char WARNING_DIALOG_CONTRACT_ID[] =
+    "@torproject.org/torbutton-extAppBlocker;1";
+
 // Helper functions for Content-Disposition headers
 
 /**
@@ -387,6 +390,22 @@ static nsresult GetDownloadDirectory(nsIFile** _directory,
   return NS_OK;
 }
 
+static already_AddRefed<nsIInterfaceRequestor> GetDialogParentAux(
+    BrowsingContext* aBrowsingContext, nsIInterfaceRequestor* aWindowContext) {
+  nsCOMPtr<nsIInterfaceRequestor> dialogParent = aWindowContext;
+
+  if (!dialogParent && aBrowsingContext) {
+    dialogParent = do_QueryInterface(aBrowsingContext->GetDOMWindow());
+  }
+  if (!dialogParent && aBrowsingContext && XRE_IsParentProcess()) {
+    RefPtr<Element> element = aBrowsingContext->Top()->GetEmbedderElement();
+    if (element) {
+      dialogParent = do_QueryInterface(element->OwnerDoc()->GetWindow());
+    }
+  }
+  return dialogParent.forget();
+}
+
 /**
  * Structure for storing extension->type mappings.
  * @see defaultMimeEntries
@@ -543,6 +562,105 @@ static const nsDefaultMimeTypeEntry nonDecodableExtensions[] = {
     {APPLICATION_COMPRESS, "z"},
     {APPLICATION_GZIP, "svgz"}};
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// begin nsExternalLoadURIHandler class definition and implementation
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+class nsExternalLoadURIHandler final : public nsIHelperAppWarningLauncher {
+ public:
+  NS_DECL_THREADSAFE_ISUPPORTS
+  NS_DECL_NSIHELPERAPPWARNINGLAUNCHER
+
+  nsExternalLoadURIHandler(BrowsingContext* aBrowsingContext, nsIURI* aURI,
+                           nsIHandlerInfo* aHandlerInfo);
+
+ protected:
+  ~nsExternalLoadURIHandler();
+
+  RefPtr<BrowsingContext> mBrowsingContext;
+  nsCOMPtr<nsIURI> mURI;
+  nsCOMPtr<nsIHandlerInfo> mHandlerInfo;
+  nsCOMPtr<nsIHelperAppWarningDialog> mWarningDialog;
+};
+
+NS_IMPL_ADDREF(nsExternalLoadURIHandler)
+NS_IMPL_RELEASE(nsExternalLoadURIHandler)
+
+NS_INTERFACE_MAP_BEGIN(nsExternalLoadURIHandler)
+  NS_INTERFACE_MAP_ENTRY_AMBIGUOUS(nsISupports, nsIHelperAppWarningLauncher)
+  NS_INTERFACE_MAP_ENTRY(nsIHelperAppWarningLauncher)
+NS_INTERFACE_MAP_END
+
+nsExternalLoadURIHandler::nsExternalLoadURIHandler(
+    BrowsingContext* aBrowsingContext, nsIURI* aURI,
+    nsIHandlerInfo* aHandlerInfo)
+    : mBrowsingContext(aBrowsingContext),
+      mURI(aURI),
+      mHandlerInfo(aHandlerInfo) {
+  nsresult rv = NS_OK;
+  mWarningDialog = do_CreateInstance(WARNING_DIALOG_CONTRACT_ID, &rv);
+  if (NS_SUCCEEDED(rv) && mWarningDialog) {
+    // This will create a reference cycle (the dialog holds a reference to us
+    // as nsIHelperAppWarningLauncher), which will be broken in ContinueRequest
+    // or CancelRequest.
+    nsCOMPtr<nsIInterfaceRequestor> dialogParent =
+        GetDialogParentAux(aBrowsingContext, nullptr);
+    rv = mWarningDialog->MaybeShow(this, dialogParent);
+  }
+
+  if (NS_FAILED(rv)) {
+    // If for some reason we could not open the download warning prompt,
+    // continue with the request.
+    ContinueRequest();
+  }
+}
+
+nsExternalLoadURIHandler::~nsExternalLoadURIHandler() {}
+
+NS_IMETHODIMP nsExternalLoadURIHandler::ContinueRequest() {
+  MOZ_ASSERT(mURI);
+  MOZ_ASSERT(mHandlerInfo);
+
+  // Break our reference cycle with the download warning dialog (set up in
+  // LoadURI).
+  mWarningDialog = nullptr;
+
+  nsHandlerInfoAction preferredAction;
+  mHandlerInfo->GetPreferredAction(&preferredAction);
+  bool alwaysAsk = true;
+  mHandlerInfo->GetAlwaysAskBeforeHandling(&alwaysAsk);
+
+  nsresult rv = NS_OK;
+  // If we are not supposed to ask, and the preferred action is to use
+  // a helper app or the system default, we just launch the URI.
+  if (!alwaysAsk && (preferredAction == nsIHandlerInfo::useHelperApp ||
+                     preferredAction == nsIHandlerInfo::useSystemDefault)) {
+    rv = mHandlerInfo->LaunchWithURI(mURI, mBrowsingContext);
+    // We are not supposed to ask, but when file not found the user most likely
+    // uninstalled the application which handles the uri so we will continue
+    // by application chooser dialog.
+    if (rv != NS_ERROR_FILE_NOT_FOUND) {
+      return rv;
+    }
+  }
+
+  nsCOMPtr<nsIContentDispatchChooser> chooser =
+      do_CreateInstance("@mozilla.org/content-dispatch-chooser;1", &rv);
+  NS_ENSURE_SUCCESS(rv, rv);
+
+  return chooser->Ask(mHandlerInfo, mBrowsingContext, mURI,
+                      nsIContentDispatchChooser::REASON_CANNOT_HANDLE);
+}
+
+NS_IMETHODIMP nsExternalLoadURIHandler::CancelRequest(nsresult aReason) {
+  NS_ENSURE_ARG(NS_FAILED(aReason));
+
+  // Break our reference cycle with the download warning dialog (set up in
+  // LoadURI).
+  mWarningDialog = nullptr;
+
+  return NS_OK;
+}
+
 static StaticRefPtr<nsExternalHelperAppService> sExtHelperAppSvcSingleton;
 
 /**
@@ -569,6 +687,9 @@ nsExternalHelperAppService::GetSingleton() {
   return do_AddRef(sExtHelperAppSvcSingleton);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// nsExternalHelperAppService definition and implementation
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 NS_IMPL_ISUPPORTS(nsExternalHelperAppService, nsIExternalHelperAppService,
                   nsPIExternalAppLauncher, nsIExternalProtocolService,
                   nsIMIMEService, nsIObserver, nsISupportsWeakReference)
@@ -971,30 +1092,13 @@ nsExternalHelperAppService::LoadURI(nsIURI* aURI,
   rv = GetProtocolHandlerInfo(scheme, getter_AddRefs(handler));
   NS_ENSURE_SUCCESS(rv, rv);
 
-  nsHandlerInfoAction preferredAction;
-  handler->GetPreferredAction(&preferredAction);
-  bool alwaysAsk = true;
-  handler->GetAlwaysAskBeforeHandling(&alwaysAsk);
-
-  // if we are not supposed to ask, and the preferred action is to use
-  // a helper app or the system default, we just launch the URI.
-  if (!alwaysAsk && (preferredAction == nsIHandlerInfo::useHelperApp ||
-                     preferredAction == nsIHandlerInfo::useSystemDefault)) {
-    rv = handler->LaunchWithURI(uri, aBrowsingContext);
-    // We are not supposed to ask, but when file not found the user most likely
-    // uninstalled the application which handles the uri so we will continue
-    // by application chooser dialog.
-    if (rv != NS_ERROR_FILE_NOT_FOUND) {
-      return rv;
-    }
+  RefPtr<nsExternalLoadURIHandler> h =
+      new nsExternalLoadURIHandler(aBrowsingContext, uri, handler);
+  if (!h) {
+    return NS_ERROR_OUT_OF_MEMORY;
   }
 
-  nsCOMPtr<nsIContentDispatchChooser> chooser =
-      do_CreateInstance("@mozilla.org/content-dispatch-chooser;1", &rv);
-  NS_ENSURE_SUCCESS(rv, rv);
-
-  return chooser->Ask(handler, aBrowsingContext, uri,
-                      nsIContentDispatchChooser::REASON_CANNOT_HANDLE);
+  return NS_OK;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1139,6 +1243,7 @@ NS_INTERFACE_MAP_BEGIN(nsExternalAppHandler)
   NS_INTERFACE_MAP_ENTRY(nsIStreamListener)
   NS_INTERFACE_MAP_ENTRY(nsIRequestObserver)
   NS_INTERFACE_MAP_ENTRY(nsIHelperAppLauncher)
+  NS_INTERFACE_MAP_ENTRY(nsIHelperAppWarningLauncher)
   NS_INTERFACE_MAP_ENTRY(nsICancelable)
   NS_INTERFACE_MAP_ENTRY(nsIBackgroundFileSaverObserver)
   NS_INTERFACE_MAP_ENTRY(nsINamed)
@@ -1499,18 +1604,7 @@ void nsExternalAppHandler::MaybeApplyDecodingForExtension(
 
 already_AddRefed<nsIInterfaceRequestor>
 nsExternalAppHandler::GetDialogParent() {
-  nsCOMPtr<nsIInterfaceRequestor> dialogParent = mWindowContext;
-
-  if (!dialogParent && mBrowsingContext) {
-    dialogParent = do_QueryInterface(mBrowsingContext->GetDOMWindow());
-  }
-  if (!dialogParent && mBrowsingContext && XRE_IsParentProcess()) {
-    RefPtr<Element> element = mBrowsingContext->Top()->GetEmbedderElement();
-    if (element) {
-      dialogParent = do_QueryInterface(element->OwnerDoc()->GetWindow());
-    }
-  }
-  return dialogParent.forget();
+  return GetDialogParentAux(mBrowsingContext, mWindowContext);
 }
 
 NS_IMETHODIMP nsExternalAppHandler::OnStartRequest(nsIRequest* request) {
@@ -1618,6 +1712,29 @@ NS_IMETHODIMP nsExternalAppHandler::OnStartRequest(nsIRequest* request) {
     MOZ_ASSERT(NS_SUCCEEDED(rv));
   }
 
+  mWarningDialog = do_CreateInstance(WARNING_DIALOG_CONTRACT_ID, &rv);
+  if (NS_SUCCEEDED(rv) && mWarningDialog) {
+    // This will create a reference cycle (the dialog holds a reference to us
+    // as nsIHelperAppWarningLauncher), which will be broken in ContinueRequest
+    // or CancelRequest.
+    nsCOMPtr<nsIInterfaceRequestor> dialogParent = GetDialogParent();
+    rv = mWarningDialog->MaybeShow(this, dialogParent);
+  }
+
+  if (NS_FAILED(rv)) {
+    // If for some reason we could not open the download warning prompt,
+    // continue with the request.
+    ContinueRequest();
+  }
+
+  return NS_OK;
+}
+
+NS_IMETHODIMP nsExternalAppHandler::ContinueRequest() {
+  // Break our reference cycle with the download warning dialog (set up in
+  // OnStartRequest).
+  mWarningDialog = nullptr;
+
   // now that the temp file is set up, find out if we need to invoke a dialog
   // asking the user what they want us to do with this content...
 
@@ -1703,6 +1820,7 @@ NS_IMETHODIMP nsExternalAppHandler::OnStartRequest(nsIRequest* request) {
     action = nsIMIMEInfo::saveToDisk;
   }
 
+  nsresult rv = NS_OK;
   if (alwaysAsk) {
     // Display the dialog
     mDialog = do_CreateInstance(NS_HELPERAPPLAUNCHERDLG_CONTRACTID, &rv);
@@ -1758,6 +1876,14 @@ NS_IMETHODIMP nsExternalAppHandler::OnStartRequest(nsIRequest* request) {
   }
 
   return NS_OK;
+}
+
+NS_IMETHODIMP nsExternalAppHandler::CancelRequest(nsresult aReason) {
+  // Break our reference cycle with the download warning dialog (set up in
+  // OnStartRequest).
+  mWarningDialog = nullptr;
+
+  return Cancel(aReason);
 }
 
 // Convert error info into proper message text and send OnStatusChange
@@ -2423,7 +2549,7 @@ NS_IMETHODIMP nsExternalAppHandler::Cancel(nsresult aReason) {
   }
 
   // Break our reference cycle with the helper app dialog (set up in
-  // OnStartRequest)
+  // ContinueRequest)
   mDialog = nullptr;
 
   mRequest = nullptr;
