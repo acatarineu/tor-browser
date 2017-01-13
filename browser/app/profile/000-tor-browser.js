@@ -7,7 +7,6 @@
 // Disable initial homepage notifications
 pref("browser.search.update", false);
 pref("browser.rights.3.shown", true);
-pref("browser.startup.homepage_override.mstone", "ignore");
 pref("startup.homepage_welcome_url", "");
 pref("startup.homepage_welcome_url.additional", "");
 
@@ -23,10 +22,12 @@ pref("app.update.promptWaitTime", 3600);
 pref("app.update.badge", true);
 pref("extensions.hotfix.id", ""); // Bug 16837: Disable hotfix updates as they may cause compat issues
 
-#ifdef XP_WIN
-// For now, disable staged updates on Windows (see #18292).
+// Disable staged updates on all platforms.
+// Staged updates do not work on Windows due to #18292.
+// Also, on Windows and Linux any changes that are made to the browser profile
+// or Tor data after an update is staged will be lost.
+// What about macOS? For consistency, we disable staged updates there too.
 pref("app.update.staging.enabled", false);
-#endif
 
 // No need to contact the Kinto-based blocklist system in addition to the old
 // one which is still used, see bug 22071.
@@ -92,6 +93,7 @@ pref("datareporting.healthreport.about.reportUrlUnified", "data:text/plain,");
 // Make sure Unified Telemetry is really disabled, see: #18738.
 pref("toolkit.telemetry.unified", false);
 pref("toolkit.telemetry.enabled", false);
+pref("toolkit.telemetry.updatePing.enabled", false); // Make sure updater telemetry is disabled; see #25909.
 // No experiments, use Tor Browser. See 21797.
 pref("experiments.enabled", false);
 pref("browser.syncPromoViewsLeftMap", "{\"addons\":0, \"passwords\":0, \"bookmarks\":0}"); // Don't promote sync

@@ -98,7 +98,7 @@ var UpdateUtils = {
           case "PRODUCT":
             return Services.appinfo.name;
           case "VERSION":
-            return Services.appinfo.version;
+            return AppConstants.TOR_BROWSER_VERSION;
           case "BUILD_ID":
             return Services.appinfo.appBuildID;
           case "BUILD_TARGET":
