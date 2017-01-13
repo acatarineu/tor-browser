@@ -55,7 +55,7 @@ xpcshell_cert.py2 = True
 dep1_cert.py2 = True
 dep2_cert.py2 = True
 
-if CONFIG['MOZ_UPDATE_CHANNEL'] in ('beta', 'release', 'esr'):
+if CONFIG['MOZ_UPDATE_CHANNEL'] in ('alpha', 'beta', 'release', 'esr'):
     primary_cert.inputs += ['release_primary.der']
     secondary_cert.inputs += ['release_secondary.der']
 elif CONFIG['MOZ_UPDATE_CHANNEL'] in ('nightly', 'aurora', 'nightly-elm',
