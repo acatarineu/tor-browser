@@ -98,7 +98,7 @@ var UpdateUtils = {
           case "PRODUCT":
             return Services.appinfo.name;
           case "VERSION":
-            return Services.appinfo.version;
+            return AppConstants.TOR_BROWSER_VERSION;
           case "BUILD_ID":
             return Services.appinfo.appBuildID;
           case "BUILD_TARGET":
@@ -162,7 +162,8 @@ var UpdateUtils = {
    * downloads and installs updates. This corresponds to whether or not the user
    * has selected "Automatically install updates" in about:preferences.
    *
-   * On Windows, this setting is shared across all profiles for the installation
+   * On Windows (except in Tor Browser), this setting is shared across all profiles
+   * for the installation
    * and is read asynchronously from the file. On other operating systems, this
    * setting is stored in a pref and is thus a per-profile setting.
    *
@@ -179,8 +180,9 @@ var UpdateUtils = {
         return Promise.resolve(false);
       }
     }
-    if (AppConstants.platform != "win") {
-      // On platforms other than Windows the setting is stored in a preference.
+    if (AppConstants.TOR_BROWSER_UPDATE || (AppConstants.platform != "win")) {
+      // On platforms other than Windows and always in Tor Browser the setting
+      // is stored in a preference.
       let prefValue = Services.prefs.getBoolPref(
         PREF_APP_UPDATE_AUTO,
         DEFAULT_APP_UPDATE_AUTO
@@ -251,7 +253,8 @@ var UpdateUtils = {
    * updates" and "Check for updates but let you choose to install them" options
    * in about:preferences.
    *
-   * On Windows, this setting is shared across all profiles for the installation
+   * On Windows (except in Tor Browser), this setting is shared across all profiles
+   * for the installation
    * and is written asynchronously to the file. On other operating systems, this
    * setting is stored in a pref and is thus a per-profile setting.
    *
@@ -277,8 +280,9 @@ var UpdateUtils = {
           "it is locked by policy"
       );
     }
-    if (AppConstants.platform != "win") {
-      // Only in Windows do we store the update config in the update directory
+    if (AppConstants.TOR_BROWSER_UPDATE || (AppConstants.platform != "win")) {
+      // Only in Windows (but never for Tor Browser) do we store the update config
+      // in the update directory
       let prefValue = !!enabledValue;
       Services.prefs.setBoolPref(PREF_APP_UPDATE_AUTO, prefValue);
       // Rather than call maybeUpdateAutoConfigChanged, a pref observer has

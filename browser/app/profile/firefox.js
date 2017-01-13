@@ -129,21 +129,15 @@ pref("app.update.download.promptMaxAttempts", 2);
 pref("app.update.elevation.promptMaxAttempts", 2);
 
 // If set to true, the Update Service will automatically download updates if the
-// user can apply updates. This pref is no longer used on Windows, except as the
-// default value to migrate to the new location that this data is now stored
-// (which is in a file in the update directory). Because of this, this pref
-// should no longer be used directly. Instead, getAppUpdateAutoEnabled and
-// getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
-#ifndef XP_WIN
-  pref("app.update.auto", true);
-#endif
+// user can apply updates.
+pref("app.update.auto", true);
 
 // If set to true, the Update Service will apply updates in the background
 // when it finishes downloading them.
 pref("app.update.staging.enabled", true);
 
 // Update service URL:
-pref("app.update.url", "https://aus5.mozilla.org/update/6/%PRODUCT%/%VERSION%/%BUILD_ID%/%BUILD_TARGET%/%LOCALE%/%CHANNEL%/%OS_VERSION%/%SYSTEM_CAPABILITIES%/%DISTRIBUTION%/%DISTRIBUTION_VERSION%/update.xml");
+pref("app.update.url", "https://aus1.torproject.org/torbrowser/update_3/%CHANNEL%/%BUILD_TARGET%/%VERSION%/%LOCALE%");
 // app.update.url.manual is in branding section
 // app.update.url.details is in branding section
 
