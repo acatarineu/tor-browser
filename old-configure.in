@@ -2063,6 +2063,16 @@ if test -z "$TOR_BROWSER_VERSION"; then
     AC_MSG_ERROR([--with-tor-browser-version is required for Tor Browser.])
 fi
 
+MOZ_ARG_ENABLE_BOOL(tor-browser-update,
+[  --enable-tor-browser-update
+                          Enable Tor Browser update],
+    TOR_BROWSER_UPDATE=1,
+    TOR_BROWSER_UPDATE= )
+
+if test -n "$TOR_BROWSER_UPDATE"; then
+    AC_DEFINE(TOR_BROWSER_UPDATE)
+fi
+
 MOZ_ARG_ENABLE_BOOL(tor-browser-data-outside-app-dir,
 [  --enable-tor-browser-data-outside-app-dir
                           Enable Tor Browser data outside of app directory],
@@ -2075,6 +2085,7 @@ fi
 
 AC_DEFINE_UNQUOTED(TOR_BROWSER_VERSION,$TOR_BROWSER_VERSION)
 AC_DEFINE_UNQUOTED(TOR_BROWSER_VERSION_QUOTED,"$TOR_BROWSER_VERSION")
+AC_SUBST(TOR_BROWSER_UPDATE)
 AC_SUBST(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
 
 MOZ_ARG_DISABLE_BOOL(tor-launcher,
