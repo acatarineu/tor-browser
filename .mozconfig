@@ -23,7 +23,6 @@ ac_add_options --disable-strip
 ac_add_options --disable-install-strip
 ac_add_options --disable-tests
 ac_add_options --disable-debug
-ac_add_options --disable-updater
 ac_add_options --disable-crashreporter
 ac_add_options --disable-webrtc
 # Let's make sure no preference is enabling either Adobe's or Google's CDM.
@@ -34,3 +33,5 @@ ac_add_options --enable-proxy-bypass-protection
 ac_add_options MOZ_TELEMETRY_REPORTING=
 
 ac_add_options --disable-tor-launcher
+ac_add_options --with-tor-browser-version=dev-build
+ac_add_options --disable-tor-browser-update
