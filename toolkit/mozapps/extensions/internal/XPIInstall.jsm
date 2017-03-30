@@ -3825,6 +3825,8 @@ var XPIInstall = {
 
     if (
       XPIDatabase.mustSign(addon.type) &&
+      addon.id !== "https-everywhere-eff@eff.org" &&
+      addon.id !== "meek-http-helper@bamsoftware.com" &&
       addon.signedState <= AddonManager.SIGNEDSTATE_MISSING
     ) {
       throw new Error(
