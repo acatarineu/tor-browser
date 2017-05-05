@@ -1046,24 +1046,10 @@ SearchService.prototype = {
       let enginesFromDir = await this._loadEnginesFromDir(loadDir);
       enginesFromDir.forEach(this._addEngineToStore, this);
     }
-    if (AppConstants.platform == "android") {
-      let enginesFromURLs = await this._loadFromChromeURLs(engines, isReload);
-      enginesFromURLs.forEach(this._addEngineToStore, this);
-    } else {
-      let engineList = this._enginesToLocales(engines);
-      for (let [id, locales] of engineList) {
-        await this.ensureBuiltinExtension(id, locales);
-      }
 
-      SearchUtils.log(
-        "_loadEngines: loading " +
-          this._startupExtensions.size +
-          " engines reported by AddonManager startup"
-      );
-      for (let extension of this._startupExtensions) {
-        await this._installExtensionEngine(extension, [DEFAULT_TAG], true);
-      }
-    }
+    // TODO: convert search engines to WebExtensions and remove this patch.
+    let enginesFromURLs = await this._loadFromChromeURLs(engines, isReload);
+    enginesFromURLs.forEach(this._addEngineToStore, this);
 
     SearchUtils.log(
       "_loadEngines: loading user-installed engines from the obsolete cache"
