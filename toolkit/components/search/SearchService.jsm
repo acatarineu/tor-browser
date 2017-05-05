@@ -959,39 +959,9 @@ SearchService.prototype = {
       let enginesFromDir = await this._loadEnginesFromDir(loadDir);
       enginesFromDir.forEach(this._addEngineToStore, this);
     }
-    if (AppConstants.platform == "android") {
-      let enginesFromURLs = await this._loadFromChromeURLs(engines, isReload);
-      enginesFromURLs.forEach(this._addEngineToStore, this);
-    } else {
-      for (let [id, localeMap] of this._extensions) {
-        let policy = WebExtensionPolicy.getByID(id);
-        if (policy) {
-          SearchUtils.log("_loadEngines: Found previously installed extension");
-          await this.addEnginesFromExtension(policy.extension);
-        } else {
-          SearchUtils.log("_loadEngines: Installing " + id);
-          // We may have marked these as loading from the cache previously
-          // but if there wasnt an valid cache, mark as installing.
-          for (let [locale, installed] of localeMap) {
-            if (installed === true) {
-              localeMap.set(locale, null);
-            }
-          }
-          this._extensions.set(id, localeMap);
-          let path = EXT_SEARCH_PREFIX + id.split("@")[0] + "/";
-          try {
-            await AddonManager.installBuiltinAddon(path);
-            // The AddonManager will install the engine asynchronously
-            // We can manually wait on that happening here.
-            await ExtensionParent.apiManager.global.pendingSearchSetupTasks.get(id);
-            SearchUtils.log("_loadEngines: " + id + " installed");
-          } catch (err) {
-            this._extensions.delete(id);
-            Cu.reportError("Failed to install engine: " + err.message + "\n" + err.stack);
-          }
-        }
-      }
-    }
+
+    let enginesFromURLs = await this._loadFromChromeURLs(engines, isReload);
+    enginesFromURLs.forEach(this._addEngineToStore, this);
 
     SearchUtils.log("_loadEngines: loading user-installed engines from the obsolete cache");
     this._loadEnginesFromCache(cache, true);
