@@ -19,6 +19,7 @@ XPCOMUtils.defineLazyServiceGetter(this, "gContentSecurityManager",
                                    "nsIContentSecurityManager");
 
 Services.prefs.setCharPref("dom.securecontext.whitelist", "example.net,example.org");
+Services.prefs.setBoolPref("dom.securecontext.whitelist_onions", false);
 
 add_task(async function test_isOriginPotentiallyTrustworthy() {
   for (let [uriSpec, expectedResult] of [
