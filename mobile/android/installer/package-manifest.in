@@ -143,6 +143,7 @@
 ; [Default Preferences]
 ; All the pref files must be part of base to prevent migration bugs
 #ifdef MOZ_GECKOVIEW_JAR
+@BINPATH@/@PREF_DIR@/000-tor-browser-android.js
 #ifndef MOZ_ANDROID_FAT_AAR_ARCHITECTURES
 @BINPATH@/@ANDROID_CPU_ARCH@/greprefs.js
 @BINPATH@/@PREF_DIR@/@ANDROID_CPU_ARCH@/geckoview-prefs.js
