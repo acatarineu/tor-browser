@@ -3453,7 +3453,7 @@ void nsCookieService::AddInternal(const nsCookieKey& aKey, nsCookie* aCookie,
   bool foundSecureExact = foundCookie && exactIter.Cookie()->IsSecure();
   bool isSecure = true;
   if (aHostURI) {
-    isSecure = aHostURI->SchemeIs("https");
+    isSecure = nsMixedContentBlocker::IsPotentiallyTrustworthyOrigin(aHostURI);
   }
   bool oldCookieIsSession = false;
   // Step1, call FindSecureCookie(). FindSecureCookie() would
