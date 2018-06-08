@@ -348,6 +348,8 @@
 #include "nsHtml5Module.h"
 #include "nsHtml5Parser.h"
 
+#include "mozilla/dom/nsMixedContentBlocker.h"
+
 #define XML_DECLARATION_BITS_DECLARATION_EXISTS (1 << 0)
 #define XML_DECLARATION_BITS_ENCODING_EXISTS (1 << 1)
 #define XML_DECLARATION_BITS_STANDALONE_EXISTS (1 << 2)
@@ -3601,7 +3603,9 @@ void Document::SetDocumentURI(nsIURI* aURI) {
   if (browsingContext) {
     nsCOMPtr<nsIURI> innerDocURI = NS_GetInnermostURI(mDocumentURI);
     if (innerDocURI) {
-      browsingContext->SetIsSecure(innerDocURI->SchemeIs("https"));
+      browsingContext->SetIsSecure(
+          innerDocURI->SchemeIs("https") ||
+          nsMixedContentBlocker::IsPotentiallyTrustworthyOnion(innerDocURI));
     }
   }
 }
