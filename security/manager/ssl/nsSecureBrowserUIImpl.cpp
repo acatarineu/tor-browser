@@ -246,7 +246,10 @@ static nsresult URICanBeConsideredSecure(
     return rv;
   }
 
-  canBeConsideredSecure = isHttps;
+  nsAutoCString host;
+  bool isOnion = NS_SUCCEEDED(innermostURI->GetHost(host)) && StringEndsWith(host, NS_LITERAL_CSTRING(".onion"));
+
+  canBeConsideredSecure = isHttps || isOnion;
 
   return NS_OK;
 }
