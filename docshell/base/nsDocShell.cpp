@@ -73,6 +73,7 @@
 #include "mozilla/dom/nsCSPContext.h"
 #include "mozilla/dom/LoadURIOptionsBinding.h"
 #include "mozilla/dom/JSWindowActorChild.h"
+#include "mozilla/dom/nsMixedContentBlocker.h"
 #include "mozilla/net/DocumentChannel.h"
 #include "nsSHEntry.h"
 #include "mozilla/net/DocumentChannelChild.h"
@@ -5018,7 +5019,8 @@ nsDocShell::GetAllowMixedContentAndConnectionData(
     // aRootHasSecureConnection should be false.
     nsCOMPtr<nsIURI> rootUri = rootPrincipal->GetURI();
     if (rootPrincipal->IsSystemPrincipal() || !rootUri ||
-        !SchemeIsHTTPS(rootUri)) {
+        (!SchemeIsHTTPS(rootUri) &&
+         !nsMixedContentBlocker::IsPotentiallyTrustworthyOnion(rootUri))) {
       *aRootHasSecureConnection = false;
     }
 
