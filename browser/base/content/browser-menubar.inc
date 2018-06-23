@@ -34,6 +34,18 @@
                           accesskey="&newPrivateWindow.accesskey;"
                           command="Tools:PrivateBrowsing"
                           key="key_privatebrowsing"/>
+                <menuseparator/>
+                <menuitem id="menu_newIdentity"
+                          accesskey="&torbutton.context_menu.new_identity_key;"
+                          key="torbutton-new-identity-key"
+                          label="&torbutton.context_menu.new_identity;"
+                          oncommand="torbutton_new_identity();"/>
+                <menuitem id="menu_newCircuit"
+                          accesskey="&torbutton.context_menu.new_circuit_key;"
+                          key="torbutton-new-circuit-key"
+                          label="&torbutton.context_menu.new_circuit;"
+                          oncommand="torbutton_new_circuit();"/>
+                <menuseparator/>
                 <menuitem id="menu_openLocation"
                           hidden="true"
                           label="&openLocationCmd.label;"
