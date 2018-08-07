@@ -327,6 +327,11 @@ pref("browser.download.panel.shown", true);
 // Treat .onions as secure
 pref("dom.securecontext.whitelist_onions", true);
 
+// Onboarding.
+pref("browser.onboarding.newtour", "welcome,privacy,tor-network,circuit-display,security,expect-differences,onion-services");
+pref("browser.onboarding.updatetour", "welcome,privacy,tor-network,circuit-display,security,expect-differences,onion-services");
+pref("browser.onboarding.skip-tour-button.hide", true);
+
 // Block Components.interfaces from content
 pref("dom.use_components_shim", false);
 
