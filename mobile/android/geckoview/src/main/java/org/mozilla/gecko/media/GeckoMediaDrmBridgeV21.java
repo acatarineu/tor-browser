@@ -483,6 +483,11 @@ public class GeckoMediaDrmBridgeV21 implements GeckoMediaDrm {
 
         @Override
         protected Void doInBackground(final Void... params) {
+            if (Build.TOR_BROWSER_VERSION != "") {
+                Log.i(LOGTAG, "This is Tor Browser. Skipping.");
+                return;
+            }
+
             HttpURLConnection urlConnection = null;
             BufferedReader in = null;
             try {
