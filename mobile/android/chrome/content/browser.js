@@ -5662,6 +5662,10 @@ var IdentityHandler = {
     return result;
   },
 
+  isOnionHost: function isOnionHost() {
+    return this._uri.host.toLowerCase().endsWith(".onion");
+  },
+
   /**
    * Determines the identity mode corresponding to the icon we show in the urlbar.
    */
@@ -5777,6 +5781,8 @@ var IdentityHandler = {
     };
 
     result.host = this.getEffectiveHost();
+    result.isOnionHost = this.isOnionHost();
+    result.hasCert = !!this._lastStatus;
 
     // Don't show identity data for pages with an unknown identity or if any
     // mixed content is loaded (mixed display content is loaded by default).
@@ -5830,7 +5836,7 @@ var IdentityHandler = {
     // hasMatchingOverride does not handle that, so avoid calling it.
     // Updating the tooltip value in those cases isn't critical.
     // FIXME: Fixing bug 646690 would probably makes this check unnecessary
-    if (this._lastLocation.hostname &&
+    if (this._lastLocation.hostname && iData.cert &&
         this._overrideService.hasMatchingOverride(this._lastLocation.hostname,
                                                   (this._lastLocation.port || 443),
                                                   iData.cert, {}, {})) {
