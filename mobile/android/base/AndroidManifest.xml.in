@@ -24,6 +24,7 @@
 #include FennecManifest_permissions.xml.in
 
     <application android:label="@string/moz_app_displayname"
+                 tools:replace="android:label"
                  android:icon="@mipmap/ic_launcher"
                  android:logo="@drawable/logo"
                  android:name="@MOZ_ANDROID_APPLICATION_CLASS@"
@@ -571,6 +572,14 @@
         <!-- This resources comes from Google Play Services. Required for casting support. -->
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 #endif
+
+        <!-- Define Orbotservice's TorService -->
+        <service
+            android:name="org.torproject.android.service.TorService"
+            android:enabled="true"
+            android:exported="false"
+            android:stopWithTask="true">
+        </service>
 
     </application>
 </manifest>
