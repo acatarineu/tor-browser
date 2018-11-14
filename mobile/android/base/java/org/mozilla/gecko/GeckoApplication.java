@@ -74,6 +74,8 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.UUID;
 
+import org.torproject.android.service.util.Prefs;
+
 public class GeckoApplication extends Application
                               implements HapticFeedbackDelegate,
                                          SharedPreferences.OnSharedPreferenceChangeListener {
@@ -400,6 +402,9 @@ public class GeckoApplication extends Application
                 "Image:SetAs",
                 "Profile:Create",
                 null);
+
+        // Give Orbot the base Context
+        Prefs.setContext(context);
 
         super.onCreate();
     }
