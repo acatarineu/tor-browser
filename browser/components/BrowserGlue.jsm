@@ -688,6 +688,7 @@ const global = this;
 
 const listeners = {
   observers: {
+    "update-downloading": ["UpdateListener"],
     "update-staged": ["UpdateListener"],
     "update-downloaded": ["UpdateListener"],
     "update-available": ["UpdateListener"],
