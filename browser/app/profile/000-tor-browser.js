@@ -328,6 +328,18 @@ pref("dom.securecontext.whitelist_onions", true);
 // Block Components.interfaces from content
 pref("dom.use_components_shim", false);
 
+// prefs to disable jump-list entries in the taskbar on Windows (see bug #12885)
+#ifdef XP_WIN
+// this pref changes the app's set AUMID to be dependent on the profile path, rather than
+// attempting to read it from the registry; this is necessary so that the file generated
+// by the jumplist system can be properly deleted if it is disabled
+pref("taskbar.grouping.useprofile", true);
+pref("browser.taskbar.lists.enabled", false);
+pref("browser.taskbar.lists.frequent.enabled", false);
+pref("browser.taskbar.lists.tasks.enabled", false);
+pref("browser.taskbar.lists.recent.enabled", false);
+#endif
+
 #ifdef TOR_BROWSER_VERSION
 #expand pref("torbrowser.version", __TOR_BROWSER_VERSION__);
 #endif
