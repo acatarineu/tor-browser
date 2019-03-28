@@ -10,7 +10,7 @@ project_flag('MOZ_ANDROID_EXCLUDE_FONTS',
 
 project_flag('MOZ_ANDROID_HLS_SUPPORT',
              help='Enable HLS (HTTP Live Streaming) support (currently using the ExoPlayer library)',
-             default=True)
+             default=False)
 
 option(env='FENNEC_NIGHTLY',
        help='Enable experimental code for Fennec Nightly users. NOTE: This is *not* equivalent '
