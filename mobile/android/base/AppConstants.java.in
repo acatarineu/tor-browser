@@ -389,7 +389,7 @@ public class AppConstants {
 //#ifdef TOR_BROWSER_VERSION
         return true;
 //#else
-        return false;
+        return true;
 //#endif
     }
 }
