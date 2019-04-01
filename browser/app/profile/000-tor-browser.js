@@ -225,6 +225,9 @@ pref("network.file.disable_unc_paths", true);
 // Enhance our treatment of file:// to avoid proxy bypasses (see Mozilla's bug
 // 1412081)
 pref("network.file.path_blacklist", "/net");
+// Make sure no enterprise policy can interfere with our proxy settings, see
+// #29916.
+pref("browser.policies.testing.disallowEnterprise", true);
 
 // Security slider
 pref("svg.in-content.enabled", true);
