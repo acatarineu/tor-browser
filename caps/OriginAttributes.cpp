@@ -78,6 +78,7 @@ void OriginAttributes::SetFirstPartyDomain(const bool aIsTopLevelDocument,
     return;
   }
 
+  bool isInsufficientDomainLevels = (rv == NS_ERROR_INSUFFICIENT_DOMAIN_LEVELS);
   nsAutoCString scheme;
   rv = aURI->GetScheme(scheme);
   NS_ENSURE_SUCCESS_VOID(rv);
@@ -94,6 +95,12 @@ void OriginAttributes::SetFirstPartyDomain(const bool aIsTopLevelDocument,
       if (principal) {
         mFirstPartyDomain = principal->OriginAttributesRef().mFirstPartyDomain;
       }
+    }
+  } else if (isInsufficientDomainLevels) {
+    nsAutoCString publicSuffix;
+    rv = tldService->GetPublicSuffix(aURI, publicSuffix);
+    if (NS_SUCCEEDED(rv)) {
+      mFirstPartyDomain = NS_ConvertUTF8toUTF16(publicSuffix);
     }
   }
 }
