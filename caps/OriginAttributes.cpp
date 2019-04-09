@@ -78,12 +78,17 @@ void OriginAttributes::SetFirstPartyDomain(const bool aIsTopLevelDocument,
     return;
   }
 
+  // Saving isInsufficientDomainLevels, since rv will be overwritten
+  bool isInsufficientDomainLevels = (rv == NS_ERROR_INSUFFICIENT_DOMAIN_LEVELS);
   nsAutoCString scheme;
   rv = aURI->GetScheme(scheme);
   NS_ENSURE_SUCCESS_VOID(rv);
   if (scheme.EqualsLiteral("about")) {
     mFirstPartyDomain.AssignLiteral(ABOUT_URI_FIRST_PARTY_DOMAIN);
-  } else if (scheme.EqualsLiteral("blob")) {
+    return;
+  }
+
+  if (scheme.EqualsLiteral("blob")) {
     nsCOMPtr<nsIURIWithPrincipal> uriPrinc = do_QueryInterface(aURI);
     if (uriPrinc) {
       nsCOMPtr<nsIPrincipal> principal;
@@ -95,6 +100,16 @@ void OriginAttributes::SetFirstPartyDomain(const bool aIsTopLevelDocument,
         mFirstPartyDomain = principal->OriginAttributesRef().mFirstPartyDomain;
       }
     }
+    return;
+  }
+
+  if (isInsufficientDomainLevels) {
+    nsAutoCString publicSuffix;
+    rv = tldService->GetPublicSuffix(aURI, publicSuffix);
+    if (NS_SUCCEEDED(rv)) {
+      mFirstPartyDomain = NS_ConvertUTF8toUTF16(publicSuffix);
+    }
+    return;
   }
 }
 
