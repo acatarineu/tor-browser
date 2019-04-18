@@ -3210,12 +3210,12 @@ int32_t nsGlobalWindowInner::GetScrollMaxY(ErrorResult& aError) {
   FORWARD_TO_OUTER_OR_THROW(GetScrollBoundaryOuter, (eSideBottom), aError, 0);
 }
 
-double nsGlobalWindowInner::GetScrollX(ErrorResult& aError) {
-  FORWARD_TO_OUTER_OR_THROW(GetScrollXOuter, (), aError, 0);
+double nsGlobalWindowInner::GetScrollX(mozilla::dom::CallerType aCallerType, ErrorResult& aError) {
+  FORWARD_TO_OUTER_OR_THROW(GetScrollXOuter, (aCallerType), aError, 0);
 }
 
-double nsGlobalWindowInner::GetScrollY(ErrorResult& aError) {
-  FORWARD_TO_OUTER_OR_THROW(GetScrollYOuter, (), aError, 0);
+double nsGlobalWindowInner::GetScrollY(mozilla::dom::CallerType aCallerType, ErrorResult& aError) {
+  FORWARD_TO_OUTER_OR_THROW(GetScrollYOuter, (aCallerType), aError, 0);
 }
 
 uint32_t nsGlobalWindowInner::Length() { FORWARD_TO_OUTER(Length, (), 0); }

@@ -3475,7 +3475,7 @@ int32_t nsGlobalWindowOuter::GetScrollBoundaryOuter(Side aSide) {
   return 0;
 }
 
-CSSPoint nsGlobalWindowOuter::GetScrollXY(bool aDoFlush) {
+CSSPoint nsGlobalWindowOuter::GetScrollXY(mozilla::dom::CallerType aCallerType, bool aDoFlush) {
   if (aDoFlush) {
     FlushPendingNotifications(FlushType::Layout);
   } else {
@@ -3492,15 +3492,15 @@ CSSPoint nsGlobalWindowOuter::GetScrollXY(bool aDoFlush) {
     // Oh, well.  This is the expensive case -- the window is scrolled and we
     // didn't actually flush yet.  Repeat, but with a flush, since the content
     // may get shorter and hence our scroll position may decrease.
-    return GetScrollXY(true);
+    return GetScrollXY(aCallerType, true);
   }
 
-  return CSSPoint::FromAppUnits(scrollPos);
+  return nsContentUtils::ResistFingerprinting(aCallerType) ? CSSPoint::FromAppUnitsRounded(scrollPos) : CSSPoint::FromAppUnits(scrollPos);
 }
 
-double nsGlobalWindowOuter::GetScrollXOuter() { return GetScrollXY(false).x; }
+double nsGlobalWindowOuter::GetScrollXOuter(mozilla::dom::CallerType aCallerType) { return GetScrollXY(aCallerType, false).x; }
 
-double nsGlobalWindowOuter::GetScrollYOuter() { return GetScrollXY(false).y; }
+double nsGlobalWindowOuter::GetScrollYOuter(mozilla::dom::CallerType aCallerType) { return GetScrollXY(aCallerType, false).y; }
 
 uint32_t nsGlobalWindowOuter::Length() {
   nsDOMWindowList* windows = GetWindowList();

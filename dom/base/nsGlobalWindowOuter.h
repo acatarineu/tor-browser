@@ -599,8 +599,8 @@ class nsGlobalWindowOuter final : public mozilla::dom::EventTarget,
   void ResizeByOuter(int32_t aWidthDif, int32_t aHeightDif,
                      mozilla::dom::CallerType aCallerType,
                      mozilla::ErrorResult& aError);
-  double GetScrollXOuter();
-  double GetScrollYOuter();
+  double GetScrollXOuter(mozilla::dom::CallerType aCallerType);
+  double GetScrollYOuter(mozilla::dom::CallerType aCallerType);
 
   void SizeToContentOuter(mozilla::dom::CallerType aCallerType,
                           mozilla::ErrorResult& aError);
@@ -875,7 +875,7 @@ class nsGlobalWindowOuter final : public mozilla::dom::EventTarget,
   // If aDoFlush is true, we'll flush our own layout; otherwise we'll try to
   // just flush our parent and only flush ourselves if we think we need to.
   // Outer windows only.
-  mozilla::CSSPoint GetScrollXY(bool aDoFlush);
+  mozilla::CSSPoint GetScrollXY(mozilla::dom::CallerType aCallerType, bool aDoFlush);
 
   int32_t GetScrollBoundaryOuter(mozilla::Side aSide);
 

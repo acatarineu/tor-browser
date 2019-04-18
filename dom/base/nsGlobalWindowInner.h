@@ -770,13 +770,13 @@ class nsGlobalWindowInner final : public mozilla::dom::EventTarget,
   void SetInnerHeight(JSContext* aCx, JS::Handle<JS::Value> aValue,
                       mozilla::dom::CallerType aCallerType,
                       mozilla::ErrorResult& aError);
-  double GetScrollX(mozilla::ErrorResult& aError);
-  double GetPageXOffset(mozilla::ErrorResult& aError) {
-    return GetScrollX(aError);
+  double GetScrollX(mozilla::dom::CallerType aCallerType, mozilla::ErrorResult& aError);
+  double GetPageXOffset(mozilla::dom::CallerType aCallerType, mozilla::ErrorResult& aError) {
+    return GetScrollX(aCallerType, aError);
   }
-  double GetScrollY(mozilla::ErrorResult& aError);
-  double GetPageYOffset(mozilla::ErrorResult& aError) {
-    return GetScrollY(aError);
+  double GetScrollY(mozilla::dom::CallerType aCallerType, mozilla::ErrorResult& aError);
+  double GetPageYOffset(mozilla::dom::CallerType aCallerType, mozilla::ErrorResult& aError) {
+    return GetScrollY(aCallerType, aError);
   }
   void GetScreenX(JSContext* aCx, JS::MutableHandle<JS::Value> aValue,
                   mozilla::dom::CallerType aCallerType,
