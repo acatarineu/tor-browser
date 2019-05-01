@@ -105,22 +105,25 @@ public class TorBootstrapPager extends FirstrunPager {
         public ViewPagerAdapter(FragmentManager fm, List<TorBootstrapPagerConfig.TorBootstrapPanelConfig> panels) {
             super(fm);
             this.panels = panels;
-            this.fragments = new Fragment[panels.size()];
+            this.fragments = getPagerPanels();
+        }
+
+        private Fragment[] getPagerPanels() {
+            Fragment[] fragments = new Fragment[panels.size()];
+            for (int i = 0; i < fragments.length; i++) {
+                TorBootstrapPagerConfig.TorBootstrapPanelConfig panelConfig = panels.get(i);
+                // We know the class is within the "org.mozilla.gecko.torbootstrap" package namespace
+                fragments[i] = Fragment.instantiate(mActivity.getApplicationContext(), panelConfig.getClassname());
+                ((TorBootstrapPanel) fragments[i]).setPagerNavigation(pagerNavigation);
+                ((TorBootstrapPanel) fragments[i]).setContext(mActivity);
+                ((TorBootstrapPanel) fragments[i]).setBootstrapController(this);
+            }
+            return fragments;
         }
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = fragments[i];
-            if (fragment == null) {
-                TorBootstrapPagerConfig.TorBootstrapPanelConfig panelConfig = panels.get(i);
-                // We know the class is within the "org.mozilla.gecko.torbootstrap" package namespace
-                fragment = Fragment.instantiate(mActivity.getApplicationContext(), panelConfig.getClassname());
-                ((TorBootstrapPanel) fragment).setPagerNavigation(pagerNavigation);
-                ((TorBootstrapPanel) fragment).setContext(mActivity);
-                ((TorBootstrapPanel) fragment).setBootstrapController(this);
-                fragments[i] = fragment;
-            }
-            return fragment;
+            return fragments[i];
         }
 
         @Override
