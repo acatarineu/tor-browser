@@ -114,7 +114,7 @@ public class TorBootstrapPager extends FirstrunPager {
             if (fragment == null) {
                 TorBootstrapPagerConfig.TorBootstrapPanelConfig panelConfig = panels.get(i);
                 // We know the class is within the "org.mozilla.gecko.torbootstrap" package namespace
-                fragment = Fragment.instantiate(mActivity.getApplicationContext(), panelConfig.getClassname(), panelConfig.getArgs());
+                fragment = Fragment.instantiate(mActivity.getApplicationContext(), panelConfig.getClassname());
                 ((TorBootstrapPanel) fragment).setPagerNavigation(pagerNavigation);
                 ((TorBootstrapPanel) fragment).setContext(mActivity);
                 ((TorBootstrapPanel) fragment).setBootstrapController(this);
@@ -126,11 +126,6 @@ public class TorBootstrapPager extends FirstrunPager {
         @Override
         public int getCount() {
             return panels.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int i) {
-            return context.getString(panels.get(i).getTitleRes()).toUpperCase();
         }
 
         public void startBootstrapping() {
