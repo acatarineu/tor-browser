@@ -862,6 +862,14 @@ nsresult nsScriptSecurityManager::CheckLoadURIFlags(nsIURI* aSourceURI,
           if (accessAllowed) {
             return NS_OK;
           }
+
+          // Allow loading from about:* pages, whitelisted or not.
+          nsAutoCString sourceScheme;
+          rv = aSourceBaseURI->GetScheme(sourceScheme);
+          if (NS_FAILED(rv)) return rv;
+          if (sourceScheme.EqualsLiteral("about")) {
+            return NS_OK;
+          }
         }
       }
     }

@@ -521,6 +521,14 @@ nsChromeRegistry::AllowContentToAccess(nsIURI* aURI, bool* aResult) {
   if (NS_SUCCEEDED(rv)) {
     *aResult = !!(flags & CONTENT_ACCESSIBLE);
   }
+
+  // Do not leak browser language to content
+  nsAutoCString provider, path;
+  rv = GetProviderAndPath(aURI, provider, path);
+  NS_ENSURE_SUCCESS(rv, rv);
+  if (provider.EqualsLiteral("locale")) {
+    *aResult = false;
+  }
   return NS_OK;
 }
 

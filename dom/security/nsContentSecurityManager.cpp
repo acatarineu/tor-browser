@@ -212,11 +212,6 @@ static bool IsImageLoadInEditorAppType(nsILoadInfo* aLoadInfo) {
 }
 
 static nsresult DoCheckLoadURIChecks(nsIURI* aURI, nsILoadInfo* aLoadInfo) {
-  // Bug 1228117: determine the correct security policy for DTD loads
-  if (aLoadInfo->GetExternalContentPolicyType() == nsIContentPolicy::TYPE_DTD) {
-    return NS_OK;
-  }
-
   if (IsImageLoadInEditorAppType(aLoadInfo)) {
     return NS_OK;
   }
