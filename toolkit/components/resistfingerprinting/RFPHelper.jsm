@@ -21,9 +21,6 @@ const kPrefLetterboxingTesting =
 const kTopicDOMWindowOpened = "domwindowopened";
 const kEventLetterboxingSizeUpdate = "Letterboxing:ContentSizeUpdated";
 
-const kDefaultWidthStepping = 200;
-const kDefaultHeightStepping = 100;
-
 var logConsole;
 function log(msg) {
   if (!logConsole) {
@@ -372,9 +369,23 @@ class _RFPHelper {
       // If the set is empty, we will round the content with the default
       // stepping size.
       if (!this._letterboxingDimensions.length) {
+        let steppedRange = (aDimension) => {
+          let stepping;
+          if (aDimension <= 50) {
+            return 0;
+          } else if (aDimension <= 500) {
+            stepping = 50;
+          } else if (aDimension <= 1600) {
+            stepping = 100;
+          } else {
+            stepping = 200;
+          }
+
+          return (aDimension % stepping) / 2;
+        };
         result = {
-          width: (aWidth % kDefaultWidthStepping) / 2,
-          height: (aHeight % kDefaultHeightStepping) / 2,
+          width: steppedRange(aWidth),
+          height: steppedRange(aHeight),
         };
         log("_roundContentView[" + logId + "] calcMargins(" + aWidth + ", " + aHeight + ") = " + result.width + " x " + result.height);
         return result;

@@ -12,8 +12,20 @@
 
 const TEST_PATH = "http://example.net/browser/browser/components/resistfingerprinting/test/browser/";
 
-const DEFAULT_ROUNDED_WIDTH_STEP  = 200;
-const DEFAULT_ROUNDED_HEIGHT_STEP = 100;
+function defaultRounding(aDimension) {
+    var stepping;
+    if (aDimension <= 50) {
+	return aDimension;
+    } else if (aDimension <= 500) {
+	stepping = 50;
+    } else if (aDimension <= 1600) {
+	stepping = 100;
+    } else {
+	stepping = 200;
+    }
+
+    return (aDimension % stepping);
+}
 
 // A set of test cases which defines the width and the height of the outer window.
 const TEST_CASES = [
@@ -52,8 +64,8 @@ function checkForDefaultSetting(
   aContentWidth, aContentHeight, aRealWidth, aRealHeight) {
   // The default behavior for rounding is to round window with 200x100 stepping.
   // So, we can get the rounded size by subtracting the remainder.
-  let targetWidth = aRealWidth - (aRealWidth % DEFAULT_ROUNDED_WIDTH_STEP);
-  let targetHeight = aRealHeight - (aRealHeight % DEFAULT_ROUNDED_HEIGHT_STEP);
+    let targetWidth = aRealWidth - defaultRounding(aRealWidth);
+    let targetHeight = aRealHeight - defaultRounding(aRealHeight);
 
   // This platform-specific code is explained in the large comment below.
   if (getPlatform() != "linux") {
