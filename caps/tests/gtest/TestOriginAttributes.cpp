@@ -5,6 +5,8 @@
 #include "mozilla/BasePrincipal.h"
 #include "mozilla/Preferences.h"
 #include "nsNetUtil.h"
+#include "nsCOMPtr.h"
+#include "nsIURI.h"
 
 using mozilla::OriginAttributes;
 using mozilla::Preferences;
