@@ -12,20 +12,7 @@
 
 const TEST_PATH = "http://example.net/browser/browser/components/resistfingerprinting/test/browser/";
 
-function defaultRounding(aDimension) {
-    var stepping;
-    if (aDimension <= 50) {
-	return aDimension;
-    } else if (aDimension <= 500) {
-	stepping = 50;
-    } else if (aDimension <= 1600) {
-	stepping = 100;
-    } else {
-	stepping = 200;
-    }
-
-    return (aDimension % stepping);
-}
+onst { RFPHelper } = ChromeUtils.import("resource://gre/modules/RFPHelper.jsm");
 
 // A set of test cases which defines the width and the height of the outer window.
 const TEST_CASES = [
@@ -62,10 +49,9 @@ function handleOSFuzziness(aContent, aTarget) {
 
 function checkForDefaultSetting(
   aContentWidth, aContentHeight, aRealWidth, aRealHeight) {
-  // The default behavior for rounding is to round window with 200x100 stepping.
-  // So, we can get the rounded size by subtracting the remainder.
-    let targetWidth = aRealWidth - defaultRounding(aRealWidth);
-    let targetHeight = aRealHeight - defaultRounding(aRealHeight);
+  // We can get the rounded size by subtracting twice the margin.
+  let targetWidth = aRealWidth - (2 * RFPHelper.steppedRange(aRealWidth));
+  let targetHeight = aRealHeight - (2 * RFPHelper.steppedRange(aRealHeight));
 
   // This platform-specific code is explained in the large comment below.
   if (getPlatform() != "linux") {
