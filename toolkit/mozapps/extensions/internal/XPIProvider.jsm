@@ -810,12 +810,16 @@ function isUsableAddon(aAddon) {
     return true;
 
   // Ensure that we allow torbutton, tor-launcher, and https-everywhere
-  if (aAddon.id == "torbutton@torproject.org" ||
-      aAddon.id == "tor-launcher@torproject.org" ||
+  if (aAddon.id == "tor-launcher@torproject.org" ||
       aAddon.id == "https-everywhere-eff@eff.org" ||
       aAddon.id == "meek-http-helper@bamsoftware.com") {
     return true;
   }
+
+  // Ensure that torbutton is never enabled as an add-on. It will be
+  // removed inside getInstallState() soon.
+  if (aAddon.id == "torbutton@torproject.org")
+    return false;
 
   if (mustSign(aAddon.type) && !aAddon.isCorrectlySigned) {
     logger.warn(`Add-on ${aAddon.id} is not correctly signed.`);
@@ -1603,9 +1607,8 @@ var XPIStates = {
       for (let [id, file] of location.getAddonLocations(true)) {
         knownIds.delete(id);
 
-        // Uninstall torbutton if it is installed in the user profile on Android
-        if (AppConstants.platform === "android" &&
-            id === "torbutton@torproject.org" &&
+        // Uninstall torbutton if it is installed in the user profile
+        if (id === "torbutton@torproject.org" &&
             location.name === KEY_APP_PROFILE) {
           logger.debug("Uninstalling torbutton from user profile.");
           location.uninstallAddon(id);
@@ -2985,10 +2988,9 @@ var XPIProvider = {
           continue;
         }
 
-        // Make sure Torbutton, TorLauncher, EFF's HTTPS-Everywhere and meek
+        // Make sure TorLauncher, EFF's HTTPS-Everywhere and meek
         // are still working after an update.
         if (mustSign(addon.type) &&
-            addon.id != "torbutton@torproject.org" &&
             addon.id != "tor-launcher@torproject.org" &&
             addon.id != "https-everywhere-eff@eff.org" &&
             addon.id != "meek-http-helper@bamsoftware.com" &&

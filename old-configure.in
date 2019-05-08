@@ -3209,10 +3209,21 @@ if test -n "$TOR_BROWSER_DATA_OUTSIDE_APP_DIR"; then
     AC_DEFINE(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
 fi
 
+MOZ_ARG_DISABLE_BOOL(tor-button,
+[  --disable-tor-button
+                          Do not include torbutton],
+   TOR_BROWSER_DISABLE_TOR_BUTTON=1,
+   TOR_BROWSER_DISABLE_TOR_BUTTON=)
+
+if test -n "$TOR_BROWSER_DISABLE_TOR_BUTTON"; then
+    AC_DEFINE(TOR_BROWSER_DISABLE_TOR_BUTTON)
+fi
+
 AC_DEFINE_UNQUOTED(TOR_BROWSER_VERSION,"$TOR_BROWSER_VERSION")
 AC_SUBST(TOR_BROWSER_VERSION)
 AC_SUBST(TOR_BROWSER_UPDATE)
 AC_SUBST(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+AC_SUBST(TOR_BROWSER_DISABLE_TOR_BUTTON)
 
 dnl ========================================================
 dnl parental controls (for Windows Vista)
