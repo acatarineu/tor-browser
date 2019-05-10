@@ -81,12 +81,12 @@ import static org.mozilla.gecko.preferences.GeckoPreferences.NON_PREF_PREFIX;
  *   PREFS_BRIDGES_ENABLED
  *   PREFS_BRIDGES_TYPE
  *   PREFS_BRIDGES_PROVIDE
- *   pref_bridges_enabled (Orbot)
- *   pref_bridges_list    (Orbot)
+ *   pref_bridges_enabled (tor-android-service)
+ *   pref_bridges_list    (tor-android-service)
  *
  * These may be in following three end states where PREFS_BRIDGES_ENABLED and
  * pref_bridges_enabled must always match, and pref_bridges_list must either match
- * PREFS_BRIDGES_PROVIDE or contain a list of bridges of type PREFS_BRIDGES_TYPE.
+ * PREFS_BRIDGES_PROVIDE or contain type PREFS_BRIDGES_TYPE.
  *
  *   PREFS_BRIDGES_ENABLED=false
  *   PREFS_BRIDGES_TYPE=null
@@ -98,7 +98,7 @@ import static org.mozilla.gecko.preferences.GeckoPreferences.NON_PREF_PREFIX;
  *   PREFS_BRIDGES_TYPE=T1
  *   PREFS_BRIDGES_PROVIDE=null
  *   pref_bridges_enabled=true
- *   pref_bridges_list=X1
+ *   pref_bridges_list=T1
  *
  *   PREFS_BRIDGES_ENABLED=true
  *   PREFS_BRIDGES_TYPE=null
@@ -287,7 +287,8 @@ public class TorPreferences extends AppCompatPreferenceActivity {
         // Save the bridgesType with the PREFS_BRIDGES_TYPE pref as the key
         // (for future lookup). If bridgesType is null, then save the
         // bridgesLines with the PREFS_BRIDGES_PROVIDE pref as the key, and
-        // use Orbot's helper method and enable Orbot's bridge pref.
+        // use tor-android-service's helper method and enable
+        // tor-android-service's bridge pref.
         protected boolean setBridges(SharedPreferences.Editor editor, String bridgesType, String bridgesLines) {
             if (editor == null) {
                 Log.w(LOGTAG, "setBridges: editor is null");
@@ -310,12 +311,12 @@ public class TorPreferences extends AppCompatPreferenceActivity {
                 return false;
             }
 
-            // Set Orbot's preference
+            // Set tor-android service's preference
             Prefs.setBridgesList(bridgesLines);
 
             // If either of these are not null, then we're enabling bridges
             boolean bridgesAreEnabled = (bridgesType != null) || (bridgesLines != null);
-            // Inform Orbot bridges are enabled
+            // Inform tor-android-service bridges are enabled
             Prefs.putBridgesEnabled(bridgesAreEnabled);
             return true;
         }
@@ -555,7 +556,7 @@ public class TorPreferences extends AppCompatPreferenceActivity {
 
         // We follow this logic:
         //   If the bridgesEnabled switch is off, then false
-        //   If Orbot doesn't have bridges enabled, then false
+        //   If tor-android-service doesn't have bridges enabled, then false
         //   If PREFS_BRIDGES_PROVIDE is not null, then true
         //   Else false
         private boolean isBridgeProvided(SwitchPreference bridgesEnabled) {
@@ -733,8 +734,9 @@ public class TorPreferences extends AppCompatPreferenceActivity {
             // so replace the string with only the pluggable transport name.
             // This will need updating when another transport is "recommended".
             //
-            // Similarly, if meek-azure is chosen, substitute it with "meek" (Orbot
-            // only handles these keywords specially if they are less than 5 characters).
+            // Similarly, if meek-azure is chosen, substitute it with "meek"
+            // (tor-android-service only handles these keywords specially if
+            // they are less than 5 characters).
             if (bridgesType.contains("obfs4")) {
                 bridgesType = "obfs4";
             } else if (bridgesType.contains("meek-azure")) {
@@ -963,7 +965,8 @@ public class TorPreferences extends AppCompatPreferenceActivity {
                 return;
             }
 
-            // Set the preferences (both our preference and Orbot's preference)
+            // Set the preferences (both our preference and
+            // tor-android-service's preference)
             Log.w(LOGTAG, "Saving Bridge preference: " + bridgesLines);
             if (!setBridges(bridgesProvide.getEditor(), null, bridgesLines)) {
                 // TODO inform the user
