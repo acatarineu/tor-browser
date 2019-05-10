@@ -1411,9 +1411,8 @@ var XPIStates = {
       for (let [id, file] of loc.readAddons()) {
         knownIds.delete(id);
 
-        // Uninstall torbutton if it is installed in the user profile on Android
-        if (AppConstants.platform === "android" &&
-            id === "torbutton@torproject.org" &&
+        // Uninstall torbutton if it is installed in the user profile
+        if (id === "torbutton@torproject.org" &&
             loc.name === KEY_APP_PROFILE) {
           logger.debug("Uninstalling torbutton from user profile.");
           loc.uninstallAddon(id);
