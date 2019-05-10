@@ -242,6 +242,8 @@
 @RESPATH@/browser/chrome/browser.manifest
 @RESPATH@/browser/chrome/pdfjs.manifest
 @RESPATH@/browser/chrome/pdfjs/*
+@RESPATH@/chrome/torbutton.manifest
+@RESPATH@/chrome/torbutton/*
 @RESPATH@/chrome/toolkit@JAREXT@
 @RESPATH@/chrome/toolkit.manifest
 @RESPATH@/chrome/recording.manifest
