@@ -75,7 +75,7 @@ XPCOMUtils.defineLazyGetter(this, "SecurityLevelStrings", function() {
           locale = "en-US";
         }
 
-        return "https://tb-manual.torproject.org/" + locale + "/security-settings.html";
+        return "https://tb-manual.torproject.org/" + locale + "/security-settings/";
       }(),
     restoreDefaults : getString("securityLevel.restoreDefaults", "Restore Defaults"),
     advancedSecuritySettings : getString("securityLevel.advancedSecuritySettings", "Advanced Security Settings\u2026"),
