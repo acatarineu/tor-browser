@@ -103,6 +103,9 @@ static const nsLiteralCString kPreloadPermissions[] = {
     NS_LITERAL_CSTRING("cookie"), NS_LITERAL_CSTRING("trackingprotection"),
     NS_LITERAL_CSTRING("trackingprotection-pb"),
 
+    // Bug 28822: Make sure uitour permissions are preloaded in content processes.
+    NS_LITERAL_CSTRING("uitour"),
+
     USER_INTERACTION_PERM};
 
 // Certain permissions should never be persisted to disk under GeckoView; it's
