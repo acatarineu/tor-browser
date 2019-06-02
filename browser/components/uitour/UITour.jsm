@@ -125,7 +125,7 @@ var UITour = {
   highlightEffects: ["random", "wobble", "zoom", "color"],
   targets: new Map([
     ["torBrowser-circuitDisplay", {
-      query: "#connection-icon",
+      query: "#identity-icon",
     }],
     ["torBrowser-circuitDisplay-diagram",
       torBrowserCircuitDisplayTarget("circuit-display-nodes")],
