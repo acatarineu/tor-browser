@@ -8,7 +8,7 @@
 
 var EXPORTED_SYMBOLS = ["Onboarding"];
 
-ChromeUtils.import("resource://gre/modules/Services.jsm");
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 const ONBOARDING_CSS_URL = "resource://onboarding/onboarding.css";
 const TORBUTTON_BUNDLE_URI = "chrome://torbutton/locale/browserOnboarding.properties";
@@ -897,6 +897,7 @@ class Onboarding {
     const kOnionURL = "https://3g2upl4pq6kufc4m.onion/";  // DuckDuckGo
     let handledTourActionClick = false;
     switch (id) {
+      case "onboarding-overlay-button-icon":
       case "onboarding-overlay-button":
         this.telemetry({
           type: "onboarding-logo-click",
@@ -1725,7 +1726,7 @@ class Onboarding {
       let tooltipStringId = Services.prefs.getStringPref(tooltipStringPrefId, defaultTourStringId);
       tooltip = this._bundle.formatStringFromName(tooltipStringId, [BRAND_SHORT_NAME], 1);
     } catch (e) {
-      Cu.reportError(`the provided ${tooltipStringPrefId} string is in wrong format `, e);
+      Cu.reportError(e);
       // fallback to defaultTourStringId to proceed
       tooltip = this._bundle.formatStringFromName(defaultTourStringId, [BRAND_SHORT_NAME], 1);
     }
