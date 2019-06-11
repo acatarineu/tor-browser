@@ -1667,8 +1667,8 @@ BrowserGlue.prototype = {
     this._idleService.addIdleObserver(
       this._lateTasksIdleObserver, LATE_TASKS_IDLE_TIME_SEC);
 
-    this._monitorScreenshotsPref();
-    this._monitorWebcompatReporterPref();
+    // this._monitorScreenshotsPref();
+    // this._monitorWebcompatReporterPref();
 
     if (Services.prefs.getBoolPref("corroborator.enabled", true)) {
       Corroborate.init().catch(Cu.reportError);
