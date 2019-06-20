@@ -3731,7 +3731,9 @@ static const char* gPropertiesFiles[nsContentUtils::PropertiesFile_COUNT] = {
     "chrome://global/locale/security/security.properties",
     "chrome://necko/locale/necko.properties",
     "resource://gre/chrome/en-US/locale/en-US/global/layout/"
-    "HtmlForm.properties"};
+    "HtmlForm.properties",
+    "resource://gre/chrome/en-US/locale/en-US/global/dom/"
+    "dom.properties"};
 
 /* static */ nsresult nsContentUtils::EnsureStringBundle(PropertiesFile aFile) {
   if (!sStringBundles[aFile]) {
@@ -3771,6 +3773,8 @@ nsresult nsContentUtils::GetLocalizedString(PropertiesFile aFile,
   // When we spoof English, use en-US default strings in HTML forms.
   if (aFile == eFORMS_PROPERTIES && sSpoofEnglish == 2) {
     aFile = eFORMS_PROPERTIES_en_US;
+  } else if (aFile == eDOM_PROPERTIES && sSpoofEnglish == 2) {
+    aFile = eDOM_PROPERTIES_en_US;
   }
 
   nsresult rv = EnsureStringBundle(aFile);
@@ -3788,6 +3792,8 @@ nsresult nsContentUtils::FormatLocalizedString(PropertiesFile aFile,
   // When we spoof English, use en-US default strings in HTML forms.
   if (aFile == eFORMS_PROPERTIES && sSpoofEnglish == 2) {
     aFile = eFORMS_PROPERTIES_en_US;
+  } else if (aFile == eDOM_PROPERTIES && sSpoofEnglish == 2) {
+    aFile = eDOM_PROPERTIES_en_US;
   }
 
   nsresult rv = EnsureStringBundle(aFile);

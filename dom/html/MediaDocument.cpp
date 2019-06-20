@@ -23,6 +23,7 @@
 #include "nsServiceManagerUtils.h"
 #include "nsIPrincipal.h"
 #include "nsIMultiPartChannel.h"
+#include "mozilla/Preferences.h"
 
 namespace mozilla {
 namespace dom {
@@ -112,8 +113,11 @@ nsresult MediaDocument::Init() {
   nsCOMPtr<nsIStringBundleService> stringService =
       mozilla::services::GetStringBundleService();
   if (stringService) {
-    stringService->CreateBundle(NSMEDIADOCUMENT_PROPERTIES_URI,
-                                getter_AddRefs(mStringBundle));
+    stringService->CreateBundle(
+        Preferences::GetInt("privacy.spoof_english", 0) == 2
+            ? NSMEDIADOCUMENT_PROPERTIES_URI_en_US
+            : NSMEDIADOCUMENT_PROPERTIES_URI,
+        getter_AddRefs(mStringBundle));
   }
 
   mIsSyntheticDocument = true;

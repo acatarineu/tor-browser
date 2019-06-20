@@ -15,6 +15,10 @@
 #define NSMEDIADOCUMENT_PROPERTIES_URI \
   "chrome://global/locale/layout/MediaDocument.properties"
 
+#define NSMEDIADOCUMENT_PROPERTIES_URI_en_US                \
+  "resource://gre/chrome/en-US/locale/en-US/global/layout/" \
+  "MediaDocument.properties"
+
 namespace mozilla {
 namespace dom {
 

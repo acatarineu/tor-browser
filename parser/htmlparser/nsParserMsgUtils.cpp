@@ -9,6 +9,7 @@
 #include "nsParserMsgUtils.h"
 #include "nsNetCID.h"
 #include "mozilla/Services.h"
+#include "mozilla/Preferences.h"
 
 static nsresult GetBundle(const char* aPropFileName,
                           nsIStringBundle** aBundle) {
@@ -21,6 +22,10 @@ static nsresult GetBundle(const char* aPropFileName,
       mozilla::services::GetStringBundleService();
   if (!stringService) return NS_ERROR_FAILURE;
 
+  if (Preferences::GetInt("privacy.spoof_english", 0) == 2 &&
+      strcmp(aPropFileName, XMLPARSER_PROPERTIES) == 0) {
+    aPropFileName = XMLPARSER_PROPERTIES_en_US;
+  }
   return stringService->CreateBundle(aPropFileName, aBundle);
 }
 
