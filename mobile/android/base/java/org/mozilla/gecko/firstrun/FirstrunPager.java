@@ -67,6 +67,7 @@ public class FirstrunPager extends RtlViewPager {
                      final FirstrunAnimationContainer.OnFinishListener onFinishListener) {
         final List<FirstrunTorPagerConfig.FirstrunTorPanelConfig> panels = FirstrunTorPagerConfig.getDefault(appContext);
 
+        /*
         if (Restrictions.isRestrictedProfile(appContext)) {
             panels = FirstrunPagerConfig.getRestricted(appContext);
         } else if (FirefoxAccounts.firefoxAccountsExist(appContext)) {
@@ -74,6 +75,7 @@ public class FirstrunPager extends RtlViewPager {
         } else {
             panels = FirstrunPagerConfig.getDefault(appContext, useLocalValues);
         }
+        */
 
         setAdapter(new ViewPagerAdapter(fm, panels));
         this.pagerNavigation = new FirstrunPanel.PagerNavigation() {

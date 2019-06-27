@@ -58,8 +58,8 @@ public class FirstrunTorPagerConfig {
             return this.classname;
         }
 
-        public int getTitleRes() {
-            return this.titleRes;
+        public int getTitle() {
+            return this.title;
         }
 
         public Bundle getArgs() {
