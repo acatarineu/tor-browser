@@ -97,7 +97,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.geckoview.GeckoViewBridge;
-import org.mozilla.mozstumbler.service.mainthread.SafeReceiver;
+// SafeReceiver excluded at compile-time
+//import org.mozilla.mozstumbler.service.mainthread.SafeReceiver;
 
 import org.torproject.android.service.TorService;
 
@@ -1024,11 +1025,12 @@ public abstract class GeckoApp extends GeckoActivity
         // We do this via intents since we can't easily access Stumbler directly,
         // as it might be compiled outside of Fennec.
         // Tor Browser: We don't want Fennec using or receiving Stumbler
-        if (!AppConstants.isTorBrowser()) {
-            final Intent stumblerIntent = new Intent(getApplicationContext(), SafeReceiver.class);
-            stumblerIntent.setAction(INTENT_REGISTER_STUMBLER_LISTENER);
-            getApplicationContext().sendBroadcast(stumblerIntent);
-        }
+        // SafeReceiver excluded at compile-time
+        //if (!AppConstants.isTorBrowser()) {
+        //    final Intent stumblerIntent = new Intent(getApplicationContext(), SafeReceiver.class);
+        //    stumblerIntent.setAction(INTENT_REGISTER_STUMBLER_LISTENER);
+        //    getApplicationContext().sendBroadcast(stumblerIntent);
+        //}
 
         // Did the OS locale change while we were backgrounded? If so,
         // we need to die so that Gecko will re-init add-ons that touch
