@@ -29,3 +29,5 @@
 <!ENTITY firstrun_onionservices_title "Onion Services.">
 <!ENTITY firstrun_onionservices_message "Onion services are sites that end with a .onion that provide extra protections to publishers and visitors, including added safeguards against censorship. Onion services allow anyone to provide content and services anonymously.">
 <!ENTITY firstrun_onionservices_next "Go to explore">
+
+<!ENTITY sync_not_supported "Sync is not currently supported in Tor Browser on Android">
