@@ -205,8 +205,8 @@ public class TorBootstrapPanel extends FirstrunPanel implements TorBootstrapLogg
             verticalPadding = 0;
         } else {
             // Place 4/5 of padding at top, and 1/5 of padding at bottom.
-            topPadding = (int) (verticalPadding*4)/5;
-            bottomPadding = (int) verticalPadding/5;
+            topPadding = (verticalPadding*4)/5;
+            bottomPadding = verticalPadding/5;
         }
 
         if (sidePadding < 0) {
@@ -215,7 +215,7 @@ public class TorBootstrapPanel extends FirstrunPanel implements TorBootstrapLogg
             rightPadding = 0;
         } else {
             // Divide the padding equally on the left and right side.
-            leftPadding = (int) sidePadding/2;
+            leftPadding = sidePadding/2;
             rightPadding = leftPadding;
         }
 
