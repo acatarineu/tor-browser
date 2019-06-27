@@ -25,7 +25,10 @@ public class FirstrunTorPagerConfig {
     public static final String KEY_SUBTEXT = "panelDescription";
     public static final String KEY_CTATEXT = "panelCtaText";
 
+    private static Context mContext;
+
     public static List<FirstrunTorPanelConfig> getDefault(Context context) {
+       mContext = context;
        final List<FirstrunTorPanelConfig> panels = new LinkedList<>();
        panels.add(SimplePanelConfigs.welcomeTorPanelConfig);
        panels.add(SimplePanelConfigs.privacyPanelConfig);
@@ -40,25 +43,25 @@ public class FirstrunTorPagerConfig {
     public static class FirstrunTorPanelConfig {
 
         private String classname;
-        private int title;
+        private String title;
         private Bundle args;
 
         public FirstrunTorPanelConfig(String classname, int title, int image, int message, int subtext, int ctatext) {
             this.classname = classname;
-            this.title = title;
+            this.title = mContext.getResources().getString(title);
 
             this.args = new Bundle();
             this.args.putInt(KEY_IMAGE, image);
-            this.args.putInt(KEY_MESSAGE, message);
-            this.args.putInt(KEY_SUBTEXT, subtext);
-            this.args.putInt(KEY_CTATEXT, ctatext);
+            this.args.putString(KEY_MESSAGE, mContext.getResources().getString(message));
+            this.args.putString(KEY_SUBTEXT, mContext.getResources().getString(subtext));
+            this.args.putString(KEY_CTATEXT, mContext.getResources().getString(ctatext));
         }
 
         public String getClassname() {
             return this.classname;
         }
 
-        public int getTitle() {
+        public String getTitle() {
             return this.title;
         }
 
