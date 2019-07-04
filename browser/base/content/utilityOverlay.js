@@ -377,8 +377,11 @@ function openLinkIn(url, where, params) {
     }
     return principal;
   }
+  console.log('ostia hahaha 1', aPrincipal && aPrincipal.originAttributes);
   aPrincipal = useOAForPrincipal(aPrincipal);
   aTriggeringPrincipal = useOAForPrincipal(aTriggeringPrincipal);
+
+  console.log('ostia hahaha', aPrincipal, aTriggeringPrincipal);
 
   if (!w || where == "window") {
     let features = "chrome,dialog=no,all";

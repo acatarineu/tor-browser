@@ -1713,13 +1713,15 @@ NS_IMETHODIMP
 IOServiceProxyCallback::OnProxyAvailable(nsICancelable* request,
                                          nsIChannel* channel, nsIProxyInfo* pi,
                                          nsresult status) {
+  printf("ostia puta xD haha\n");
   // Checking proxy status for speculative connect
   nsAutoCString type;
-  if (NS_SUCCEEDED(status) && pi && NS_SUCCEEDED(pi->GetType(type)) &&
-      !type.EqualsLiteral("direct")) {
-    // proxies dont do speculative connect
-    return NS_OK;
-  }
+  // if (NS_SUCCEEDED(status) && pi && NS_SUCCEEDED(pi->GetType(type)) &&
+  //     !type.EqualsLiteral("direct")) {
+  //   // proxies dont do speculative connect
+  //   printf("ostia puta nospec xD haha\n");
+  //   return NS_OK;
+  // }
 
   nsCOMPtr<nsIURI> uri;
   nsresult rv = channel->GetURI(getter_AddRefs(uri));

@@ -76,10 +76,8 @@ RemoteWebNavigation.prototype = {
                                                   cancelContentJSEpoch});
   },
   loadURI(aURI, aLoadURIOptions) {
+    console.log('hahaha', aURI, aLoadURIOptions, (new Error().stack));
     let uri;
-/*******************************************************************************
-   TOR BROWSER: Disable the following speculative connect until
-   we can make it properly obey first-party isolation.
 
     // We know the url is going to be loaded, let's start requesting network
     // connection before the content process asks.
@@ -89,23 +87,23 @@ RemoteWebNavigation.prototype = {
       try {
         uri = makeURI(aURI);
         let principal = aLoadURIOptions.triggeringPrincipal;
-        // We usually have a triggeringPrincipal assigned, but in case we
-        // don't have one or if it's a SystemPrincipal, let's create it with OA
-        // inferred from the current context.
-        if (!principal || principal.isSystemPrincipal) {
+        // // We usually have a triggeringPrincipal assigned, but in case we
+        // // don't have one or if it's a SystemPrincipal, let's create it with OA
+        // // inferred from the current context.
+        // if (!principal || principal.isSystemPrincipal) {
           let attrs = {
             userContextId: this._browser.getAttribute("usercontextid") || 0,
             privateBrowsingId: PrivateBrowsingUtils.isBrowserPrivate(this._browser) ? 1 : 0,
           };
           principal = Services.scriptSecurityManager.createCodebasePrincipal(uri, attrs);
-        }
+        // }
         Services.io.speculativeConnect(uri, principal, null);
       } catch (ex) {
         // Can't setup speculative connection for this uri string for some
         // reason (such as failing to parse the URI), just ignore it.
       }
     }
-*******************************************************************************/
+
     let cancelContentJSEpoch = this._cancelContentJSEpoch++;
     this._browser.frameLoader.remoteTab.maybeCancelContentJSExecution(
       Ci.nsIRemoteTab.NAVIGATE_URL, {uri, epoch: cancelContentJSEpoch});
