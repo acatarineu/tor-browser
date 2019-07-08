@@ -102,7 +102,6 @@
   Services.scriptloader.loadSubScript("chrome://browser/content/tabbrowser.js", this);
   Services.scriptloader.loadSubScript("chrome://browser/content/search/autocomplete-popup.js", this);
   Services.scriptloader.loadSubScript("chrome://browser/content/search/searchbar.js", this);
-  Services.scriptloader.loadSubScript("chrome://torbutton/content/torbutton_util.js", this);
   Services.scriptloader.loadSubScript("chrome://torbutton/content/tor-circuit-display.js", this);
   Services.scriptloader.loadSubScript("chrome://torbutton/content/torbutton.js", this);
 
