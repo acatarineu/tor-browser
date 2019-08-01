@@ -8,6 +8,9 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   PanelMultiView: "resource:///modules/PanelMultiView.jsm",
 });
 
+XPCOMUtils.defineLazyGlobalGetters(this, ["DOMParser"]);
+XPCOMUtils.defineLazyGetter(this, "domParser", () => new DOMParser());
+
 /*
  Security Level Strings
 
@@ -33,36 +36,64 @@ XPCOMUtils.defineLazyGetter(this, "SecurityLevelStrings", function() {
     return retval;
   };
 
+  // copied from testing/marionette/l10n.js
+  let localizeEntity = function(urls, id) {
+    // Build a string which contains all possible entity locations
+    let locations = [];
+    urls.forEach((url, index) => {
+      locations.push(`<!ENTITY % dtd_${index} SYSTEM "${url}">%dtd_${index};`);
+    });
+  
+    // Use the DOM parser to resolve the entity and extract its real value
+    let header = `<?xml version="1.0"?><!DOCTYPE elem [${locations.join("")}]>`;
+    let elem = `<elem id="elementID">&${id};</elem>`;
+    let doc = domParser.parseFromString(header + elem, "text/xml");
+    let element = doc.querySelector("elem[id='elementID']");
+  
+    if (element === null) {
+      throw new Error(`Entity with id='${id}' hasn't been found`);
+    }
+  
+    return element.textContent;
+  };
+
+  let getStringDTD = function(key, fallback) {
+    try {
+      return localizeEntity(['chrome://torbutton/locale/torbutton.dtd'], `torbutton.${key}`);
+    } catch (e) { }
+    return fallback;
+  };
+
   // read localized strings from torbutton; but use hard-coded en-US strings as fallbacks in case of error
   let retval = {
-    securityLevel : getString("securityLevel.securityLevel", "Security Level"),
+    securityLevel : getStringDTD("prefs.sec_caption", "Security Level"),
     customWarning : getString("securityLevel.customWarning", "Custom"),
     overview : getString("securityLevel.overview", "Disable certain web features that can be used to attack your security and anonymity."),
     standard : {
-      level : getString("securityLevel.standard.level", "Standard"),
+      level : getStringDTD("prefs.sec_standard_label", "Standard"),
       tooltip : getString("securityLevel.standard.tooltip", "Security Level : Standard"),
-      summary : getString("securityLevel.standard.summary", "All Tor Browser and website features are enabled."),
+      summary : getStringDTD("prefs.sec_standard_description", "All Tor Browser and website features are enabled."),
     },
     safer : {
-      level : getString("securityLevel.safer.level", "Safer"),
+      level : getStringDTD("prefs.sec_safer_label", "Safer"),
       tooltip : getString("securityLevel.safer.tooltip", "Security Level : Safer"),
-      summary : getString("securityLevel.safer.summary", "Disables website features that are often dangerous, causing some sites to lose functionality."),
-      description1 : getString("securityLevel.safer.description1", "JavaScript is disabled on non-HTTPS sites."),
-      description2 : getString("securityLevel.safer.description2", "Some fonts and math symbols are disabled."),
-      description3 : getString("securityLevel.safer.description3", "Audio and video (HTML5 media) are click-to-play."),
+      summary : getStringDTD("prefs.sec_safer_description", "Disables website features that are often dangerous, causing some sites to lose functionality."),
+      description1 : getStringDTD("prefs.sec_js_on_https_sites_only", "JavaScript is disabled on non-HTTPS sites."),
+      description2 : getStringDTD("prefs.sec_limit_typography", "Some fonts and math symbols are disabled."),
+      description3 : getStringDTD("prefs.sec_click_to_play_media", "Audio and video (HTML5 media) are click-to-play."),
     },
     safest : {
-      level : getString("securityLevel.safest.level", "Safest"),
+      level : getString("prefs.sec_safest_label", "Safest"),
       tooltip : getString("securityLevel.safest.tooltip", "Security Level : Safest"),
-      summary : getString("securityLevel.safest.summary", "Only allows website features required for static sites and basic services. These changes affect images, media, and scripts."),
-      description1 : getString("securityLevel.safest.description1", "JavaScript is disabled by default on all sites."),
-      description2 : getString("securityLevel.safest.description2", "Some fonts, icons, math symbols, and images are disabled."),
-      description3 : getString("securityLevel.safest.description3", "Audio and video (HTML5 media) are click-to-play."),
+      summary : getStringDTD("prefs.sec_safest_description", "Only allows website features required for static sites and basic services. These changes affect images, media, and scripts."),
+      description1 : getStringDTD("prefs.sec_js_on_https_sites_only", "JavaScript is disabled by default on all sites."),
+      description2 : getStringDTD("prefs.sec_limit_typography", "Some fonts, icons, math symbols, and images are disabled."),
+      description3 : getStringDTD("prefs.sec_click_to_play_media", "Audio and video (HTML5 media) are click-to-play."),
     },
     custom : {
       summary : getString("securityLevel.custom.summary", "Your custom browser preferences have resulted in unusual security settings. For security and privacy reasons, we recommend you choose one of the default security levels."),
     },
-    learnMore : getString("securityLevel.learnMore", "Learn more"),
+    learnMore : getStringDTD("prefs.sec_learn_more_label", "Learn more"),
     learnMoreURL : function() {
         let locale = "";
         try {
