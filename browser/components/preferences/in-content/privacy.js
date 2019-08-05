@@ -161,6 +161,7 @@ var gPrivacyPane = {
       window.removeEventListener("unload", unload);
       SecurityLevelPreferences.uninit();
     };
+    window.addEventListener("unload", unload);
   },
 
   /**
