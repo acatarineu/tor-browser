@@ -1195,7 +1195,7 @@ public abstract class GeckoApp extends GeckoActivity
                 // Change visibility here in case mMenu is initialized. If it is not initialized,
                 // then the visibility is set in BrowserApp::onCreateOptionsMenu().
                 if (mMenu != null) {
-                    MenuItem newTabMenuItem = (MenuItem) mMenu.findItem(R.id.new_tab);
+                    MenuItem newTabMenuItem = mMenu.findItem(R.id.new_tab);
                     if (newTabMenuItem != null) {
                         newTabMenuItem.setVisible(mOnlyPrivateTabs == false);
                     }
