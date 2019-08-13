@@ -1,4 +1,4 @@
-// Copyright (c) 2018, The Tor Project, Inc.
+// Copyright (c) 2019, The Tor Project, Inc.
 // See LICENSE for licensing information.
 //
 // vim: set sw=2 sts=2 ts=8 et syntax=javascript:
@@ -17,8 +17,8 @@ Cu.import("resource://gre/modules/NetUtil.jsm");
 const kRequestUpdateMessageName = "AboutTBUpdate:RequestUpdate";
 const kSendUpdateMessageName    = "AboutTBUpdate:Update";
 
-#ifdef TOR_BROWSER_VERSION
-#expand const TOR_BROWSER_VERSION = __TOR_BROWSER_VERSION__;
+#ifdef TOR_BROWSER_VERSION_QUOTED
+#expand const TOR_BROWSER_VERSION = __TOR_BROWSER_VERSION_QUOTED__;
 #endif
 
 /**
@@ -29,9 +29,7 @@ const kSendUpdateMessageName    = "AboutTBUpdate:Update";
  */
 var AboutTBUpdate = {
   init: function() {
-    let mm = Cc["@mozilla.org/globalmessagemanager;1"]
-               .getService(Ci.nsIMessageListenerManager);
-    mm.addMessageListener(kRequestUpdateMessageName, this);
+    Services.mm.addMessageListener(kRequestUpdateMessageName, this);
   },
 
   receiveMessage: function(aMessage) {
@@ -45,9 +43,7 @@ var AboutTBUpdate = {
     if (aTarget && aTarget.messageManager) {
       aTarget.messageManager.sendAsyncMessage(kSendUpdateMessageName, data);
     } else {
-      let mm = Cc["@mozilla.org/globalmessagemanager;1"]
-                 .getService(Ci.nsIMessageListenerManager);
-      mm.broadcastAsyncMessage(kSendUpdateMessageName, data);
+      Services.mm.broadcastAsyncMessage(kSendUpdateMessageName, data);
     }
   },
 
