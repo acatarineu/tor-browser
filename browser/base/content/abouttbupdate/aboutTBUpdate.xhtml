@@ -13,13 +13,14 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="default-src chrome:" />
   <title>&aboutTBUpdate.changelogTitle;</title>
   <link rel="stylesheet" type="text/css"
         href="chrome://browser/content/abouttbupdate/aboutTBUpdate.css"/>
   <script src="chrome://browser/content/abouttbupdate/aboutTBUpdate.js"
           type="text/javascript"/>
 </head>
-<body dir="&locale.dir;" onload="init()">
+<body dir="&locale.dir;">
 <div class="two-column-grid">
   <div class="label-column">&aboutTBUpdate.version;</div>
   <div id="version-content"/>
