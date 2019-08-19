@@ -317,8 +317,6 @@ bool nsContentUtils::sBypassCSSOMOriginCheck = false;
 
 nsCString* nsContentUtils::sJSBytecodeMimeType = nullptr;
 
-int32_t nsContentUtils::sSpoofEnglish = 0;
-
 nsContentUtils::UserInteractionObserver*
     nsContentUtils::sUserInteractionObserver = nullptr;
 
@@ -606,8 +604,6 @@ nsresult nsContentUtils::Init() {
 
   Preferences::AddBoolVarCache(&sAllowXULXBL_for_file,
                                "dom.allow_XUL_XBL_for_file");
-
-  Preferences::AddIntVarCache(&sSpoofEnglish, "privacy.spoof_english", 0);
 
 #ifndef RELEASE_OR_BETA
   sBypassCSSOMOriginCheck = getenv("MOZ_BYPASS_CSSOM_ORIGIN_CHECK");
@@ -3511,7 +3507,7 @@ void nsContentUtils::GetEventArgNames(int32_t aNameSpaceID, nsAtom* aEventName,
 
 // Note: The list of content bundles in nsStringBundle.cpp should be updated
 // whenever entries are added or removed from this list.
-static const char* gPropertiesFiles[nsContentUtils::PropertiesFile_COUNT] = {
+static const char gPropertiesFiles[nsContentUtils::PropertiesFile_COUNT][56] = {
     // Must line up with the enum values in |PropertiesFile| enum.
     "chrome://global/locale/css.properties",
     "chrome://global/locale/xbl.properties",
@@ -3526,9 +3522,7 @@ static const char* gPropertiesFiles[nsContentUtils::PropertiesFile_COUNT] = {
     "chrome://global/locale/commonDialogs.properties",
     "chrome://global/locale/mathml/mathml.properties",
     "chrome://global/locale/security/security.properties",
-    "chrome://necko/locale/necko.properties",
-    "resource://gre/chrome/en-US/locale/en-US/global/layout/"
-    "HtmlForm.properties"};
+    "chrome://necko/locale/necko.properties"};
 
 /* static */
 nsresult nsContentUtils::EnsureStringBundle(PropertiesFile aFile) {
@@ -3581,11 +3575,6 @@ void nsContentUtils::AsyncPrecreateStringBundles() {
 nsresult nsContentUtils::GetLocalizedString(PropertiesFile aFile,
                                             const char* aKey,
                                             nsAString& aResult) {
-  // When we spoof English, use en-US default strings in HTML forms.
-  if (aFile == eFORMS_PROPERTIES && sSpoofEnglish == 2) {
-    aFile = eFORMS_PROPERTIES_en_US;
-  }
-
   nsresult rv = EnsureStringBundle(aFile);
   NS_ENSURE_SUCCESS(rv, rv);
   nsIStringBundle* bundle = sStringBundles[aFile];
@@ -3598,11 +3587,6 @@ nsresult nsContentUtils::FormatLocalizedString(PropertiesFile aFile,
                                                const char16_t** aParams,
                                                uint32_t aParamsLength,
                                                nsAString& aResult) {
-  // When we spoof English, use en-US default strings in HTML forms.
-  if (aFile == eFORMS_PROPERTIES && sSpoofEnglish == 2) {
-    aFile = eFORMS_PROPERTIES_en_US;
-  }
-
   nsresult rv = EnsureStringBundle(aFile);
   NS_ENSURE_SUCCESS(rv, rv);
   nsIStringBundle* bundle = sStringBundles[aFile];
@@ -5136,13 +5120,11 @@ nsIWidget* nsContentUtils::GetTopLevelWidget(nsIWidget* aWidget) {
 const nsDependentString nsContentUtils::GetLocalizedEllipsis() {
   static char16_t sBuf[4] = {0, 0, 0, 0};
   if (!sBuf[0]) {
-    if (sSpoofEnglish != 2) {
-      nsAutoString tmp;
-      Preferences::GetLocalizedString("intl.ellipsis", tmp);
-      uint32_t len =
-          std::min(uint32_t(tmp.Length()), uint32_t(ArrayLength(sBuf) - 1));
-      CopyUnicodeTo(tmp, 0, sBuf, len);
-    }
+    nsAutoString tmp;
+    Preferences::GetLocalizedString("intl.ellipsis", tmp);
+    uint32_t len =
+        std::min(uint32_t(tmp.Length()), uint32_t(ArrayLength(sBuf) - 1));
+    CopyUnicodeTo(tmp, 0, sBuf, len);
     if (!sBuf[0]) sBuf[0] = char16_t(0x2026);
   }
   return nsDependentString(sBuf);
