@@ -3524,7 +3524,9 @@ static const char* gPropertiesFiles[nsContentUtils::PropertiesFile_COUNT] = {
     "chrome://global/locale/security/security.properties",
     "chrome://necko/locale/necko.properties",
     "chrome://global/locale/layout/HtmlForm.properties",
-    "resource://gre/res/locale/layout/HtmlForm.properties"};
+    "resource://gre/res/locale/layout/HtmlForm.properties",
+    "chrome://global/locale/dom/dom.properties",
+    "resource://gre/res/locale/dom/dom.properties"};
 
 /* static */
 nsresult nsContentUtils::EnsureStringBundle(PropertiesFile aFile) {
@@ -3573,7 +3575,8 @@ void nsContentUtils::AsyncPrecreateStringBundles() {
   }
 }
 
-static bool SpoofLocaleEnglish() {
+/* static */
+bool nsContentUtils::SpoofLocaleEnglish() {
   // 0 - will prompt
   // 1 - don't spoof
   // 2 - spoof
@@ -3587,6 +3590,8 @@ nsresult nsContentUtils::GetLocalizedString(PropertiesFile aFile,
   // When we spoof English, use en-US default strings in HTML forms.
   if (aFile == eFORMS_PROPERTIES_MAYBESPOOF && SpoofLocaleEnglish()) {
     aFile = eFORMS_PROPERTIES_en_US;
+  } else if (aFile == eDOM_PROPERTIES_MAYBESPOOF && SpoofLocaleEnglish()) {
+    aFile = eDOM_PROPERTIES_en_US;
   }
 
   nsresult rv = EnsureStringBundle(aFile);
@@ -3604,6 +3609,8 @@ nsresult nsContentUtils::FormatLocalizedString(PropertiesFile aFile,
   // When we spoof English, use en-US default strings in HTML forms.
   if (aFile == eFORMS_PROPERTIES_MAYBESPOOF && SpoofLocaleEnglish()) {
     aFile = eFORMS_PROPERTIES_en_US;
+  } else if (aFile == eDOM_PROPERTIES_MAYBESPOOF && SpoofLocaleEnglish()) {
+    aFile = eDOM_PROPERTIES_en_US;
   }
 
   nsresult rv = EnsureStringBundle(aFile);
