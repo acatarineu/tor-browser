@@ -143,14 +143,8 @@ pref("app.update.download.promptMaxAttempts", 2);
 pref("app.update.elevation.promptMaxAttempts", 2);
 
 // If set to true, the Update Service will automatically download updates if the
-// user can apply updates. This pref is no longer used on Windows, except as the
-// default value to migrate to the new location that this data is now stored
-// (which is in a file in the update directory). Because of this, this pref
-// should no longer be used directly. Instead, getAppUpdateAutoEnabled and
-// getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
-#ifndef XP_WIN
+// user can apply updates.
 pref("app.update.auto", true);
-#endif
 
 // If set to true, the Update Service will present no UI for any event.
 pref("app.update.silent", false);
@@ -178,7 +172,7 @@ pref("app.update.idletime", 60);
 pref("app.update.service.enabled", true);
 #endif
 
-#ifdef XP_WIN
+#ifdef MOZ_BITS_DOWNLOAD
 // If set to true, the Update Service will attempt to use Windows BITS to
 // download updates and will fallback to downloading internally if that fails.
 pref("app.update.BITS.enabled", true);
