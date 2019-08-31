@@ -1031,6 +1031,7 @@ SearchService.prototype = {
     let locale = Services.locale.requestedLocale;
     let buildID = Services.appinfo.platformBuildID;
     let appVersion = Services.appinfo.version;
+    let enabledScopes = Services.prefs.getIntPref("extensions.enabledScopes", -1);
 
     // Allows us to force a cache refresh should the cache format change.
     cache.version = this.CACHE_VERSION;
@@ -1043,6 +1044,10 @@ SearchService.prototype = {
     // Store the appVersion as well so we can do extra things during major updates.
     cache.appVersion = appVersion;
     cache.locale = locale;
+
+    // Bug 31563: we want to force reloading engines if extensions.enabledScopes
+    // pref changes
+    cache.enabledScopes = enabledScopes;
 
     if (gModernConfig) {
       cache.builtInEngineList = this._searchOrder;
@@ -1134,7 +1139,8 @@ SearchService.prototype = {
       !cache.engines ||
       cache.version != this.CACHE_VERSION ||
       cache.locale != Services.locale.requestedLocale ||
-      cache.buildID != buildID;
+      cache.buildID != buildID ||
+      cache.enabledScopes != Services.prefs.getIntPref("extensions.enabledScopes", -1);
 
     let enginesCorrupted = false;
     if (!rebuildCache) {
