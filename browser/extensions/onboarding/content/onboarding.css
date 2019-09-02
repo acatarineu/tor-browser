@@ -27,7 +27,7 @@
   padding: 16px 0 0 0;
   position: fixed;
   top: 4px;
-  offset-inline-start: 12px;
+  inset-inline-start: 12px;
 }
 
 /*
@@ -41,7 +41,7 @@
   width: 20px;
   height: 20px;
   top: -8px;
-  offset-inline-start: -16px;
+  inset-inline-start: -16px;
   background-color: #00E2B1;
   border-radius: 50%;
   animation: pulsate 2.0s ease-out;
@@ -61,11 +61,7 @@
 }
 
 #onboarding-overlay-button {
-  padding: 10px 0 0 0;
-  position: fixed;
   cursor: pointer;
-  top: 4px;
-  inset-inline-start: 12px;
   border: none;
   /* Set to none so no grey contrast background in the high-contrast mode */
   background: none;
