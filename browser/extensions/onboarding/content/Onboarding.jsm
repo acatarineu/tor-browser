@@ -8,7 +8,7 @@
 
 var EXPORTED_SYMBOLS = ["Onboarding"];
 
-const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 const ONBOARDING_CSS_URL = "resource://onboarding/onboarding.css";
 const TORBUTTON_BUNDLE_URI = "chrome://torbutton/locale/browserOnboarding.properties";
