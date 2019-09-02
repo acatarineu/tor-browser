@@ -132,7 +132,6 @@
   padding-right: 10px;
 }
 
-/* The primary button gets the same color as the customize button. */
 #UITourTooltipButtons > button.button-primary {
   background-color: #420C5D;
   color: white;
