@@ -8,7 +8,6 @@
 ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 XPCOMUtils.defineLazyModuleGetters(this, {
   OnboardingTourType: "resource://onboarding/modules/OnboardingTourType.jsm",
-  OnboardingTelemetry: "resource://onboarding/modules/OnboardingTelemetry.jsm",
   Services: "resource://gre/modules/Services.jsm",
   UIState: "resource://services-sync/UIState.jsm",
 });

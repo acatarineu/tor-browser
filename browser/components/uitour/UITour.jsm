@@ -789,7 +789,7 @@ var UITour = {
         let securityLevelButton =
                       window.document.getElementById("security-level-button");
         if (securityLevelButton)
-	  securityLevelButton.doCommand();
+	  securityLevelButton.click();
         break;
     }
 
