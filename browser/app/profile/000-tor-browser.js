@@ -161,6 +161,8 @@ pref("security.webauth.webauthn", false); // Bug 26614: Disable Web Authenticati
 pref("browser.cache.frecency_experiment", -1);
 // Bug 2874: Block Components.interfaces from content
 pref("dom.use_components_shim", false);
+// Enable letterboxing
+pref("privacy.resistFingerprinting.letterboxing", true);
 
 // Third party stuff
 pref("privacy.firstparty.isolate", true); // Always enforce first party isolation
