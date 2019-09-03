@@ -156,11 +156,12 @@ add_task(async function do_test() {
     Ci.nsIPermissionManager.ALLOW_ACTION,
     pm.testPermissionFromPrincipal(principal4, TEST_PERMISSION)
   );
-  // make sure principals with a firstPartyDomain use different permissions
+  // make sure principals with userContextId use the same permissions
   Assert.equal(
     Ci.nsIPermissionManager.ALLOW_ACTION,
     pm.testPermissionFromPrincipal(principal6, TEST_PERMISSION)
   );
+  // make sure principals with a firstPartyDomain use different permissions
   Assert.equal(
     Ci.nsIPermissionManager.UNKNOWN_ACTION,
     pm.testPermissionFromPrincipal(principal7, TEST_PERMISSION)
