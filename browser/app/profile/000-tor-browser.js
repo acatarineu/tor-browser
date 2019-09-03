@@ -173,6 +173,7 @@ pref("network.proxy.socks", "127.0.0.1");
 pref("network.proxy.socks_port", 9150);
 pref("network.proxy.socks_remote_dns", true);
 pref("network.proxy.no_proxies_on", ""); // For fingerprinting and local service vulns (#10419)
+pref("network.proxy.allow_hijacking_localhost", true); // Allow proxies for localhost (#31065)
 pref("network.proxy.type", 1);
 pref("network.security.ports.banned", "9050,9051,9150,9151");
 pref("network.dns.disablePrefetch", true);
