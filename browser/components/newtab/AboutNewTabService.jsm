@@ -109,20 +109,7 @@ class BaseAboutNewTabService {
    * the newtab page has no effect on the result of this function.
    */
   get defaultURL() {
-    // Generate the desired activity stream resource depending on state, e.g.,
-    // "resource://activity-stream/prerendered/activity-stream.html"
-    // "resource://activity-stream/prerendered/activity-stream-debug.html"
-    // "resource://activity-stream/prerendered/activity-stream-noscripts.html"
-    return [
-      "resource://activity-stream/prerendered/",
-      "activity-stream",
-      // Debug version loads dev scripts but noscripts separately loads scripts
-      this.activityStreamDebug && !this.privilegedAboutProcessEnabled
-        ? "-debug"
-        : "",
-      this.privilegedAboutProcessEnabled ? "-noscripts" : "",
-      ".html",
-    ].join("");
+    return "about:tor";
   }
 
   /*
@@ -147,7 +134,6 @@ class AboutNewTabChildService extends BaseAboutNewTabService {
   constructor() {
     super();
     if (this.privilegedAboutProcessEnabled) {
-      Services.obs.addObserver(this, TOPIC_CONTENT_DOCUMENT_INTERACTIVE);
       Services.obs.addObserver(this, TOPIC_APP_QUIT);
     }
   }
@@ -155,7 +141,6 @@ class AboutNewTabChildService extends BaseAboutNewTabService {
   observe(subject, topic, data) {
     switch (topic) {
       case TOPIC_APP_QUIT: {
-        Services.obs.removeObserver(this, TOPIC_CONTENT_DOCUMENT_INTERACTIVE);
         Services.obs.removeObserver(this, TOPIC_APP_QUIT);
         break;
       }
