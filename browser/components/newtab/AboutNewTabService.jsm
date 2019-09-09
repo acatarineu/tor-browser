@@ -10,8 +10,8 @@ const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 const {E10SUtils} = ChromeUtils.import("resource://gre/modules/E10SUtils.jsm");
 
-ChromeUtils.defineModuleGetter(this, "AboutNewTab",
-                               "resource:///modules/AboutNewTab.jsm");
+// ChromeUtils.defineModuleGetter(this, "AboutNewTab",
+//                                "resource:///modules/AboutNewTab.jsm");
 
 const TOPIC_APP_QUIT = "quit-application-granted";
 const TOPIC_LOCALES_CHANGE = "intl:app-locales-changed";
@@ -49,7 +49,7 @@ function AboutNewTabService() {
   this.alreadyRecordedTopsitesPainted = false;
 
   if (IS_MAIN_PROCESS) {
-    AboutNewTab.init();
+    // AboutNewTab.init();
   } else if (IS_PRIVILEGED_PROCESS) {
     Services.obs.addObserver(this, TOPIC_CONTENT_DOCUMENT_INTERACTIVE);
   }
@@ -180,7 +180,7 @@ AboutNewTabService.prototype = {
       case TOPIC_APP_QUIT:
         this.uninit();
         if (IS_MAIN_PROCESS) {
-          AboutNewTab.uninit();
+          // AboutNewTab.uninit();
         } else if (IS_PRIVILEGED_PROCESS) {
           Services.obs.removeObserver(this, TOPIC_CONTENT_DOCUMENT_INTERACTIVE);
         }
