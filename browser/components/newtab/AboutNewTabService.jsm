@@ -18,12 +18,6 @@ const { E10SUtils } = ChromeUtils.import(
   "resource://gre/modules/E10SUtils.jsm"
 );
 
-ChromeUtils.defineModuleGetter(
-  this,
-  "AboutNewTab",
-  "resource:///modules/AboutNewTab.jsm"
-);
-
 const PREF_SEPARATE_ABOUT_WELCOME = "browser.aboutwelcome.enabled";
 const SEPARATE_ABOUT_WELCOME_URL =
   "resource://activity-stream/aboutwelcome/aboutwelcome.html";
@@ -66,12 +60,6 @@ function AboutNewTabService() {
   // More initialization happens here
   this.toggleActivityStream(true);
   this.initialized = true;
-
-  if (IS_MAIN_PROCESS) {
-    AboutNewTab.init();
-  } else if (IS_PRIVILEGED_PROCESS) {
-    Services.obs.addObserver(this, TOPIC_CONTENT_DOCUMENT_INTERACTIVE);
-  }
 }
 
 /*
@@ -199,11 +187,6 @@ AboutNewTabService.prototype = {
       }
       case TOPIC_APP_QUIT:
         this.uninit();
-        if (IS_MAIN_PROCESS) {
-          AboutNewTab.uninit();
-        } else if (IS_PRIVILEGED_PROCESS) {
-          Services.obs.removeObserver(this, TOPIC_CONTENT_DOCUMENT_INTERACTIVE);
-        }
         break;
     }
   },
@@ -255,20 +238,7 @@ AboutNewTabService.prototype = {
    * the newtab page has no effect on the result of this function.
    */
   get defaultURL() {
-    // Generate the desired activity stream resource depending on state, e.g.,
-    // "resource://activity-stream/prerendered/activity-stream.html"
-    // "resource://activity-stream/prerendered/activity-stream-debug.html"
-    // "resource://activity-stream/prerendered/activity-stream-noscripts.html"
-    return [
-      "resource://activity-stream/prerendered/",
-      "activity-stream",
-      // Debug version loads dev scripts but noscripts separately loads scripts
-      this._activityStreamDebug && !this._privilegedAboutContentProcess
-        ? "-debug"
-        : "",
-      this._privilegedAboutContentProcess ? "-noscripts" : "",
-      ".html",
-    ].join("");
+    return "about:tor";
   },
 
   /*
