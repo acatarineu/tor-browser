@@ -273,8 +273,9 @@ pref("xpinstall.whitelist.add", "");
 pref("xpinstall.whitelist.add.36", "");
 // We don't know what extensions Mozilla is advertising to our users and we
 // don't want to have some random Google Analytics script running either on the
-// about:addons page, see bug 22073 and 22900.
+// about:addons page, see bug 22073, 22900 and 31601.
 pref("extensions.getAddons.showPane", false);
+pref("extensions.htmlaboutaddons.recommendations.enabled", false);
 // Show our legacy extensions directly on about:addons and get rid of the
 // warning for the default theme.
 pref("extensions.legacy.exceptions", "{972ce4c6-7e08-4474-a285-3208198ce6fd},torbutton@torproject.org");
