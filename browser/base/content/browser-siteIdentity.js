@@ -947,11 +947,8 @@ var gIdentityHandler = {
 
     this._refreshPermissionIcons();
 
-    // Hide the shield icon if it is a chrome page.
-    this._trackingProtectionIconContainer.classList.toggle(
-      "chromeUI",
-      this._isSecureInternalUI
-    );
+    // Bug 26345: Hide tracking protection UI.
+    this._trackingProtectionIconContainer.classList.toggle("chromeUI", true);
   },
 
   /**
