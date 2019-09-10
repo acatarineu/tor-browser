@@ -242,6 +242,9 @@
 }
 
 /* TRACKING PROTECTION ICON */
+#tracking-protection-icon {
+  display: none;
+}
 
 #tracking-protection-icon-container {
   padding-inline: @identityBoxPaddingInline@;
