@@ -16,6 +16,7 @@
 <?xml-stylesheet href="chrome://browser/skin/preferences/in-content/containers.css"?>
 <?xml-stylesheet href="chrome://browser/skin/preferences/in-content/privacy.css"?>
 <?xml-stylesheet href="chrome://browser/content/securitylevel/securityLevelPreferences.css"?>
+<?xml-stylesheet href="chrome://browser/content/torpreferences/torPreferences.css"?>
 
 <!DOCTYPE html [
 <!ENTITY % aboutTorDTD SYSTEM "chrome://torbutton/locale/aboutTor.dtd">
@@ -144,6 +145,9 @@
           <image class="category-icon"/>
           <label class="category-name" flex="1" data-l10n-id="pane-sync-title2"></label>
         </richlistitem>
+
+#include ../../torpreferences/content/torCategory.inc.xhtml
+
       </richlistbox>
 
       <spacer flex="1"/>
@@ -203,6 +207,7 @@
 #include privacy.inc.xhtml
 #include containers.inc.xhtml
 #include sync.inc.xhtml
+#include ../../torpreferences/content/torPane.xhtml
         </vbox>
       </vbox>
     </vbox>
