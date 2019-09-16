@@ -9,7 +9,11 @@ XPCOMUtils.defineLazyModuleGetters(this, {
 });
 
 XPCOMUtils.defineLazyGlobalGetters(this, ["DOMParser"]);
-XPCOMUtils.defineLazyGetter(this, "domParser", () => new DOMParser());
+XPCOMUtils.defineLazyGetter(this, "domParser", () => {
+  const parser = new DOMParser();
+  parser.forceEnableDTD();
+  return parser;
+});
 
 /*
  Security Level Strings
