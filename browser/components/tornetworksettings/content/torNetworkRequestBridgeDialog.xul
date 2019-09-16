@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://browser/content/tornetworksettings/torNetworkSettings.css"?>
+
+<dialog id="torNetworkSettings-requestBridge-dialog" type="child" class="prefwindow"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    title="Request Bridge"
+    buttons="cancel,accept"
+    role="dialog">
+  <command id="torNetworkSettings-requestBridge-submitCommand" oncommand="TorRequestBridgeDialog.onSubmitCaptcha();"/>
+  <description id="torNetworkSettings-requestBridge-description"/>
+  <image id="torNetworkSettings-requestBridge-captchaImage" flex="1"/>
+  <hbox>
+    <textbox id="torNetworkSettings-requestBridge-captchaTextbox" flex="1" />
+    <command id="torNetworkSettings-requestBridge-refreshCaptchaCommand" oncommand="TorRequestBridgeDialog.onRefreshCaptcha();"/>
+    <button id="torNetworkSettings-requestBridge-refreshCaptchaButton" image="chrome://browser/skin/reload.svg"/>
+  </hbox>
+  <hbox id="torNetworkSettings-requestBridge-incorrectCaptchaHbox">
+    <image id="torNetworkSettings-requestBridge-errorIcon" />
+    <label id="torNetworkSettings-requestBridge-incorrectCaptchaError" flex="1"/>
+  </hbox>
+  <script type="application/javascript"><![CDATA[
+    "use strict";
+
+    let TorRequestBridgeDialog = window.arguments[0];
+    let dialog = document.getElementById("torNetworkSettings-requestBridge-dialog");
+    TorRequestBridgeDialog.init(dialog);
+  ]]></script>
+</dialog>

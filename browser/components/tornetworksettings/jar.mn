@@ -1,0 +1,12 @@
+browser.jar:
+    content/browser/tornetworksettings/torNetworkCategory.inc.xul        (content/torNetworkCategory.inc.xul)
+    content/browser/tornetworksettings/torNetworkPane.xul                (content/torNetworkPane.xul)
+    content/browser/tornetworksettings/torNetworkPane.js                 (content/torNetworkPane.js)
+    content/browser/tornetworksettings/torBridgeDB.js                    (content/torBridgeDB.js)
+    content/browser/tornetworksettings/torBridgeSettings.js              (content/torBridgeSettings.js)
+    content/browser/tornetworksettings/torFirewallSettings.js            (content/torFirewallSettings.js)
+    content/browser/tornetworksettings/torProxySettings.js               (content/torProxySettings.js)
+    content/browser/tornetworksettings/torNetworkIcon.svg                (content/torNetworkIcon.svg)
+    content/browser/tornetworksettings/torNetworkSettings.css            (content/torNetworkSettings.css)
+    content/browser/tornetworksettings/torNetworkRequestBridgeDialog.xul (content/torNetworkRequestBridgeDialog.xul)
+    content/browser/tornetworksettings/torNetworkRequestBridgeDialog.js  (content/torNetworkRequestBridgeDialog.js)
