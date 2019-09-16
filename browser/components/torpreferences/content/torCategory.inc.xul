@@ -1,0 +1,10 @@
+<richlistitem id="category-tor"
+              class="category"
+              value="paneTor"
+              helpTopic="prefs-tor"
+              data-l10n-id="category-tor"
+              data-l10n-attrs="tooltiptext"
+              align="center">
+  <image class="category-icon"/>
+  <label id="torPreferences-labelCategory" class="category-name" flex="1" data-l10n-id="pane-tor-title"/>
+</richlistitem>
