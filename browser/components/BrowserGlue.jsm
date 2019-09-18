@@ -1844,6 +1844,9 @@ BrowserGlue.prototype = {
     const ID = "screenshots@mozilla.org";
     const _checkScreenshotsPref = async () => {
       let addon = await AddonManager.getAddonByID(ID);
+      if (!addon) {
+        return;
+      }
       let disabled = Services.prefs.getBoolPref(PREF, false);
       if (disabled) {
         await addon.disable({ allowSystemAddons: true });
@@ -1860,6 +1863,9 @@ BrowserGlue.prototype = {
     const ID = "webcompat-reporter@mozilla.org";
     Services.prefs.addObserver(PREF, async () => {
       let addon = await AddonManager.getAddonByID(ID);
+      if (!addon) {
+        return;
+      }
       let enabled = Services.prefs.getBoolPref(PREF, false);
       if (enabled && !addon.isActive) {
         await addon.enable({ allowSystemAddons: true });
