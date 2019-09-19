@@ -435,7 +435,8 @@ static bool CopyUpdaterIntoUpdateDir(nsIFile* greDir, nsIFile* appDir,
  */
 /**
  * Appends the specified path to the library path.
- * This is used so that updater can find libmozsqlite3.so and other shared libs.
+ * This is used so that the updater can find libnss3.dylib and other
+ * shared libs.
  *
  * @param pathToAppend A new library path to prepend to the dynamic linker's
  * search path.
@@ -731,7 +732,7 @@ static void ApplyUpdate(nsIFile* greDir, nsIFile* updateDir, nsIFile* appDir,
 #if defined(TOR_BROWSER_UPDATE) && defined(MOZ_VERIFY_MAR_SIGNATURE) && \
     defined(MAR_NSS) && defined(XP_MACOSX)
   // On macOS, append the app directory to the shared library search path
-  // so the system can located the shared libraries that are needed by the
+  // so the system can locate the shared libraries that are needed by the
   // updater, e.g., libnss3.dylib).
   nsAutoCString appPath;
   nsresult rv2 = appDir->GetNativePath(appPath);
