@@ -23,12 +23,13 @@ pref("app.update.badge", true);
 pref("app.update.notifyDuringDownload", true);
 pref("extensions.hotfix.id", ""); // Bug 16837: Disable hotfix updates as they may cause compat issues
 
-// Disable staged updates on all platforms.
+#ifndef XP_MACOSX
+// Disable staged updates on platforms other than macOS.
 // Staged updates do not work on Windows due to #18292.
 // Also, on Windows and Linux any changes that are made to the browser profile
 // or Tor data after an update is staged will be lost.
-// What about macOS? For consistency, we disable staged updates there too.
 pref("app.update.staging.enabled", false);
+#endif
 
 // No need to contact the Kinto-based blocklist system in addition to the old
 // one which is still used, see bug 22071.
