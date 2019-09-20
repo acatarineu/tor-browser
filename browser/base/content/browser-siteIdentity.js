@@ -612,6 +612,10 @@ var gIdentityHandler = {
    * built-in (returns false) or imported (returns true).
    */
   _hasCustomRoot() {
+    if (!this._secInfo) {
+      return false;
+    }
+
     let issuerCert = null;
     // Walk the whole chain to get the last cert.
     // eslint-disable-next-line no-empty

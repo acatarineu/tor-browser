@@ -316,22 +316,36 @@ nsresult nsSecureBrowserUIImpl::UpdateStateAndSecurityInfo(nsIChannel* channel,
     }
     // If the security state is STATE_IS_INSECURE, the TLS handshake never
     // completed. Don't set any further state.
-    if (mState == STATE_IS_INSECURE) {
-      return NS_OK;
+    if (mState != STATE_IS_INSECURE) {
+      mTopLevelSecurityInfo = securityInfo;
+      MOZ_LOG(gSecureBrowserUILog, LogLevel::Debug,
+              ("  set mTopLevelSecurityInfo"));
+      bool isEV;
+      rv = mTopLevelSecurityInfo->GetIsExtendedValidation(&isEV);
+      if (NS_FAILED(rv)) {
+        return rv;
+      }
+      if (isEV) {
+        MOZ_LOG(gSecureBrowserUILog, LogLevel::Debug, ("  is EV"));
+        mState |= STATE_IDENTITY_EV_TOPLEVEL;
+      }
     }
+  }
 
-    mTopLevelSecurityInfo = securityInfo;
-    MOZ_LOG(gSecureBrowserUILog, LogLevel::Debug,
-            ("  set mTopLevelSecurityInfo"));
-    bool isEV;
-    rv = mTopLevelSecurityInfo->GetIsExtendedValidation(&isEV);
-    if (NS_FAILED(rv)) {
-      return rv;
+  // any protocol routed over tor is secure
+  if (mState != STATE_IS_SECURE) {
+    nsAutoCString host;
+    if (NS_SUCCEEDED(uri->GetHost(host))) {
+      if (StringEndsWith(host, NS_LITERAL_CSTRING(".onion"))) {
+        MOZ_LOG(gSecureBrowserUILog, LogLevel::Debug,
+                ("SecureUI: GetSecurityState: - "
+                 "uri is onion.\n"));
+        mState = STATE_IS_SECURE;
+      }
     }
-    if (isEV) {
-      MOZ_LOG(gSecureBrowserUILog, LogLevel::Debug, ("  is EV"));
-      mState |= STATE_IDENTITY_EV_TOPLEVEL;
-    }
+  }
+
+  if (mState != STATE_IS_INSECURE) {
     // Proactively check for mixed content in case GetState() is never called
     // (this can happen when loading from the BF cache).
     CheckForMixedContent();

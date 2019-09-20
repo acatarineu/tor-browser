@@ -5558,6 +5558,13 @@ nsDocShell::GetMixedContentChannel(nsIChannel** aMixedContentChannel) {
   return NS_OK;
 }
 
+static bool IsOnion(nsIURI* aURI) {
+  MOZ_ASSERT(aURI);
+  nsAutoCString host;
+  return NS_SUCCEEDED(aURI->GetHost(host)) &&
+         StringEndsWith(host, NS_LITERAL_CSTRING(".onion"));
+}
+
 NS_IMETHODIMP
 nsDocShell::GetAllowMixedContentAndConnectionData(
     bool* aRootHasSecureConnection, bool* aAllowMixedContent,
@@ -5583,7 +5590,7 @@ nsDocShell::GetAllowMixedContentAndConnectionData(
     // aRootHasSecureConnection should be false.
     nsCOMPtr<nsIURI> rootUri = rootPrincipal->GetURI();
     if (nsContentUtils::IsSystemPrincipal(rootPrincipal) || !rootUri ||
-        !SchemeIsHTTPS(rootUri)) {
+        (!SchemeIsHTTPS(rootUri) && !IsOnion(rootUri))) {
       *aRootHasSecureConnection = false;
     }
 
