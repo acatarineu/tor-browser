@@ -23,7 +23,6 @@ pref("webchannel.allowObject.urlWhitelist", "");
 
 // Disable browser auto updaters
 pref("app.update.auto", false);
-pref("app.update.enabled", false);
 pref("browser.startup.homepage_override.mstone", "ignore");
 
 // Clear data on quit
@@ -39,10 +38,6 @@ pref("privacy.clearOnShutdown.siteSettings",true);
 
 // Disable Control media casting & mirroring features
 pref("browser.casting.enabled", false);
-pref("browser.mirroring.enabled", false);
-
-// Disable autoplay
-pref("media.autoplay.enabled", false);
 
 // controls if we want camera support
 pref("device.camera.enabled", false);
@@ -62,3 +57,10 @@ pref("media.hls.enabled", false);
 
 // Inherit locale from the OS, used for multi-locale builds
 pref("intl.locale.requested", "");
+
+// Disable ServiceWorkers by default
+pref("dom.serviceWorkers.enabled", false);
+
+// Disable WebAuthn. It requires Google Play Services, so it isn't
+// available, but avoid any potential problems.
+pref("security.webauth.webauthn_enable_android_fido2", false);
