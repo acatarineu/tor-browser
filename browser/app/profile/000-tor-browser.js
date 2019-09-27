@@ -119,6 +119,9 @@ pref("browser.pocket.api", "");
 pref("browser.pocket.site", "");
 pref("network.http.referer.hideOnionSource", true);
 
+// Disable ServiceWorkers by default
+pref("dom.serviceWorkers.enabled", false);
+
 // Fingerprinting
 pref("webgl.disable-extensions", true);
 pref("webgl.disable-fail-if-major-performance-caveat", true);
