@@ -6770,6 +6770,12 @@ var IdentityHandler = {
    */
   getIdentityData: function() {
     let result = {};
+
+    // Even if the connection is secure, it may not have a certificate
+    if (!this._lastSecInfo) {
+      return result;
+    }
+
     let cert = this._lastSecInfo.serverCert;
 
     // Human readable name of Subject
@@ -6933,7 +6939,7 @@ var IdentityHandler = {
 
     result.host = this.getEffectiveHost();
     result.isOnionHost = this.isOnionHost();
-    result.hasCert = !!this._lastStatus;
+    result.hasCert = !!this._lastSecInfo;
 
     // Don't show identity data for pages with an unknown identity or if any
     // mixed content is loaded (mixed display content is loaded by default).
