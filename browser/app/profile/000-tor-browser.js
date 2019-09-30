@@ -215,14 +215,13 @@ pref("media.gmp-manager.updateEnabled", false);
 // Mozilla is relying on preferences to make sure no DRM blob is downloaded and
 // run. Even though those prefs should be set correctly by specifying
 // --disable-eme (which we do), we disable all of them here as well for defense
-// in depth.
+// in depth (see bug 16285 for more details).
 pref("browser.eme.ui.enabled", false);
-pref("media.gmp-eme-adobe.visible", false);
-pref("media.gmp-eme-adobe.enabled", false);
 pref("media.gmp-widevinecdm.visible", false);
 pref("media.gmp-widevinecdm.enabled", false);
 pref("media.eme.enabled", false);
 pref("media.eme.apiVisible", false);
+pref("media.mediadrm-widevinecdm.visible", false);
 // WebIDE can bypass proxy settings for remote debugging. It also downloads
 // some additional addons that we have not reviewed. Turn all that off.
 pref("devtools.webide.autoinstallADBHelper", false);
