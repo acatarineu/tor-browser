@@ -1,10 +1,16 @@
 "use strict";
 
-XPCOMUtils.defineLazyScriptGetter(this, ["TorConfigKeys"],
-                                  "chrome://browser/content/torstrings/torStrings.js");
+XPCOMUtils.defineLazyScriptGetter(
+  this,
+  ["TorConfigKeys"],
+  "chrome://browser/content/torstrings/torStrings.js"
+);
 
-XPCOMUtils.defineLazyModuleGetter(this, "TorLauncherUtil",
-                                 "resource://torlauncher/modules/tl-util.jsm");
+ChromeUtils.defineModuleGetter(
+  this,
+  "TorLauncherUtil",
+  "resource://torlauncher/modules/tl-util.jsm"
+);
 
 // TODO: constants in tor strings somewhere
 
@@ -12,19 +18,18 @@ const kPrefDefaultBridgeType = "extensions.torlauncher.default_bridge_type";
 const kPrefBranchDefaultBridge = "extensions.torlauncher.default_bridge.";
 const kPrefBranchBridgeDBBridges = "extensions.torlauncher.bridgedb_bridge";
 
-const TorBridgeSource =
-{
-  NONE : "NONE",
-  BUILTIN : "BUILTIN",
-  BRIDGEDB : "BRIDGEDB",
-  USERPROVIDED : "USERPROVIDED",
+const TorBridgeSource = {
+  NONE: "NONE",
+  BUILTIN: "BUILTIN",
+  BRIDGEDB: "BRIDGEDB",
+  USERPROVIDED: "USERPROVIDED",
 };
 
 function TorBridgeSettings() {
   this._bridgeSource = TorBridgeSource.NONE;
   this._selectedDefaultBridgeType = null;
   this._bridgeStrings = [];
-};
+}
 
 /* properties */
 TorBridgeSettings.prototype = {
@@ -51,7 +56,6 @@ TorBridgeSettings.prototype = {
 }; /* properties*/
 
 TorBridgeSettings.DefaultBridgeTypes = function() {
-
   if (TorBridgeSettings._defaultBridgeTypes) {
     return TorBridgeSettings._defaultBridgeTypes;
   }
@@ -81,7 +85,7 @@ TorBridgeSettings.DefaultBridgeTypes = function() {
   // cache off
   TorBridgeSettings._defaultBridgeTypes = retval;
   return retval;
-}
+};
 
 TorBridgeSettings.prototype._readDefaultBridges = function(aBridgeType) {
   let bridgeBranch = Services.prefs.getBranch(kPrefBranchDefaultBridge);
@@ -94,17 +98,18 @@ TorBridgeSettings.prototype._readDefaultBridges = function(aBridgeType) {
   bridgeBranchPrefs.forEach(key => {
     // verify the location of the match is the correct offset required for aBridgeType
     // to fit, and that the string begins with aBridgeType
-    if (key.search(pattern) == aBridgeType.length &&
-        key.indexOf(aBridgeType) == 0) {
-
-        let bridgeStr = bridgeBranch.getCharPref(key);
-        retval.push(bridgeStr);
+    if (
+      key.search(pattern) == aBridgeType.length &&
+      key.indexOf(aBridgeType) == 0
+    ) {
+      let bridgeStr = bridgeBranch.getCharPref(key);
+      retval.push(bridgeStr);
     }
   });
 
   // TODO: shuffle bridge list
   return retval;
-}
+};
 
 TorBridgeSettings.prototype._readBridgeDBBridges = function() {
   let bridgeBranch = Services.prefs.getBranch(`${kPrefBranchBridgeDBBridges}.`);
@@ -114,13 +119,17 @@ TorBridgeSettings.prototype._readBridgeDBBridges = function() {
   bridgeBranchPrefs.sort();
 
   // just assume all of the prefs under the parent point to valid bridge string
-  let retval = bridgeBranchPrefs.map(key => bridgeBranch.getCharPref(key).trim());
+  let retval = bridgeBranchPrefs.map(key =>
+    bridgeBranch.getCharPref(key).trim()
+  );
 
   return retval;
-}
+};
 
 TorBridgeSettings.prototype._readTorrcBridges = function() {
-  let tlps = Cc["@torproject.org/torlauncher-protocol-service;1"].getService(Ci.nsISupports).wrappedJSObject;
+  let tlps = Cc["@torproject.org/torlauncher-protocol-service;1"].getService(
+    Ci.nsISupports
+  ).wrappedJSObject;
   let reply;
 
   reply = tlps.TorGetConf(TorConfigKeys.BridgeList);
@@ -139,11 +148,10 @@ TorBridgeSettings.prototype._readTorrcBridges = function() {
 
     return retval;
   }
-}
+};
 
 // analagous to initBridgeSettings()
 TorBridgeSettings.prototype.ReadSettings = function() {
-
   // restore to defaults
   this._bridgeSource = TorBridgeSource.NONE;
   this._selectedDefaultBridgeType = null;
@@ -172,7 +180,7 @@ TorBridgeSettings.prototype.ReadSettings = function() {
   try {
     // TODO: put preffered bridge type first in thi slist
     defaultBridgeType = Services.prefs.getCharPref(kPrefDefaultBridgeType);
-  } catch (e) { }
+  } catch (e) {}
 
   // check if source is BUILTIN
   if (defaultBridgeType) {
@@ -196,10 +204,14 @@ TorBridgeSettings.prototype.ReadSettings = function() {
   // if these two lists are equal then we got our bridges from bridgedb
   // ie: same element in identical order
   let arraysEqual = (left, right) => {
-    if (left.length != right.length) { return false; }
+    if (left.length != right.length) {
+      return false;
+    }
     const length = left.length;
-    for(let i = 0; i < length; ++i) {
-      if (left[i] != right[i]) { return false; }
+    for (let i = 0; i < length; ++i) {
+      if (left[i] != right[i]) {
+        return false;
+      }
     }
     return true;
   };
@@ -217,7 +229,9 @@ TorBridgeSettings.prototype.ReadSettings = function() {
 };
 
 TorBridgeSettings.prototype.WriteSettings = function() {
-  let tlps = Cc["@torproject.org/torlauncher-protocol-service;1"].getService(Ci.nsISupports).wrappedJSObject;
+  let tlps = Cc["@torproject.org/torlauncher-protocol-service;1"].getService(
+    Ci.nsISupports
+  ).wrappedJSObject;
   let settingsObject = {};
 
   // init tor bridge settings to null
@@ -228,20 +242,28 @@ TorBridgeSettings.prototype.WriteSettings = function() {
   Services.prefs.setCharPref(kPrefDefaultBridgeType, "");
   let bridgeBranch = Services.prefs.getBranch(`${kPrefBranchBridgeDBBridges}.`);
   let bridgeBranchPrefs = bridgeBranch.getChildList("", {});
-  bridgeBranchPrefs.forEach(pref => Services.prefs.clearUserPref(`${kPrefBranchBridgeDBBridges}.${pref}`));
+  bridgeBranchPrefs.forEach(pref =>
+    Services.prefs.clearUserPref(`${kPrefBranchBridgeDBBridges}.${pref}`)
+  );
 
-  switch(this._bridgeSource) {
+  switch (this._bridgeSource) {
     case TorBridgeSource.NONE:
       break;
     case TorBridgeSource.BUILTIN:
-      Services.prefs.setCharPref(kPrefDefaultBridgeType, this._selectedDefaultBridgeType);
+      Services.prefs.setCharPref(
+        kPrefDefaultBridgeType,
+        this._selectedDefaultBridgeType
+      );
       settingsObject[TorConfigKeys.UseBridges] = true;
       settingsObject[TorConfigKeys.BridgeList] = this.BridgeStringsArray;
       break;
     case TorBridgeSource.BRIDGEDB:
       // save bridges off to prefs
-      for(let i = 0; i < this.BridgeStringsArray.length; ++i) {
-        Services.prefs.setCharPref(`${kPrefBranchBridgeDBBridges}.${i}`, this.BridgeStringsArray[i]);
+      for (let i = 0; i < this.BridgeStringsArray.length; ++i) {
+        Services.prefs.setCharPref(
+          `${kPrefBranchBridgeDBBridges}.${i}`,
+          this.BridgeStringsArray[i]
+        );
       }
       settingsObject[TorConfigKeys.UseBridges] = true;
       settingsObject[TorConfigKeys.BridgeList] = this.BridgeStringsArray;
@@ -269,7 +291,7 @@ function TorBuiltinBridgeSettings(aBridgeType) {
   retval._bridgeStrings = retval._readDefaultBridges(aBridgeType);
 
   return retval;
-};
+}
 
 function TorBridgeDBBridgeSettings(aBridges) {
   let retval = new TorBridgeSettings();
@@ -278,7 +300,7 @@ function TorBridgeDBBridgeSettings(aBridges) {
   retval._bridgeStrings = aBridges;
 
   return retval;
-};
+}
 
 function TorUserProvidedBridgeSettings(aBridges) {
   let retval = new TorBridgeSettings();
@@ -287,4 +309,4 @@ function TorUserProvidedBridgeSettings(aBridges) {
   retval._bridgeStrings = aBridges;
 
   return retval;
-};
+}

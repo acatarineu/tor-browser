@@ -1,21 +1,23 @@
 "use strict";
 
-XPCOMUtils.defineLazyScriptGetter(this, ["TorConfigKeys"],
-                                  "chrome://browser/content/torstrings/torStrings.js");
+XPCOMUtils.defineLazyScriptGetter(
+  this,
+  ["TorConfigKeys"],
+  "chrome://browser/content/torstrings/torStrings.js"
+);
 
 function TorFirewallSettings() {
   this._allowedPorts = [];
-};
+}
 
 TorFirewallSettings.prototype = {
-
   get PortsConfigurationString() {
     let portStrings = this._allowedPorts.map(port => `*:${port}`);
-    return portStrings.join(',');
+    return portStrings.join(",");
   },
 
   get CommaSeparatedListString() {
-    return this._allowedPorts.join(',');
+    return this._allowedPorts.join(",");
   },
 
   get HasPorts() {
@@ -26,7 +28,9 @@ TorFirewallSettings.prototype = {
 // attempts to read firewall settings from Tor daemon
 // throws on error
 TorFirewallSettings.prototype.ReadSettings = function() {
-  let tlps = Cc["@torproject.org/torlauncher-protocol-service;1"].getService(Ci.nsISupports).wrappedJSObject;
+  let tlps = Cc["@torproject.org/torlauncher-protocol-service;1"].getService(
+    Ci.nsISupports
+  ).wrappedJSObject;
   let reply;
 
   reply = tlps.TorGetConfStr(TorConfigKeys.ReachableAddresses, null);
@@ -42,14 +46,18 @@ TorFirewallSettings.prototype.ReadSettings = function() {
 };
 
 TorFirewallSettings.prototype.WriteSettings = function() {
-  let tlps = Cc["@torproject.org/torlauncher-protocol-service;1"].getService(Ci.nsISupports).wrappedJSObject;
+  let tlps = Cc["@torproject.org/torlauncher-protocol-service;1"].getService(
+    Ci.nsISupports
+  ).wrappedJSObject;
   let settingsObject = {};
 
   // init to null so Tor daemon resets if no ports
   settingsObject[TorConfigKeys.ReachableAddresses] = null;
 
   if (this._allowedPorts.length > 0) {
-    settingsObject[TorConfigKeys.ReachableAddresses] = this.PortsConfigurationString;
+    settingsObject[
+      TorConfigKeys.ReachableAddresses
+    ] = this.PortsConfigurationString;
   }
 
   let errorObject = {};
