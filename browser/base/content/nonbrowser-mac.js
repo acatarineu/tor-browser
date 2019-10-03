@@ -104,10 +104,16 @@ function nonBrowserWindowStartup() {
 
     // Hide menuitems that don't apply to private contexts.
     if (PrivateBrowsingUtils.permanentPrivateBrowsing) {
-      document.getElementById("macDockMenuNewWindow").hidden = true;
+      element = document.getElementById("macDockMenuNewWindow");
+      if (element) {
+        element.hidden = true;
+      }
     }
     if (!PrivateBrowsingUtils.enabled) {
-      document.getElementById("macDockMenuNewPrivateWindow").hidden = true;
+      element = document.getElementById("macDockMenuNewPrivateWindow");
+      if (element) {
+        element.hidden = true;
+      }
     }
   }
 
