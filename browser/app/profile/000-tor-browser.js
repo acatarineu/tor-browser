@@ -328,8 +328,10 @@ pref("security.family_safety.mode", 0);
 // Enforce SHA1 deprecation, see: bug 18042.
 pref("security.pki.sha1_enforcement_level", 2);
 
-// Disable the language pack signing check for now, see: bug 26465
+// Disable the language pack signing check for now on macOS, see #31942
+#ifdef XP_MACOSX
 pref("extensions.langpacks.signatures.required", false);
+#endif
 
 // Avoid report TLS errors to Mozilla. We might want to repurpose this feature
 // one day to help detecting bad relays (which is bug 19119). For now we just
