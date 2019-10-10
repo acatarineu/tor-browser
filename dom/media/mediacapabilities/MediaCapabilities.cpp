@@ -287,7 +287,8 @@ already_AddRefed<Promise> MediaCapabilities::DecodingInfo(
                             nsAutoCString reason;
                             bool powerEfficient = true;
                             bool smooth = true;
-                            if (config->GetAsVideoInfo()->mImage.height > 480) {
+                            if (!nsContentUtils::ShouldResistFingerprinting() &&
+                                config->GetAsVideoInfo()->mImage.height > 480) {
                               // Assume that we can do stuff at 480p or less in
                               // a power efficient manner and smoothly. If
                               // greater than 480p we assume that if the video
