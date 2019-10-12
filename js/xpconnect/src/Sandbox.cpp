@@ -1045,9 +1045,6 @@ nsresult xpc::CreateSandboxObject(JSContext* cx, MutableHandleValue vp,
   // creationOptions.setSecureContext(true).
 
   bool isSystemPrincipal = principal->IsSystemPrincipal();
-  if (isSystemPrincipal) {
-    creationOptions.setClampAndJitterTime(false);
-  }
 
   xpc::SetPrefableRealmOptions(realmOptions);
   if (options.sameZoneAs) {
@@ -1069,6 +1066,10 @@ nsresult xpc::CreateSandboxObject(JSContext* cx, MutableHandleValue vp,
       .setTrace(TraceXPCGlobal);
 
   realmOptions.behaviors().setDiscardSource(options.discardSource);
+
+  if (isSystemPrincipal) {
+    realmOptions.behaviors().setClampAndJitterTime(false);
+  }
 
   const js::Class* clasp = &SandboxClass;
 
