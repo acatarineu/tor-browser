@@ -466,6 +466,8 @@ class TestJSPrincipals : public JSPrincipals {
     MOZ_ASSERT(false, "not implemented");
     return false;
   }
+
+  bool isSystemOrAddonPrincipal() override { return true; }
 };
 
 // A class that simulates externally memory-managed data, for testing with
