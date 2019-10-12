@@ -17,6 +17,11 @@ struct WorkletPrincipal final : public JSPrincipals {
     MOZ_CRASH("WorkletPrincipal::write not implemented");
     return false;
   }
+
+  bool isSystemOrAddonPrincipal() override {
+    // Per Bug 1578623 rev a83797ed249c - Worklets are always NullPrincipal
+    return false;
+  }
 };
 
 JSPrincipals* GetWorkletPrincipal() {
