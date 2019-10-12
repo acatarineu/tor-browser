@@ -162,12 +162,6 @@ class JS_PUBLIC_API RealmCreationOptions {
     return *this;
   }
 
-  bool clampAndJitterTime() const { return clampAndJitterTime_; }
-  RealmCreationOptions& setClampAndJitterTime(bool flag) {
-    clampAndJitterTime_ = flag;
-    return *this;
-  }
-
  private:
   JSTraceOp traceGlobal_ = nullptr;
   CompartmentSpecifier compSpec_ = CompartmentSpecifier::NewCompartmentAndZone;
@@ -185,7 +179,6 @@ class JS_PUBLIC_API RealmCreationOptions {
   bool fields_ = false;
   bool awaitFix_ = false;
   bool secureContext_ = false;
-  bool clampAndJitterTime_ = true;
 };
 
 /**
@@ -207,6 +200,12 @@ class JS_PUBLIC_API RealmBehaviors {
   bool disableLazyParsing() const { return disableLazyParsing_; }
   RealmBehaviors& setDisableLazyParsing(bool flag) {
     disableLazyParsing_ = flag;
+    return *this;
+  }
+
+  bool clampAndJitterTime() const { return clampAndJitterTime_; }
+  RealmBehaviors& setClampAndJitterTime(bool flag) {
+    clampAndJitterTime_ = flag;
     return *this;
   }
 
@@ -254,6 +253,7 @@ class JS_PUBLIC_API RealmBehaviors {
  private:
   bool discardSource_ = false;
   bool disableLazyParsing_ = false;
+  bool clampAndJitterTime_ = true;
   Override extraWarningsOverride_ = {};
 
   // To XDR singletons, we need to ensure that all singletons are all used as
