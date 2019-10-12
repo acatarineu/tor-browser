@@ -1436,6 +1436,7 @@ pref("javascript.options.ion.full.threshold", 100000);
 pref("javascript.options.ion.frequent_bailout_threshold", 10);
 pref("javascript.options.asmjs",            true);
 pref("javascript.options.wasm",             true);
+pref("javascript.options.wasm_trustedprincipals", true);
 pref("javascript.options.wasm_verbose",     false);
 pref("javascript.options.wasm_ionjit",      true);
 pref("javascript.options.wasm_baselinejit", true);
