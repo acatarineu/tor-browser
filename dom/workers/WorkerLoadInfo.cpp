@@ -87,6 +87,7 @@ WorkerLoadInfoData::WorkerLoadInfoData()
       mReportCSPViolations(false),
       mXHRParamsAllowed(false),
       mPrincipalIsSystem(false),
+      mPrincipalIsAddonOrExpandedAddon(false),
       mWatchedByDevtools(false),
       mStorageAccess(nsContentUtils::StorageAccess::eDeny),
       mFirstPartyStorageAccessGranted(false),
@@ -102,6 +103,8 @@ nsresult WorkerLoadInfo::SetPrincipalsOnMainThread(
   mPrincipal = aPrincipal;
   mStoragePrincipal = aStoragePrincipal;
   mPrincipalIsSystem = nsContentUtils::IsSystemPrincipal(aPrincipal);
+  mPrincipalIsAddonOrExpandedAddon =
+      aPrincipal->GetIsAddonOrExpandedAddonPrincipal();
 
   nsresult rv = aPrincipal->GetCsp(getter_AddRefs(mCSP));
   NS_ENSURE_SUCCESS(rv, rv);
