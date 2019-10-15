@@ -285,7 +285,7 @@ already_AddRefed<Promise> MediaCapabilities::DecodingInfo(
                           } else if (nsContentUtils::
                                          ShouldResistFingerprinting()) {
                             p = CapabilitiesPromise::CreateAndResolve(
-                                MediaCapabilitiesInfo(true, true, true),
+                                MediaCapabilitiesInfo(true, true, false),
                                 __func__);
                           } else {
                             MOZ_ASSERT(config->IsVideo());
