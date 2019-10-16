@@ -62,8 +62,6 @@ const SecurityLevelPrefs = {
 
 const SecurityLevelButton = {
   _securityPrefsBranch : null,
-  _button : null,
-  _anchor : null,
 
   _populateXUL : function(securityLevelButton) {
     if (securityLevelButton != null) {
@@ -95,36 +93,28 @@ const SecurityLevelButton = {
   },
 
   get button() {
-    if (this._button) {
-      return this._button;
-    }
-
     let button = document.getElementById("security-level-button");
     if (!button) {
       return null;
     }
-
-    return this._button = button;
+    return button;
   },
 
   get anchor() {
-    if (this._anchor) {
-      return this._anchor;
-    }
-
     let anchor = this.button.icon;
     if (!anchor) {
       return null;
     }
 
     anchor.setAttribute("consumeanchor", SecurityLevelButton.button.id);
-    return this._anchor = anchor;
+    return anchor;
   },
 
   init : function() {
     // set the initial class based off of the current pref
-    this._populateXUL(this.button);
-    this._configUIFromPrefs(this.button);
+    let button = this.button;
+    this._populateXUL(button);
+    this._configUIFromPrefs(button);
 
     this._securityPrefsBranch = Services.prefs.getBranch("extensions.torbutton.");
     this._securityPrefsBranch.addObserver("", this, false);
@@ -166,9 +156,6 @@ const SecurityLevelButton = {
     if (aNode.id == "security-level-button" && !aWasRemoval) {
       this._populateXUL(aNode);
       this._configUIFromPrefs(aNode);
-      // clear out our cached elements as they seem to be recreated when the UI is customized
-      delete this._button;
-      delete this._anchor;
     }
   },
 
