@@ -729,8 +729,6 @@ SearchService.prototype = {
         await this._ensureKnownRegionPromise;
       }
 
-      this._setupRemoteSettings().catch(Cu.reportError);
-
       await this._loadEngines(cache);
 
       // If we've got this far, but the application is now shutting down,
