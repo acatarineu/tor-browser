@@ -322,6 +322,9 @@ pref("security.cert_pinning.enforcement_level", 2);
 // Don't allow MitM via Microsoft Family Safety, see bug 21686
 pref("security.family_safety.mode", 0);
 
+// Don't allow MitM via enterprise roots, see bug 30681
+pref("security.enterprise_roots.enabled", false);
+
 // Enforce SHA1 deprecation, see: bug 18042.
 pref("security.pki.sha1_enforcement_level", 2);
 
