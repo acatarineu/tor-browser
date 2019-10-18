@@ -169,6 +169,8 @@ pref("browser.cache.frecency_experiment", -1);
 pref("dom.use_components_shim", false);
 // Enable letterboxing
 pref("privacy.resistFingerprinting.letterboxing", true);
+// Enable FuzzyFox
+pref("privacy.fuzzyfox.enabled", true);
 
 // Third party stuff
 pref("privacy.firstparty.isolate", true); // Always enforce first party isolation
