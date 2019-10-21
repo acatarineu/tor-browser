@@ -12,7 +12,6 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <script type="application/javascript" src="chrome://browser/content/browser.js"/>
-  <script type="application/javascript" src="chrome://torbutton/content/torbutton_util.js"/>
   <script type="application/javascript" src="chrome://torbutton/content/torbutton.js"/>
 
   <deck id="browsers" flex="1"/>
