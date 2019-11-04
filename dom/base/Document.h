@@ -3661,6 +3661,11 @@ class Document : public nsINode,
    */
   virtual void InitialDocumentTranslationCompleted();
 
+  /**
+   * Returns whether the document allows localization.
+   */
+  bool AllowsL10n() const;
+
  protected:
   RefPtr<DocumentL10n> mDocumentL10n;
 
