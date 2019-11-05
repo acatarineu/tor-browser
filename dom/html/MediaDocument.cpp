@@ -125,9 +125,7 @@ nsresult MediaDocument::Init() {
   nsCOMPtr<nsIStringBundleService> stringService =
       mozilla::services::GetStringBundleService();
   if (stringService) {
-    stringService->CreateBundle(nsContentUtils::SpoofLocaleEnglish()
-                                    ? NSMEDIADOCUMENT_PROPERTIES_URI_en_US
-                                    : NSMEDIADOCUMENT_PROPERTIES_URI,
+    stringService->CreateBundle(NSMEDIADOCUMENT_PROPERTIES_URI,
                                 getter_AddRefs(mStringBundle));
   }
 

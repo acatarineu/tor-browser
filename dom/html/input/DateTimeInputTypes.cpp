@@ -138,7 +138,7 @@ nsresult DateTimeInputTypeBase::GetRangeOverflowMessage(nsAString& aMessage) {
 
   const char16_t* params[] = {maxStr.get()};
   return nsContentUtils::FormatLocalizedString(
-      nsContentUtils::eDOM_PROPERTIES_MAYBESPOOF, "FormValidationDateTimeRangeOverflow",
+      nsContentUtils::eDOM_PROPERTIES, "FormValidationDateTimeRangeOverflow",
       params, aMessage);
 }
 
@@ -148,7 +148,7 @@ nsresult DateTimeInputTypeBase::GetRangeUnderflowMessage(nsAString& aMessage) {
 
   const char16_t* params[] = {minStr.get()};
   return nsContentUtils::FormatLocalizedString(
-      nsContentUtils::eDOM_PROPERTIES_MAYBESPOOF, "FormValidationDateTimeRangeUnderflow",
+      nsContentUtils::eDOM_PROPERTIES, "FormValidationDateTimeRangeUnderflow",
       params, aMessage);
 }
 
@@ -194,7 +194,7 @@ nsresult DateInputType::GetBadInputMessage(nsAString& aMessage) {
   }
 
   return nsContentUtils::GetLocalizedString(
-      nsContentUtils::eDOM_PROPERTIES_MAYBESPOOF, "FormValidationInvalidDate", aMessage);
+      nsContentUtils::eDOM_PROPERTIES, "FormValidationInvalidDate", aMessage);
 }
 
 bool DateInputType::ConvertStringToNumber(
