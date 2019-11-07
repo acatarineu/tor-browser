@@ -1876,8 +1876,8 @@ js_option(env='RUSTC_OPT_LEVEL',
           nargs=1,
           help='Rust compiler optimization level (-C opt-level=%s)')
 
-# --enable-release kicks in full optimizations.
-imply_option('RUSTC_OPT_LEVEL', '2', when='--enable-release')
+# Use -O1 as a workaround for reproducibility issues for now, see #32053.
+imply_option('RUSTC_OPT_LEVEL', '1', when='--enable-release')
 
 
 @depends('RUSTC_OPT_LEVEL', moz_optimize)
