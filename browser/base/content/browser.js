@@ -1821,6 +1821,7 @@ var gBrowserInit = {
     BrowserOnClick.init();
     CaptivePortalWatcher.init();
     ZoomUI.init(window);
+    OnionLocation.init();
 
     let mm = window.getGroupMessageManager("browsers");
     mm.loadFrameScript("chrome://browser/content/tab-content.js", true, true);
@@ -2481,6 +2482,8 @@ var gBrowserInit = {
     BrowserOnClick.uninit();
 
     CaptivePortalWatcher.uninit();
+
+    OnionLocation.uninit();
 
     SidebarUI.uninit();
 
@@ -4619,6 +4622,40 @@ const DOMEventHandler = {
   },
 };
 
+const OnionLocation = {
+  init() {
+    let mm = window.messageManager;
+    mm.addMessageListener("OnionLocation:Set", this);
+  },
+
+  uninit() {
+    let mm = window.messageManager;
+    mm.removeMessageListener("OnionLocation:Set", this);
+  },
+
+  receiveMessage(aMsg) {
+    switch (aMsg.name) {
+      case "OnionLocation:Set":
+        this.setOnionLocation(aMsg.target, aMsg.data);
+        break;
+    }
+  },
+
+  setOnionLocation(aBrowser, aURL) {
+    let tab = gBrowser.getTabForBrowser(aBrowser);
+    if (!tab) {
+      return;
+    }
+
+    aBrowser.onionLocation = aURL;
+    this.updateOnionLocationBadge();
+  },
+
+  updateOnionLocationBadge() {
+    BrowserPageActions.onionLocation.updateOnionLocation();
+  },
+};
+
 const BrowserSearch = {
   _searchInitComplete: false,
 
@@ -5771,6 +5808,7 @@ var XULBrowserWindow = {
       if (aRequest && aWebProgress.isTopLevel) {
         // clear out search-engine data
         browser.engines = null;
+        browser.onionLocation = null;
       }
 
       this.isBusy = true;
@@ -5989,6 +6027,7 @@ var XULBrowserWindow = {
 
   asyncUpdateUI() {
     BrowserSearch.updateOpenSearchBadge();
+    OnionLocation.updateOnionLocationBadge();
   },
 
   onStatusChange(aWebProgress, aRequest, aStatus, aMessage) {

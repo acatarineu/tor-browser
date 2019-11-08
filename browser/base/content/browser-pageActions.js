@@ -1160,6 +1160,49 @@ BrowserPageActions.sendToDevice = {
   },
 };
 
+// onion location
+BrowserPageActions.onionLocation = {
+  get action() {
+    return PageActions.actionForID("onionLocation");
+  },
+
+  updateOnionLocation() {
+    this.action.setDisabled(
+      !gBrowser.selectedBrowser.onionLocation ||
+        gBrowser.selectedBrowser.documentURI.scheme !== "https" ||
+        gBrowser.selectedBrowser.documentURI.host.endsWith(".onion"),
+      window
+    );
+  },
+
+  onSubviewPlaced(panelViewNode) {
+    this.action.setTitle(".onion available");
+    this.action.setIconURL("chrome://browser/skin/onion-fill.svg", window);
+
+    let bodyNode = panelViewNode.querySelector(".panel-subview-body");
+    const items = [
+      { label: "Visit .onion now" },
+      { label: "Always use .onion when available" },
+    ];
+
+    for (const { label } of items) {
+      let elem = document.createXULElement("toolbarbutton");
+      elem.classList.add("subviewbutton", "subviewbutton-iconic");
+      elem.setAttribute("label", label);
+      elem.addEventListener("command", event => {
+        openUILink(gBrowser.selectedBrowser.onionLocation, event, {
+          triggeringPrincipal: Services.scriptSecurityManager.createNullPrincipal(
+            {}
+          ),
+        });
+        let panelNode = panelViewNode.closest("panel");
+        PanelMultiView.hidePopup(panelNode);
+      });
+      bodyNode.appendChild(elem);
+    }
+  },
+};
+
 // add search engine
 BrowserPageActions.addSearchEngine = {
   get action() {

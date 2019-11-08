@@ -789,3 +789,28 @@
 #urlbar.hidden-focus[focused="true"] {
   caret-color: transparent;
 }
+
+#onion-location-button {
+  list-style-image: url(chrome://browser/skin/onion-fill.svg);
+}
+
+#onion-location-box {
+  border-radius: 3px;
+  background-color: #e6e6e6;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #4c4c4d;
+  -moz-context-properties: fill;
+  fill: #4c4c4d;
+}
+
+toolbar[brighttext] #onion-location-box {
+  background-color: #a6a5a5;
+}
+
+#onion-location-box:hover {
+  background-color: #7d4698!important;
+  color: white;
+  -moz-context-properties: fill;
+  fill: white;
+}

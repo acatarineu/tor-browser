@@ -349,6 +349,9 @@ var PageActions = {
   },
 
   logTelemetry(type, action, node = null) {
+    if (action._id === "onionLocation") {
+      return;
+    }
     if (type == "used") {
       type =
         node && node.closest("#urlbar-container")
@@ -1270,6 +1273,21 @@ if (Services.prefs.getBoolPref("identity.fxaccounts.enabled")) {
     },
   });
 }
+
+gBuiltInActions.push({
+  id: "onionLocation",
+  _transient: true,
+  urlbarIDOverride: "onion-location-box",
+  _urlbarNodeInMarkup: true,
+  pinnedToUrlbar: true,
+  title: "",
+  wantsSubview: true,
+  onSubviewPlaced(panelViewNode) {
+    browserPageActions(panelViewNode).onionLocation.onSubviewPlaced(
+      panelViewNode
+    );
+  },
+});
 
 // share URL
 if (AppConstants.platform == "macosx") {

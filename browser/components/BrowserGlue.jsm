@@ -216,6 +216,13 @@ let LEGACY_ACTORS = {
     },
   },
 
+  OnionLocation: {
+    child: {
+      module: "resource:///actors/OnionLocationChild.jsm",
+      events: { pageshow: {} },
+    },
+  },
+
   PageInfo: {
     child: {
       module: "resource:///actors/PageInfoChild.jsm",
