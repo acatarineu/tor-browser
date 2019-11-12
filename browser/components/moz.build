@@ -41,6 +41,7 @@ DIRS += [
     'library',
     'migration',
     'newtab',
+    'onionservices',
     'originattributes',
     'places',
     'pocket',
