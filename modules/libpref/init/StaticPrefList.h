@@ -2547,6 +2547,12 @@ VARCACHE_PREF(
 )
 #undef PREF_VALUE
 
+VARCACHE_PREF(
+  "privacy.prioritizeonions.enabled",
+   privacy_prioritizeOnions,
+  RelaxedAtomicBool, false
+)
+
 // Anti-fingerprinting, disabled by default
 VARCACHE_PREF(
   "privacy.resistFingerprinting",

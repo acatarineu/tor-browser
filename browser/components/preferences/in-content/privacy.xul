@@ -15,6 +15,16 @@
   <html:h1 data-l10n-id="privacy-header"/>
 </hbox>
 
+<groupbox id="onionServicesGroup" data-category="panePrivacy">
+  <label><html:h2>Onion Services</html:h2></label>
+  <label><label class="tail-with-learn-more" id="prioritizeOnionsDesc">Prioritize .onion served websites when it is available.</label><label
+  class="learnMore" is="text-link" href="https://www.torproject.org/">Learn more</label></label>
+  <radiogroup id="prioritizeOnionsRadioGroup" aria-labelledby="prioritizeOnionsDesc" preference="privacy.prioritizeonions.enabled">
+    <radio value="true" label="Always"/>
+    <radio value="false" label="Ask you everytime"/>
+  </radiogroup>
+</groupbox>
+
 <!-- Tracking / Content Blocking -->
 <groupbox id="trackingGroup" data-category="panePrivacy" hidden="true" aria-describedby="contentBlockingDescription">
   <label id="contentBlockingHeader"><html:h2 data-l10n-id="content-blocking-header"/></label>

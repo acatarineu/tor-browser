@@ -153,6 +153,8 @@ pref("dom.use_components_shim", false);
 // Enable letterboxing
 pref("privacy.resistFingerprinting.letterboxing", true);
 
+pref("privacy.prioritizeonions.enabled", false);
+
 // Third party stuff
 pref("privacy.firstparty.isolate", true); // Always enforce first party isolation
 pref("network.cookie.cookieBehavior", 1);

@@ -2633,6 +2633,34 @@ nsresult nsHttpChannel::ContinueProcessResponse3(nsresult rv) {
   rv = NS_OK;
 
   uint32_t httpStatus = mResponseHead->Status();
+  if (mLoadInfo &&
+      mLoadInfo->GetExternalContentPolicyType() ==
+          nsIContentPolicy::TYPE_DOCUMENT &&
+      StaticPrefs::privacy_prioritizeOnions()) {
+    nsAutoCString onionLocation;
+    Unused << mResponseHead->GetHeader(nsHttp::Onion_Location, onionLocation);
+    if (!onionLocation.IsEmpty()) {
+      // don't store the response body for redirects
+      MaybeInvalidateCacheEntryForSubsequentGet();
+      PushRedirectAsyncFunc(&nsHttpChannel::ContinueProcessResponse4);
+      rv = AsyncProcessRedirectionOnion(httpStatus, onionLocation);
+      if (NS_FAILED(rv)) {
+        PopRedirectAsyncFunc(&nsHttpChannel::ContinueProcessResponse4);
+        LOG(("AsyncProcessRedirectionOnion failed [rv=%" PRIx32 "]\n",
+             static_cast<uint32_t>(rv)));
+        // don't cache failed redirect responses.
+        if (mCacheEntry) mCacheEntry->AsyncDoom(nullptr);
+        if (DoNotRender3xxBody(rv)) {
+          mStatus = rv;
+          DoNotifyListener();
+        } else {
+          rv = ContinueProcessResponse4(rv);
+        }
+      }
+      // TODO: update cache disposition at the end?
+      return rv;
+    }
+  }
 
   // handle different server response categories.  Note that we handle
   // caching or not caching of error pages in
@@ -5835,6 +5863,60 @@ nsresult nsHttpChannel::SetupReplacementChannel(nsIURI* newURI,
   }
 
   return NS_OK;
+}
+
+nsresult nsHttpChannel::AsyncProcessRedirectionOnion(uint32_t redirectType,
+                                                     nsAutoCString& location) {
+  nsAutoCString host;
+  if (NS_FAILED(mURI->GetHost(host)) ||
+      StringEndsWith(host, NS_LITERAL_CSTRING(".onion"))) {
+    return NS_ERROR_FAILURE;
+  }
+
+  // // If we were told to not follow redirects automatically, then again
+  // // carry on as though this were a normal response.
+  // if (mLoadInfo && mLoadInfo->GetDontFollowRedirects()) {
+  //   return NS_ERROR_FAILURE;
+  // }
+
+  // make sure non-ASCII characters in the location header are escaped.
+  nsAutoCString locationBuf;
+  if (NS_EscapeURL(location.get(), -1, esc_OnlyNonASCII | esc_Spaces,
+                   locationBuf))
+    location = locationBuf;
+
+  mRedirectType = redirectType;
+
+  LOG(("redirecting to: %s [redirection-limit=%u]\n", location.get(),
+       uint32_t(mRedirectionLimit)));
+
+  nsresult rv = CreateNewURI(location.get(), getter_AddRefs(mRedirectURI));
+
+  if (NS_FAILED(rv)) {
+    LOG(("Invalid URI for redirect: Location: %s\n", location.get()));
+    return NS_ERROR_CORRUPTED_CONTENT;
+  }
+
+  if (NS_FAILED(mRedirectURI->GetHost(host)) ||
+      !StringEndsWith(host, NS_LITERAL_CSTRING(".onion"))) {
+    return NS_ERROR_FAILURE;
+  }
+  if (mApplicationCache) {
+    // if we are redirected to a different origin check if there is a fallback
+    // cache entry to fall back to. we don't care about file strict
+    // checking, at least mURI is not a file URI.
+    if (!NS_SecurityCompareURIs(mURI, mRedirectURI, false)) {
+      PushRedirectAsyncFunc(
+          &nsHttpChannel::ContinueProcessRedirectionAfterFallback);
+      bool waitingForRedirectCallback;
+      Unused << ProcessFallback(&waitingForRedirectCallback);
+      if (waitingForRedirectCallback) return NS_OK;
+      PopRedirectAsyncFunc(
+          &nsHttpChannel::ContinueProcessRedirectionAfterFallback);
+    }
+  }
+
+  return ContinueProcessRedirectionAfterFallback(NS_OK);
 }
 
 nsresult nsHttpChannel::AsyncProcessRedirection(uint32_t redirectType) {

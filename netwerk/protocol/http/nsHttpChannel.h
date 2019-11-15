@@ -353,6 +353,8 @@ class nsHttpChannel final : public HttpBaseChannel,
   MOZ_MUST_USE nsresult ContinueProcessResponseAfterNotModified(nsresult aRv);
 
   MOZ_MUST_USE nsresult AsyncProcessRedirection(uint32_t httpStatus);
+  MOZ_MUST_USE nsresult AsyncProcessRedirectionOnion(uint32_t httpStatus,
+                                                     nsAutoCString& location);
   MOZ_MUST_USE nsresult ContinueProcessRedirection(nsresult);
   MOZ_MUST_USE nsresult ContinueProcessRedirectionAfterFallback(nsresult);
   MOZ_MUST_USE nsresult ProcessFailedProxyConnect(uint32_t httpStatus);

@@ -118,6 +118,9 @@ Preferences.addAll([
   // Do not track
   { id: "privacy.donottrackheader.enabled", type: "bool" },
 
+  // Onion Location
+  { id: "privacy.prioritizeonions.enabled", type: "bool" },
+
   // Media
   { id: "media.autoplay.default", type: "int" },
 
