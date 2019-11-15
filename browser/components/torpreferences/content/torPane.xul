@@ -5,12 +5,13 @@
 <html:template id="template-paneTor">
 <hbox id="torPreferencesCategory"
       class="subcategory"
-      hidden="true"
-      data-category="paneTor">
+      data-category="paneTor"
+      hidden="true">
   <html:h1 id="torPreferences-header"/>
 </hbox>
 
-<groupbox data-category="paneTor" >
+<groupbox data-category="paneTor"
+          hidden="true">
   <description flex="1">
     <html:span id="torPreferences-description" class="tail-with-learn-more"/>
     <label id="torPreferences-learnMore" class="learnMore text-link" is="text-link"/>
@@ -18,7 +19,9 @@
 </groupbox>
 
 <!-- Bridges -->
-<groupbox id="torPreferences-bridges-group" data-category="paneTor" >
+<groupbox id="torPreferences-bridges-group"
+          data-category="paneTor"
+          hidden="true">
   <html:h2 id="torPreferences-bridges-header"/>
   <description flex="1">
     <html:span id="torPreferences-bridges-description" class="tail-with-learn-more"/>
@@ -63,7 +66,9 @@
 </groupbox>
 
 <!-- Advanced -->
-<groupbox id="torPreferences-advanced-group" data-category="paneTor">
+<groupbox id="torPreferences-advanced-group"
+          data-category="paneTor"
+          hidden="true">
   <html:h2 id="torPreferences-advanced-header"/>
   <description flex="1">
     <html:span id="torPreferences-advanced-description" class="tail-with-learn-more"/>
