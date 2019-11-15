@@ -1166,38 +1166,68 @@ BrowserPageActions.onionLocation = {
     return PageActions.actionForID("onionLocation");
   },
 
-  updateOnionLocation() {
-    this.action.setDisabled(
-      !gBrowser.selectedBrowser.onionLocation ||
-        gBrowser.selectedBrowser.documentURI.scheme !== "https" ||
-        gBrowser.selectedBrowser.documentURI.host.endsWith(".onion"),
-      window
-    );
+  setTitle(title) {
+    this.action.setTitle(title);
+    document.getElementById("onion-label").textContent = title;
   },
 
+  updateOnionLocation() {
+    if (gBrowser.selectedBrowser.onionLocationRedirect) {
+      this.setTitle(".onion redirected");
+      this.action.setDisabled(false, window);
+    } else if (
+      gBrowser.selectedBrowser.onionLocation &&
+      gBrowser.selectedBrowser.documentURI.scheme === "https" &&
+      !gBrowser.selectedBrowser.documentURI.host.endsWith(".onion")
+    ) {
+      this.setTitle(".onion available");
+      this.action.setDisabled(false, window);
+    } else {
+      this.action.setDisabled(true, window);
+    }
+  },
+
+  // TODO: hide action when typing (like bookmark star).
+  // TODO: Render differently for redirected and non-redirected.
+  // TODO: localize.
   onSubviewPlaced(panelViewNode) {
-    this.action.setTitle(".onion available");
     this.action.setIconURL("chrome://browser/skin/onion-fill.svg", window);
 
     let bodyNode = panelViewNode.querySelector(".panel-subview-body");
     const items = [
-      { label: "Visit .onion now" },
-      { label: "Always use .onion when available" },
+      {
+        label: "Visit .onion now",
+        oncommand(event) {
+          // TODO: should mark as "redirected" so that visual feedback is displayed
+          // for this case, too.
+          openUILink(gBrowser.selectedBrowser.onionLocation, event, {
+            triggeringPrincipal: Services.scriptSecurityManager.createNullPrincipal(
+              {}
+            ),
+          });
+          let panelNode = panelViewNode.closest("panel");
+          PanelMultiView.hidePopup(panelNode);
+        },
+      },
+      {
+        label: "Always use .onion when available",
+        oncommand() {
+          Services.prefs.setBoolPref("privacy.prioritizeonions.enabled", true);
+          // TODO: check if this way of reloading is alright. Note: if
+          // for some reason Onion-Location header is not sent, this will not be
+          // redirected...
+          gBrowser.reloadWithFlags(Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE);
+          let panelNode = panelViewNode.closest("panel");
+          PanelMultiView.hidePopup(panelNode);
+        },
+      },
     ];
 
-    for (const { label } of items) {
+    for (const { label, oncommand } of items) {
       let elem = document.createXULElement("toolbarbutton");
       elem.classList.add("subviewbutton", "subviewbutton-iconic");
       elem.setAttribute("label", label);
-      elem.addEventListener("command", event => {
-        openUILink(gBrowser.selectedBrowser.onionLocation, event, {
-          triggeringPrincipal: Services.scriptSecurityManager.createNullPrincipal(
-            {}
-          ),
-        });
-        let panelNode = panelViewNode.closest("panel");
-        PanelMultiView.hidePopup(panelNode);
-      });
+      elem.addEventListener("command", oncommand);
       bodyNode.appendChild(elem);
     }
   },

@@ -2630,37 +2630,40 @@ nsresult nsHttpChannel::ContinueProcessResponse3(nsresult rv) {
     return NS_OK;
   }
 
-  rv = NS_OK;
-
   uint32_t httpStatus = mResponseHead->Status();
   if (mLoadInfo &&
       mLoadInfo->GetExternalContentPolicyType() ==
           nsIContentPolicy::TYPE_DOCUMENT &&
       StaticPrefs::privacy_prioritizeOnions()) {
-    nsAutoCString onionLocation;
-    Unused << mResponseHead->GetHeader(nsHttp::Onion_Location, onionLocation);
-    if (!onionLocation.IsEmpty()) {
-      // don't store the response body for redirects
-      MaybeInvalidateCacheEntryForSubsequentGet();
-      PushRedirectAsyncFunc(&nsHttpChannel::ContinueProcessResponse4);
-      rv = AsyncProcessRedirectionOnion(httpStatus, onionLocation);
-      if (NS_FAILED(rv)) {
-        PopRedirectAsyncFunc(&nsHttpChannel::ContinueProcessResponse4);
-        LOG(("AsyncProcessRedirectionOnion failed [rv=%" PRIx32 "]\n",
-             static_cast<uint32_t>(rv)));
-        // don't cache failed redirect responses.
-        if (mCacheEntry) mCacheEntry->AsyncDoom(nullptr);
-        if (DoNotRender3xxBody(rv)) {
-          mStatus = rv;
-          DoNotifyListener();
-        } else {
-          rv = ContinueProcessResponse4(rv);
+    bool isHttps = false;
+    if (NS_SUCCEEDED(mURI->SchemeIs("https", &isHttps)) && isHttps) {
+      nsAutoCString onionLocation;
+      Unused << mResponseHead->GetHeader(nsHttp::Onion_Location, onionLocation);
+      if (!onionLocation.IsEmpty()) {
+        // don't store the response body for redirects
+        MaybeInvalidateCacheEntryForSubsequentGet();
+        PushRedirectAsyncFunc(&nsHttpChannel::ContinueProcessResponse4);
+        rv = AsyncProcessRedirectionOnion(httpStatus, onionLocation);
+        if (NS_FAILED(rv)) {
+          PopRedirectAsyncFunc(&nsHttpChannel::ContinueProcessResponse4);
+          LOG(("AsyncProcessRedirectionOnion failed [rv=%" PRIx32 "]\n",
+              static_cast<uint32_t>(rv)));
+          // don't cache failed redirect responses.
+          if (mCacheEntry) mCacheEntry->AsyncDoom(nullptr);
+          if (DoNotRender3xxBody(rv)) {
+            mStatus = rv;
+            DoNotifyListener();
+          } else {
+            rv = ContinueProcessResponse4(rv);
+          }
         }
+        // TODO: update cache disposition at the end?
+        return rv;
       }
-      // TODO: update cache disposition at the end?
-      return rv;
     }
   }
+
+  rv = NS_OK;
 
   // handle different server response categories.  Note that we handle
   // caching or not caching of error pages in

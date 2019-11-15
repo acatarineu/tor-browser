@@ -4626,17 +4626,22 @@ const OnionLocation = {
   init() {
     let mm = window.messageManager;
     mm.addMessageListener("OnionLocation:Set", this);
+    mm.addMessageListener("OnionLocation:Redirect", this);
   },
 
   uninit() {
     let mm = window.messageManager;
     mm.removeMessageListener("OnionLocation:Set", this);
+    mm.removeMessageListener("OnionLocation:Redirect", this);
   },
 
   receiveMessage(aMsg) {
     switch (aMsg.name) {
       case "OnionLocation:Set":
         this.setOnionLocation(aMsg.target, aMsg.data);
+        break;
+      case "OnionLocation:Redirect":
+        this.setRedirectInfo(aMsg.target, aMsg.data);
         break;
     }
   },
@@ -4648,6 +4653,16 @@ const OnionLocation = {
     }
 
     aBrowser.onionLocation = aURL;
+    this.updateOnionLocationBadge();
+  },
+
+  setRedirectInfo(aBrowser, aURL) {
+    let tab = gBrowser.getTabForBrowser(aBrowser);
+    if (!tab) {
+      return;
+    }
+
+    aBrowser.onionLocationRedirect = aURL;
     this.updateOnionLocationBadge();
   },
 
@@ -5809,6 +5824,7 @@ var XULBrowserWindow = {
         // clear out search-engine data
         browser.engines = null;
         browser.onionLocation = null;
+        browser.onionLocationRedirect = null;
       }
 
       this.isBusy = true;

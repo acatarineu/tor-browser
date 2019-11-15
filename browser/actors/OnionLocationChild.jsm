@@ -44,6 +44,17 @@ class OnionLocationChild extends ActorChild {
       if (isValidOnionLocation(onionLocation)) {
         this.mm.sendAsyncMessage("OnionLocation:Set", onionLocation);
       }
+
+      // TODO: we need to properly detect Onion-Location redirects (somehow)
+      let URI = httpChannel.URI;
+      let originalURI = httpChannel.originalURI;
+      if (
+        !URI.equals(originalURI) &&
+        !originalURI.host.endsWith(".onion") &&
+        URI.host.endsWith(".onion")
+      ) {
+        this.mm.sendAsyncMessage("OnionLocation:Redirect", URI.asciiSpec);
+      }
     } catch (e) {}
   }
 }
