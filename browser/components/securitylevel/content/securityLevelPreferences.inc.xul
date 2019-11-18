@@ -1,5 +1,5 @@
 <groupbox id="securityLevel-groupbox" data-category="panePrivacy" hidden="true">
-  <caption><label id="securityLevel-header"/></caption>
+  <label><html:h2 id="securityLevel-header"/></label>
   <vbox data-subcategory="securitylevel" flex="1">
     <description flex="1">
       <html:span id="securityLevel-overview" class="tail-with-learn-more"/>

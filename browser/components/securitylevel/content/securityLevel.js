@@ -334,7 +334,7 @@ const SecurityLevelPreferences =
     let groupbox = document.getElementById("securityLevel-groupbox");
 
     let labelHeader = groupbox.querySelector("#securityLevel-header");
-    labelHeader.setAttribute("value", TorStrings.securityLevel.securityLevel);
+    labelHeader.textContent = TorStrings.securityLevel.securityLevel;
 
     let spanOverview = groupbox.querySelector("#securityLevel-overview");
     spanOverview.textContent = TorStrings.securityLevel.overview;
