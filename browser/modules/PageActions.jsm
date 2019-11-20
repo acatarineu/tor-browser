@@ -1281,9 +1281,10 @@ gBuiltInActions.push({
   _urlbarNodeInMarkup: true,
   pinnedToUrlbar: true,
   title: "",
+  iconURL: "chrome://browser/skin/onion-fill.svg",
   wantsSubview: true,
-  onSubviewPlaced(panelViewNode) {
-    browserPageActions(panelViewNode).onionLocation.onSubviewPlaced(
+  onSubviewShowing(panelViewNode) {
+    browserPageActions(panelViewNode).onionLocation.onShowingSubview(
       panelViewNode
     );
   },

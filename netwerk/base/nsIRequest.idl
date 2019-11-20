@@ -143,6 +143,8 @@ interface nsIRequest : nsISupports
      */
     const unsigned long LOAD_DISABLE_TRR = 1 << 3;
 
+    const unsigned long LOAD_ONION_REDIRECT = 1 << 4;
+
     /**************************************************************************
      * The following flags control the flow of data into the cache.
      */

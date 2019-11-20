@@ -2634,7 +2634,8 @@ nsresult nsHttpChannel::ContinueProcessResponse3(nsresult rv) {
   if (mLoadInfo &&
       mLoadInfo->GetExternalContentPolicyType() ==
           nsIContentPolicy::TYPE_DOCUMENT &&
-      StaticPrefs::privacy_prioritizeOnions()) {
+      (StaticPrefs::privacy_prioritizeOnions() ||
+       mLoadFlags & nsIRequest::LOAD_ONION_REDIRECT)) {
     bool isHttps = false;
     if (NS_SUCCEEDED(mURI->SchemeIs("https", &isHttps)) && isHttps) {
       nsAutoCString onionLocation;

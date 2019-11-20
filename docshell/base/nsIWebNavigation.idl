@@ -95,9 +95,14 @@ interface nsIWebNavigation : nsISupports
   const unsigned long LOAD_FLAGS_NONE            = 0x0000;
 
   /**
-   * Flags 0x1, 0x2, 0x4, 0x8 are reserved for internal use by
+   * Flags 0x1, 0x2, 0x4 are reserved for internal use by
    * nsIWebNavigation implementations for now.
    */
+
+  /**
+   * Redirect to Onion-Location header, if present.
+   */
+  const unsigned long LOAD_FLAGS_ONION_REDIRECT = 0x0008;
 
   /**
    * This flag specifies that the load should have the semantics of an HTML

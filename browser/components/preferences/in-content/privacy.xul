@@ -15,7 +15,7 @@
   <html:h1 data-l10n-id="privacy-header"/>
 </hbox>
 
-<groupbox id="onionServicesGroup" data-category="panePrivacy">
+<groupbox id="onionServicesGroup" data-category="panePrivacy" data-subcategory="onionservices">
   <label><html:h2>Onion Services</html:h2></label>
   <label><label class="tail-with-learn-more" id="prioritizeOnionsDesc">Prioritize .onion served websites when it is available.</label><label
   class="learnMore" is="text-link" href="https://www.torproject.org/">Learn more</label></label>

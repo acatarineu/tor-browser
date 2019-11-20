@@ -53,7 +53,10 @@ class OnionLocationChild extends ActorChild {
         !originalURI.host.endsWith(".onion") &&
         URI.host.endsWith(".onion")
       ) {
-        this.mm.sendAsyncMessage("OnionLocation:Redirect", URI.asciiSpec);
+        this.mm.sendAsyncMessage(
+          "OnionLocation:Redirect",
+          originalURI.asciiSpec
+        );
       }
     } catch (e) {}
   }

@@ -1171,40 +1171,55 @@ BrowserPageActions.onionLocation = {
     document.getElementById("onion-label").textContent = title;
   },
 
-  updateOnionLocation() {
-    if (gBrowser.selectedBrowser.onionLocationRedirect) {
-      this.setTitle(".onion redirected");
-      this.action.setDisabled(false, window);
-    } else if (
-      gBrowser.selectedBrowser.onionLocation &&
-      gBrowser.selectedBrowser.documentURI.scheme === "https" &&
-      !gBrowser.selectedBrowser.documentURI.host.endsWith(".onion")
-    ) {
-      this.setTitle(".onion available");
-      this.action.setDisabled(false, window);
-    } else {
-      this.action.setDisabled(true, window);
-    }
+  setOnionAvailable(onionLocation) {
+    this._fromURI = null;
+    this._onionLocation = onionLocation;
+    this.setTitle(".onion available");
+    this.action.setDisabled(false, window);
   },
 
-  // TODO: hide action when typing (like bookmark star).
-  // TODO: Render differently for redirected and non-redirected.
-  // TODO: localize.
-  onSubviewPlaced(panelViewNode) {
-    this.action.setIconURL("chrome://browser/skin/onion-fill.svg", window);
+  setOnionRedirected(fromURI) {
+    this._fromURI = fromURI;
+    this._onionLocation = null;
+    this.setTitle(".onion redirected");
+    this.action.setDisabled(false, window);
+  },
 
+  setDisabled() {
+    this._fromURI = null;
+    this._onionLocation = null;
+    this.action.setDisabled(true, window);
+  },
+
+  renderRedirected(panelViewNode) {
+    let from = this._fromURI;
+    let bodyNode = panelViewNode.querySelector(".panel-subview-body");
+
+    let vbox = document.createXULElement("vbox");
+
+    let elem = document.createXULElement("description");
+    elem.textContent = `Redirected from ${from}`;
+    vbox.appendChild(elem);
+
+    let button = document.createXULElement("button");
+    button.setAttribute("label", "Onion Sevices Settings...");
+    button.setAttribute("id", "onionLocationSettingsButton");
+    button.addEventListener("command", () => {
+      openPreferences("privacy-onionservices");
+      let panelNode = panelViewNode.closest("panel");
+      PanelMultiView.hidePopup(panelNode);
+    });
+    vbox.appendChild(button);
+    bodyNode.appendChild(vbox);
+  },
+
+  renderOnionAvailable(panelViewNode) {
     let bodyNode = panelViewNode.querySelector(".panel-subview-body");
     const items = [
       {
         label: "Visit .onion now",
         oncommand(event) {
-          // TODO: should mark as "redirected" so that visual feedback is displayed
-          // for this case, too.
-          openUILink(gBrowser.selectedBrowser.onionLocation, event, {
-            triggeringPrincipal: Services.scriptSecurityManager.createNullPrincipal(
-              {}
-            ),
-          });
+          BrowserReloadWithFlags(Ci.nsIWebNavigation.LOAD_FLAGS_ONION_REDIRECT);
           let panelNode = panelViewNode.closest("panel");
           PanelMultiView.hidePopup(panelNode);
         },
@@ -1216,7 +1231,7 @@ BrowserPageActions.onionLocation = {
           // TODO: check if this way of reloading is alright. Note: if
           // for some reason Onion-Location header is not sent, this will not be
           // redirected...
-          gBrowser.reloadWithFlags(Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE);
+          gBrowser.reload();
           let panelNode = panelViewNode.closest("panel");
           PanelMultiView.hidePopup(panelNode);
         },
@@ -1229,6 +1244,34 @@ BrowserPageActions.onionLocation = {
       elem.setAttribute("label", label);
       elem.addEventListener("command", oncommand);
       bodyNode.appendChild(elem);
+    }
+  },
+
+  updateOnionLocation() {
+    if (gBrowser.selectedBrowser.onionLocationRedirect) {
+      this.setOnionRedirected(gBrowser.selectedBrowser.onionLocationRedirect);
+    } else if (
+      gBrowser.selectedBrowser.onionLocation &&
+      gBrowser.selectedBrowser.documentURI.scheme === "https" &&
+      !gBrowser.selectedBrowser.documentURI.host.endsWith(".onion")
+    ) {
+      this.setOnionAvailable(gBrowser.selectedBrowser.onionLocation);
+    } else {
+      this.setDisabled();
+    }
+  },
+
+  onShowingSubview(panelViewNode) {
+    let body = panelViewNode.querySelector(".panel-subview-body");
+    while (body.firstChild) {
+      body.firstChild.remove();
+    }
+    if (this._onionLocation) {
+      this.renderOnionAvailable(panelViewNode);
+    } else if (this._fromURI) {
+      this.renderRedirected(panelViewNode);
+    } else {
+      // This should not happen!
     }
   },
 };

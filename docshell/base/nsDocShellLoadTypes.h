@@ -110,7 +110,10 @@ enum LoadType : uint32_t {
    * consumer-triggered load failed.
    */
   LOAD_ERROR_PAGE =
-      MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, LOAD_FLAGS_ERROR_PAGE)
+      MAKE_LOAD_TYPE(nsIDocShell::LOAD_CMD_NORMAL, LOAD_FLAGS_ERROR_PAGE),
+
+  LOAD_RELOAD_ONION_REDIRECT = MAKE_LOAD_TYPE(
+      nsIDocShell::LOAD_CMD_RELOAD, nsIWebNavigation::LOAD_FLAGS_ONION_REDIRECT)
 
   // NOTE: Adding a new value? Remember to update IsValidLoadType!
 };
@@ -121,6 +124,7 @@ static inline bool IsForceReloadType(uint32_t aLoadType) {
     case LOAD_RELOAD_BYPASS_PROXY:
     case LOAD_RELOAD_BYPASS_PROXY_AND_CACHE:
     case LOAD_RELOAD_ALLOW_MIXED_CONTENT:
+    case LOAD_RELOAD_ONION_REDIRECT:
       return true;
   }
   return false;
@@ -152,6 +156,7 @@ static inline bool IsValidLoadType(uint32_t aLoadType) {
     case LOAD_PUSHSTATE:
     case LOAD_REPLACE_BYPASS_CACHE:
     case LOAD_ERROR_PAGE:
+    case LOAD_RELOAD_ONION_REDIRECT:
       return true;
   }
   return false;
@@ -189,6 +194,7 @@ static inline nsDOMNavigationTiming::Type ConvertLoadTypeToNavigationType(
     case LOAD_RELOAD_BYPASS_PROXY:
     case LOAD_RELOAD_BYPASS_PROXY_AND_CACHE:
     case LOAD_RELOAD_ALLOW_MIXED_CONTENT:
+    case LOAD_RELOAD_ONION_REDIRECT:
       result = nsDOMNavigationTiming::TYPE_RELOAD;
       break;
     case LOAD_STOP_CONTENT_AND_REPLACE:

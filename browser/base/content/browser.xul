@@ -976,7 +976,7 @@
                          class="urlbar-icon urlbar-page-action"
                          role="presentation"/>
                 </hbox>
-                <hbox id="onion-location-box" role="button" hidden="true" onclick="BrowserPageActions.doCommandForAction(PageActions.actionForID('onionLocation'), event, this);">
+                <hbox id="onion-location-box" class="urlbar-icon-wrapper urlbar-page-action" role="button" hidden="true" onclick="BrowserPageActions.doCommandForAction(PageActions.actionForID('onionLocation'), event, this);">
                       <image id="onion-location-button"
                          role="presentation"/>
                   <hbox id="onion-label-container">
