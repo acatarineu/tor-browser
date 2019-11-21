@@ -9647,8 +9647,8 @@ void nsHttpChannel::SetOriginHeader() {
       nsAutoCString currentOrigin;
       nsContentUtils::GetASCIIOrigin(mURI, currentOrigin);
       if (!origin.EqualsIgnoreCase(currentOrigin.get())) {
-        // Origin header is suppressed by .onion
-        return;
+        // Origin header set to null by .onion
+        origin.AssignLiteral("null");
       }
     }
   }
