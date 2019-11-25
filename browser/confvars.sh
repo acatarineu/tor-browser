@@ -33,6 +33,15 @@ MOZ_APP_ID={ec8030f7-c20a-464f-9b0e-13a3a9e97384}
 if test "$MOZ_UPDATE_CHANNEL" = "aurora"; then
   ACCEPTED_MAR_CHANNEL_IDS=firefox-mozilla-aurora
   MAR_CHANNEL_ID=firefox-mozilla-aurora
+elif test "$MOZ_UPDATE_CHANNEL" = "alpha"; then
+  # alpha is currently using the -release channel id. However we accept
+  # both -alpha and -release channel ID for the alpha so that we can
+  # switch it to -alpha at some point. See bug 32498.
+  ACCEPTED_MAR_CHANNEL_IDS=torbrowser-torproject-alpha,torbrowser-torproject-release
+  MAR_CHANNEL_ID=torbrowser-torproject-release
+elif test "$MOZ_UPDATE_CHANNEL" = "nightly"; then
+  ACCEPTED_MAR_CHANNEL_IDS=torbrowser-torproject-nightly
+  MAR_CHANNEL_ID=torbrowser-torproject-nightly
 else
   ACCEPTED_MAR_CHANNEL_IDS=torbrowser-torproject-release
   MAR_CHANNEL_ID=torbrowser-torproject-release
