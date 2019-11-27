@@ -2547,6 +2547,13 @@ VARCACHE_PREF(
 )
 #undef PREF_VALUE
 
+// Automatically redirect to Onion-Location header, disabled by default
+VARCACHE_PREF(
+  "privacy.prioritizeonions.enabled",
+   privacy_prioritizeOnions,
+  RelaxedAtomicBool, false
+)
+
 // Anti-fingerprinting, disabled by default
 VARCACHE_PREF(
   "privacy.resistFingerprinting",

@@ -2630,9 +2630,59 @@ nsresult nsHttpChannel::ContinueProcessResponse3(nsresult rv) {
     return NS_OK;
   }
 
-  rv = NS_OK;
-
   uint32_t httpStatus = mResponseHead->Status();
+
+  // Handle Onion-Location redirect.
+  if (mLoadInfo &&
+      mLoadInfo->GetExternalContentPolicyType() ==
+          nsIContentPolicy::TYPE_DOCUMENT &&
+      (StaticPrefs::privacy_prioritizeOnions() ||
+       mLoadFlags & nsIRequest::LOAD_ONION_REDIRECT)) {
+    bool isHttps = false;
+    nsCOMPtr<nsIURI> onionLocationURI;
+    nsAutoCString host;
+    nsAutoCString onionLocation;
+    // Do the redirect if original URI is https and not .onion, and we are
+    // redirecting to .onion.
+    if (NS_SUCCEEDED(mURI->SchemeIs("https", &isHttps)) && isHttps &&
+        NS_SUCCEEDED(
+            mResponseHead->GetHeader(nsHttp::Onion_Location, onionLocation)) &&
+        NS_SUCCEEDED(CreateNewURI(onionLocation.get(),
+                                  getter_AddRefs(onionLocationURI))) &&
+        NS_SUCCEEDED(onionLocationURI->GetHost(host)) &&
+        StringEndsWith(host, NS_LITERAL_CSTRING(".onion")) &&
+        NS_SUCCEEDED(mURI->GetHost(host)) &&
+        !StringEndsWith(host, NS_LITERAL_CSTRING(".onion"))) {
+      // This code is adapted from the 30X case later in this function,
+      // and should be kept in sync with that.
+
+      // don't store the response body for redirects
+      MaybeInvalidateCacheEntryForSubsequentGet();
+      PushRedirectAsyncFunc(&nsHttpChannel::ContinueProcessResponse4);
+      // In the 30X case later, this code would pass the http status
+      // as the redirect type. Since here the http status can be non-30X,
+      // we always pass 308 = Permanent Redirect.
+      uint32_t redirectType = 308;
+      rv = AsyncProcessRedirectionInternal(redirectType, onionLocation);
+      if (NS_FAILED(rv)) {
+        PopRedirectAsyncFunc(&nsHttpChannel::ContinueProcessResponse4);
+        LOG(("AsyncProcessRedirectionInternal failed [rv=%" PRIx32 "]\n",
+             static_cast<uint32_t>(rv)));
+        // don't cache failed redirect responses.
+        if (mCacheEntry) mCacheEntry->AsyncDoom(nullptr);
+        if (DoNotRender3xxBody(rv)) {
+          mStatus = rv;
+          DoNotifyListener();
+        } else {
+          rv = ContinueProcessResponse4(rv);
+        }
+      }
+      UpdateCacheDisposition(false, false);
+      return rv;
+    }
+  }
+
+  rv = NS_OK;
 
   // handle different server response categories.  Note that we handle
   // caching or not caching of error pages in
@@ -5837,17 +5887,8 @@ nsresult nsHttpChannel::SetupReplacementChannel(nsIURI* newURI,
   return NS_OK;
 }
 
-nsresult nsHttpChannel::AsyncProcessRedirection(uint32_t redirectType) {
-  LOG(("nsHttpChannel::AsyncProcessRedirection [this=%p type=%u]\n", this,
-       redirectType));
-
-  nsAutoCString location;
-
-  // if a location header was not given, then we can't perform the redirect,
-  // so just carry on as though this were a normal response.
-  if (NS_FAILED(mResponseHead->GetHeader(nsHttp::Location, location)))
-    return NS_ERROR_FAILURE;
-
+nsresult nsHttpChannel::AsyncProcessRedirectionInternal(
+    uint32_t redirectType, nsAutoCString location) {
   // If we were told to not follow redirects automatically, then again
   // carry on as though this were a normal response.
   if (mLoadInfo && mLoadInfo->GetDontFollowRedirects()) {
@@ -5888,6 +5929,20 @@ nsresult nsHttpChannel::AsyncProcessRedirection(uint32_t redirectType) {
   }
 
   return ContinueProcessRedirectionAfterFallback(NS_OK);
+}
+
+nsresult nsHttpChannel::AsyncProcessRedirection(uint32_t redirectType) {
+  LOG(("nsHttpChannel::AsyncProcessRedirection [this=%p type=%u]\n", this,
+       redirectType));
+
+  nsAutoCString location;
+
+  // if a location header was not given, then we can't perform the redirect,
+  // so just carry on as though this were a normal response.
+  if (NS_FAILED(mResponseHead->GetHeader(nsHttp::Location, location)))
+    return NS_ERROR_FAILURE;
+
+  return AsyncProcessRedirectionInternal(redirectType, location);
 }
 
 nsresult nsHttpChannel::ContinueProcessRedirectionAfterFallback(nsresult rv) {

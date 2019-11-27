@@ -6385,6 +6385,7 @@ nsresult nsDocShell::Embed(nsIContentViewer* aContentViewer,
     case LOAD_RELOAD_BYPASS_PROXY:
     case LOAD_RELOAD_BYPASS_PROXY_AND_CACHE:
     case LOAD_REPLACE_BYPASS_CACHE:
+    case LOAD_RELOAD_ONION_REDIRECT:
       updateHistory = false;
       break;
     default:
@@ -10612,6 +10613,11 @@ nsresult nsDocShell::DoChannelLoad(nsIChannel* aChannel,
     case LOAD_RELOAD_NORMAL:
     case LOAD_REFRESH:
       loadFlags |= nsIRequest::VALIDATE_ALWAYS;
+      break;
+
+    case LOAD_RELOAD_ONION_REDIRECT:
+      loadFlags |=
+          nsIRequest::VALIDATE_ALWAYS | nsIRequest::LOAD_ONION_REDIRECT;
       break;
 
     case LOAD_NORMAL_BYPASS_CACHE:

@@ -817,6 +817,8 @@ nsresult nsSHistory::Reload(uint32_t aReloadFlags) {
     loadType = LOAD_RELOAD_CHARSET_CHANGE;
   } else if (aReloadFlags & nsIWebNavigation::LOAD_FLAGS_ALLOW_MIXED_CONTENT) {
     loadType = LOAD_RELOAD_ALLOW_MIXED_CONTENT;
+  } else if (aReloadFlags & nsIWebNavigation::LOAD_FLAGS_ONION_REDIRECT) {
+    loadType = LOAD_RELOAD_ONION_REDIRECT;
   } else {
     loadType = LOAD_RELOAD_NORMAL;
   }
