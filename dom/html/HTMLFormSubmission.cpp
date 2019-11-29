@@ -38,6 +38,7 @@
 #include "mozilla/dom/Directory.h"
 #include "mozilla/dom/File.h"
 #include "mozilla/StaticPrefs.h"
+#include "mozilla/RandomNum.h"
 
 namespace mozilla {
 namespace dom {
@@ -353,6 +354,16 @@ nsresult FSURLEncoded::URLEncode(const nsAString& aStr, nsACString& aEncoded) {
 
 // --------------------------------------------------------------------------
 
+static uint32_t RandomInt() {
+  Maybe<uint32_t> maybeInt = mozilla::RandomUint64();
+  return maybeInt.valueOrFrom([] {
+    // rand() may return numbers as small as 15 bit, so make sure the fallback
+    // returns a 32 bit number by calling it three times.
+    srand(PR_Now());
+    return (rand() << 17) ^ (rand() << 9) ^ rand();
+  });
+}
+
 FSMultipartFormData::FSMultipartFormData(nsIURI* aActionURL,
                                          const nsAString& aTarget,
                                          NotNull<const Encoding*> aEncoding,
@@ -368,9 +379,9 @@ FSMultipartFormData::FSMultipartFormData(nsIURI* aActionURL,
   mTotalLength = 0;
 
   mBoundary.AssignLiteral("---------------------------");
-  mBoundary.AppendInt(rand());
-  mBoundary.AppendInt(rand());
-  mBoundary.AppendInt(rand());
+  mBoundary.AppendInt(RandomInt());
+  mBoundary.AppendInt(RandomInt());
+  mBoundary.AppendInt(RandomInt());
 }
 
 FSMultipartFormData::~FSMultipartFormData() {
