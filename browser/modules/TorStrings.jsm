@@ -5,6 +5,7 @@ var EXPORTED_SYMBOLS = ["TorStrings"];
 const { XPCOMUtils } = ChromeUtils.import(
   "resource://gre/modules/XPCOMUtils.jsm"
 );
+const { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const { getLocale } = ChromeUtils.import(
   "resource://torbutton/modules/utils.js"
 );
@@ -17,11 +18,11 @@ XPCOMUtils.defineLazyGetter(this, "domParser", () => {
 });
 
 /*
-  Tor String Bundle
+  Tor DTD String Bundle
 
-  Strings loaded from torbutton/tor-launcher, but provide a fallback in case they aren't available
+  DTD strings loaded from torbutton/tor-launcher, but provide a fallback in case they aren't available
 */
-class TorStringBundle {
+class TorDTDStringBundle {
   constructor(aBundleURLs, aPrefix) {
     let locations = [];
     for (const [index, url] of aBundleURLs.entries()) {
@@ -65,6 +66,36 @@ class TorStringBundle {
 }
 
 /*
+  Tor Property String Bundle
+
+  Property strings loaded from torbutton/tor-launcher, but provide a fallback in case they aren't available
+*/
+class TorPropertyStringBundle {
+  constructor(aBundleURL, aPrefix) {
+    try {
+      this._bundle = Services.strings.createBundle(aBundleURL);
+    } catch (e) {}
+
+    this._prefix = aPrefix;
+  }
+
+  getString(key, fallback) {
+    if (key) {
+      try {
+        return this._bundle.GetStringFromName(`${this._prefix}${key}`);
+      } catch (e) {}
+    }
+
+    // on failure, assign the fallback if it exists
+    if (fallback) {
+      return fallback;
+    }
+    // otherwise return string key
+    return `$(${key})`;
+  }
+}
+
+/*
   Security Level Strings
 */
 var TorStrings = {
@@ -72,7 +103,7 @@ var TorStrings = {
     Tor Browser Security Level Strings
   */
   securityLevel: (function() {
-    let tsb = new TorStringBundle(
+    let tsb = new TorDTDStringBundle(
       ["chrome://torbutton/locale/torbutton.dtd"],
       "torbutton.prefs.sec_"
     );
@@ -157,7 +188,7 @@ var TorStrings = {
     Tor about:preferences#tor Strings
   */
   settings: (function() {
-    let tsb = new TorStringBundle(
+    let tsb = new TorDTDStringBundle(
       ["chrome://torlauncher/locale/network-settings.dtd"],
       ""
     );
@@ -211,7 +242,10 @@ var TorStrings = {
         "torPreferences.advancedDescription",
         "Configure how Tor Browser connects to the internet."
       ),
-      useLocalProxy: getString("torsettings.useProxy.checkbox", "I use a proxy to connect to the Internet"),
+      useLocalProxy: getString(
+        "torsettings.useProxy.checkbox",
+        "I use a proxy to connect to the Internet"
+      ),
       proxyType: getString("torsettings.useProxy.type", "Proxy Type"),
       proxyTypeSOCKS4: getString("torsettings.useProxy.type.socks4", "SOCKS4"),
       proxyTypeSOCKS5: getString("torsettings.useProxy.type.socks5", "SOCKS5"),
@@ -282,6 +316,46 @@ var TorStrings = {
 
     return retval;
   })() /* Tor Network Settings Strings */,
+
+  /*
+    OnionLocation
+  */
+  onionLocation: (function() {
+    let tsb = new TorPropertyStringBundle(
+      ["chrome://torbutton/locale/torbutton.properties"],
+      "onionLocation."
+    );
+    let getString = function(key, fallback) {
+      return tsb.getString(key, fallback);
+    };
+
+    let retval = {
+      alwaysPrioritize: getString(
+        "alwaysPrioritize",
+        "Always prioritize Onions"
+      ),
+      alwaysPrioritizeAccessKey: getString("alwaysPrioritizeAccessKey", "a"),
+      notNow: getString("notNow", "Not Now"),
+      notNowAccessKey: getString("notNowAccessKey", "n"),
+      description: getString(
+        "description",
+        "Website publishers can protect users by adding a transportation security layer. It prevents eavedroppers from knowing that is you who is visiting that website."
+      ),
+      tryThis: getString("tryThis", "Try this: Onion Services"),
+      onionAvailable: getString("onionAvailable", ".onion available"),
+      learnMore: getString("learnMore", "Learn more"),
+      learnMoreURL: getString("learnMoreURL", "https://www.torproject.org/"),
+      always: getString("always", "Always"),
+      askEverytime: getString("askEverytime", "Ask you everytime"),
+      prioritizeOnionsDescription: getString(
+        "prioritizeOnionsDescription",
+        "Prioritize .onion served websites when it is available."
+      ),
+      onionServicesTitle: getString("onionServicesTitle", "Onion Services"),
+    };
+
+    return retval;
+  })() /* OnionLocation */,
 
   /*
     Tor Deamon Configuration Key Strings
