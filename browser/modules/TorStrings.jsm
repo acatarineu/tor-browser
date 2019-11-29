@@ -284,6 +284,61 @@ var TorStrings = {
   })() /* Tor Network Settings Strings */,
 
   /*
+    OnionLocation
+  */
+  onionLocation: (function() {
+    let tsb = new TorStringBundle(
+      ["chrome://torbutton/locale/torbutton.dtd"],
+      ""
+    );
+    let getString = function(key, fallback) {
+      return tsb.getString(key, fallback);
+    };
+
+    let retval = {
+      alwaysPrioritize: getString(
+        "onionLocation.alwaysPrioritize",
+        "Always prioritize Onions"
+      ),
+      alwaysPrioritizeAccessKey: getString(
+        "onionLocation.alwaysPrioritizeAccessKey",
+        "a"
+      ),
+      notNow: getString("onionLocation.notNow", "Not Now"),
+      notNowAccessKey: getString("onionLocation.notNowAccessKey", "n"),
+      description: getString(
+        "onionLocation.description",
+        "Website publishers can protect users by adding a transportation security layer. It prevents eavedroppers from knowing that is you who is visiting that website."
+      ),
+      tryThis: getString("onionLocation.tryThis", "Try this: Onion Services"),
+      onionAvailable: getString(
+        "onionLocation.onionAvailable",
+        ".onion available"
+      ),
+      learnMore: getString("onionLocation.learnMore", "Learn more"),
+      learnMoreURL: getString(
+        "onionLocation.learnMoreURL",
+        "https://www.torproject.org/"
+      ),
+      always: getString("onionLocation.always", "Always"),
+      askEverytime: getString(
+        "onionLocation.askEverytime",
+        "Ask you everytime"
+      ),
+      prioritizeOnionsDescription: getString(
+        "onionLocation.prioritizeOnionsDescription",
+        "Prioritize .onion served websites when it is available."
+      ),
+      onionServicesTitle: getString(
+        "onionLocation.onionServicesTitle",
+        "Onion Services"
+      ),
+    };
+
+    return retval;
+  })() /* OnionLocation */,
+
+  /*
     Tor Deamon Configuration Key Strings
   */
 
