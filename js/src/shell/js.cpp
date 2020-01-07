@@ -10255,6 +10255,7 @@ static bool SetContextOptions(JSContext* cx, const OptionParser& op) {
   JS::ContextOptionsRef(cx)
       .setBaseline(enableBaseline)
       .setIon(enableIon)
+      .setIonForTrustedPrinciples(enableIon)
       .setAsmJS(enableAsmJS)
       .setWasm(enableWasm)
       .setWasmForTrustedPrinciples(enableWasm)

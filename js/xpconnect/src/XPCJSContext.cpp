@@ -780,6 +780,8 @@ static void ReloadPrefsCallback(const char* pref, XPCJSContext* xpccx) {
 
   bool useBaseline = Preferences::GetBool(JS_OPTIONS_DOT_STR "baselinejit");
   bool useIon = Preferences::GetBool(JS_OPTIONS_DOT_STR "ion");
+  bool useIonTrustedPrincipals =
+      Preferences::GetBool(JS_OPTIONS_DOT_STR "ion_trustedprincipals");
   bool useAsmJS = Preferences::GetBool(JS_OPTIONS_DOT_STR "asmjs");
   bool useWasm = Preferences::GetBool(JS_OPTIONS_DOT_STR "wasm");
   bool useWasmTrustedPrincipals =
@@ -881,6 +883,7 @@ static void ReloadPrefsCallback(const char* pref, XPCJSContext* xpccx) {
   JS::ContextOptionsRef(cx)
       .setBaseline(useBaseline)
       .setIon(useIon)
+      .setIonForTrustedPrinciples(useIonTrustedPrincipals)
       .setAsmJS(useAsmJS)
       .setWasm(useWasm)
       .setWasmForTrustedPrinciples(useWasmTrustedPrincipals)

@@ -20,6 +20,7 @@ class JS_PUBLIC_API ContextOptions {
   ContextOptions()
       : baseline_(true),
         ion_(true),
+        ionForTrustedPrinciples_(true),
         asmJS_(true),
         wasm_(true),
         wasmForTrustedPrinciples_(true),
@@ -65,6 +66,12 @@ class JS_PUBLIC_API ContextOptions {
   }
   ContextOptions& toggleIon() {
     ion_ = !ion_;
+    return *this;
+  }
+
+  bool ionForTrustedPrinciples() const { return ionForTrustedPrinciples_; }
+  ContextOptions& setIonForTrustedPrinciples(bool flag) {
+    ionForTrustedPrinciples_ = flag;
     return *this;
   }
 
@@ -226,6 +233,7 @@ class JS_PUBLIC_API ContextOptions {
  private:
   bool baseline_ : 1;
   bool ion_ : 1;
+  bool ionForTrustedPrinciples_ : 1;
   bool asmJS_ : 1;
   bool wasm_ : 1;
   bool wasmForTrustedPrinciples_ : 1;

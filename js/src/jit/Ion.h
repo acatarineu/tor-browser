@@ -12,6 +12,7 @@
 
 #include "jit/CompileWrappers.h"
 #include "jit/JitOptions.h"
+#include "js/ContextOptions.h"
 #include "vm/JSContext.h"
 #include "vm/Realm.h"
 
@@ -166,7 +167,15 @@ static inline bool IsIonEnabled(JSContext* cx) {
 #if defined(JS_CODEGEN_NONE)
   return false;
 #else
-  return cx->options().ion() && cx->options().baseline() &&
+  // If the general ion pref is on, it's on for everything.
+  bool prefEnabled = JS::ContextOptionsRef(cx).ion();
+  if (MOZ_UNLIKELY(!prefEnabled) &&
+      JS::ContextOptionsRef(cx).ionForTrustedPrinciples()) {
+    JS::Realm* realm = js::GetContextRealm(cx);
+    prefEnabled = realm && JS::GetRealmPrincipals(realm) &&
+                  JS::GetRealmPrincipals(realm)->isSystemOrAddonPrincipal();
+  }
+  return prefEnabled && JS::ContextOptionsRef(cx).baseline() &&
          cx->runtime()->jitSupportsFloatingPoint;
 #endif
 }

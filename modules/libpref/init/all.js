@@ -1429,6 +1429,7 @@ pref("javascript.options.baselinejit",      true);
 //Duplicated in JitOptions - ensure both match.
 pref("javascript.options.baselinejit.threshold", 10);
 pref("javascript.options.ion",              true);
+pref("javascript.options.ion_trustedprincipals", true);
 //Duplicated in JitOptions - ensure both match.
 pref("javascript.options.ion.threshold",    1000);
 pref("javascript.options.ion.full.threshold", 100000);
