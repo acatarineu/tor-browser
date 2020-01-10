@@ -916,6 +916,8 @@ SearchEngine.prototype = {
   _extensionID: null,
   // The locale, or "DEFAULT", if required.
   _locale: null,
+  // The principal from which the engine was added.
+  _contentPrincipal: null,
   // Built in search engine extensions.
   _isBuiltin: false,
   // The order hint from the configuration (if any).
@@ -961,7 +963,7 @@ SearchEngine.prototype = {
       '_initFromURIAndLoad: Downloading engine from: "' + loadURI.spec + '".'
     );
 
-    var chan = SearchUtils.makeChannel(loadURI);
+    var chan = SearchUtils.makeChannel(loadURI, this._contentPrincipal);
 
     if (this._engineToUpdate && chan instanceof Ci.nsIHttpChannel) {
       var lastModified = this._engineToUpdate.getAttr("updatelastmodified");
@@ -1334,7 +1336,7 @@ SearchEngine.prototype = {
             this.name +
             '"'
         );
-        var chan = SearchUtils.makeChannel(uri);
+        var chan = SearchUtils.makeChannel(uri, this._contentPrincipal);
 
         let iconLoadCallback = function(byteArray, engine) {
           // This callback may run after we've already set a preferred icon,
