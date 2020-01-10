@@ -2780,7 +2780,7 @@ SearchService.prototype = {
     return params;
   },
 
-  async addEngine(engineURL, iconURL, confirm, extensionID) {
+  async addEngine(engineURL, iconURL, confirm, extensionID, contentPrincipal) {
     SearchUtils.log('addEngine: Adding "' + engineURL + '".');
     await this.init();
     let errCode;
@@ -2793,6 +2793,9 @@ SearchService.prototype = {
       engine._confirm = confirm;
       if (extensionID) {
         engine._extensionID = extensionID;
+      }
+      if (contentPrincipal) {
+        engine._contentPrincipal = contentPrincipal;
       }
       errCode = await new Promise(resolve => {
         engine._installCallback = function(errorCode) {
