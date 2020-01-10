@@ -1317,7 +1317,8 @@ BrowserPageActions.addSearchEngine = {
   },
 
   _installEngine(uri, image) {
-    Services.search.addEngine(uri, image, false).then(
+    const principal = gBrowser.contentPrincipal;
+    Services.search.addEngine(uri, image, false, principal).then(
       engine => {
         showBrowserPageActionFeedback(this.action);
       },
