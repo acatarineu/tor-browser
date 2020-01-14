@@ -341,6 +341,19 @@ var TorStrings = {
         failedToSetKey:
           getString("authPrompt.failedToSetKey", "Failed to set key"),
       },
+      authPreferences: {
+        header: getString("authPreferences.header", "Onion Services Authentication"),
+        overview: getString("authPreferences.overview", "Some onion services require that you identify yourself with a key"),
+        savedKeys: getString("authPreferences.savedKeys", "Saved Keys"),
+        dialogTitle: getString("authPreferences.dialogTitle", "Onion Services Keys"),
+        dialogIntro: getString("authPreferences.dialogIntro", "Keys for the following onion sites are stored on your computer"),
+        onionSite: getString("authPreferences.onionSite", "Onion Site"),
+        onionKey: getString("authPreferences.onionKey", "Key"),
+        remove: getString("authPreferences.remove", "Remove"),
+        removeAll: getString("authPreferences.removeAll", "Remove All"),
+        failedToGetKeys: getString("authPreferences.failedToGetKeys", "Failed to get keys"),
+        failedToRemoveKey: getString("authPreferences.failedToRemoveKey", "Failed to remove key"),
+      },
     };
 
     return retval;

@@ -19,6 +19,7 @@ const OnionAuthUtil = {
     onionNameSpanID: "tor-clientauth-notification-onionname",
     keyElementID: "tor-clientauth-notification-key",
     warningElementID: "tor-clientauth-warning",
+    checkboxElementID: "tor-clientauth-persistkey-checkbox",
   },
 
   addCancelMessageListener(aTabContent, aDocShell) {

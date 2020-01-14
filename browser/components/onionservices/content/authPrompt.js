@@ -105,6 +105,10 @@ const OnionAuthPrompt = (function() {
       }
 
       this._showWarning(aWarningMessage);
+      let checkboxElem = this._getCheckboxElement();
+      if (checkboxElem) {
+        checkboxElem.checked = false;
+      }
     },
 
     _onPromptShown() {
@@ -158,6 +162,9 @@ const OnionAuthPrompt = (function() {
         return;
       }
 
+      let checkboxElem = this._getCheckboxElement();
+      let isPermanent = (checkboxElem && checkboxElem.checked);
+
       this._prompt.remove();
 
       // Use Torbutton's controller module to add the private key to Tor.
@@ -170,7 +177,7 @@ const OnionAuthPrompt = (function() {
           this.show(controllerFailureMsg);
         });
         let onionAddr = this._onionName.toLowerCase().replace(/\.onion$/, "");
-        torController.onionAuthAdd(onionAddr, base64key)
+        torController.onionAuthAdd(onionAddr, base64key, isPermanent)
         .then(aResponse => {
           // Success! Reload the page.
           this._browser.messageManager.sendAsyncMessage("Browser:Reload", {});
@@ -196,6 +203,11 @@ const OnionAuthPrompt = (function() {
     _getKeyElement() {
       let xulDoc = this._browser.ownerDocument;
       return xulDoc.getElementById(OnionAuthUtil.string.keyElementID);
+    },
+
+    _getCheckboxElement() {
+      let xulDoc = this._browser.ownerDocument;
+      return xulDoc.getElementById(OnionAuthUtil.string.checkboxElementID);
     },
 
     _showWarning(aWarningMessage) {
