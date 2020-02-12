@@ -682,12 +682,8 @@ var gIdentityHandler = {
       );
       // _isSecure implicitly includes onion services, which may not have an SSL certificate
     } else if (this._uriHasHost && this._isSecure && this._secInfo != null) {
-      let uriIsOnionHost = this._uriIsOnionHost;
-      if (uriIsOnionHost) {
-        this._identityBox.className = this._secInfo.serverCert.isSelfSigned ? "onionSelfSigned" : "onionVerifiedDomain";
-      } else {
-        this._identityBox.className = "verifiedDomain";
-      }
+      const uriIsOnionHost = this._uriIsOnionHost;
+      this._identityBox.className = uriIsOnionHost ? "onionVerifiedDomain" : "verifiedDomain";
       if (this._isMixedActiveContentBlocked) {
         this._identityBox.classList.add(uriIsOnionHost ? "onionMixedActiveBlocked" : "mixedActiveBlocked");
       }
@@ -708,7 +704,7 @@ var gIdentityHandler = {
       // For net errors we should not show notSecure as it's likely confusing
       this._identityBox.className = "unknownIdentity";
     } else {
-      let uriIsOnionHost = this._uriIsOnionHost;
+      const uriIsOnionHost = this._uriIsOnionHost;
       if (this._isBroken) {
         this._identityBox.className = uriIsOnionHost ? "onionUnknownIdentity" : "unknownIdentity";
 
@@ -719,6 +715,7 @@ var gIdentityHandler = {
         } else if (this._isMixedPassiveContentLoaded) {
           this._identityBox.classList.add(uriIsOnionHost ? "onionMixedDisplayContent" : "mixedDisplayContent");
         } else {
+          // TODO: ignore weak https cipher for onionsites?
           this._identityBox.classList.add("weakCipher");
         }
       } else {
@@ -749,7 +746,8 @@ var gIdentityHandler = {
     }
 
     if (this._isCertUserOverridden) {
-      this._identityBox.classList.add("certUserOverridden");
+      const uriIsOnionHost = this._uriIsOnionHost;
+      this._identityBox.classList.add(uriIsOnionHost ? "onionCertUserOverridden" : "certUserOverridden");
       // Cert is trusted because of a security exception, verifier is a special string.
       tooltip = gNavigatorBundle.getString(
         "identity.identified.verified_by_you"
