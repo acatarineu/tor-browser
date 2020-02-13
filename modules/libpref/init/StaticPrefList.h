@@ -2650,6 +2650,13 @@ VARCACHE_PREF(
    bool, false
 )
 
+// Whether rewriting the urlbar to a short .onion alias is allowed.
+VARCACHE_PREF(
+  "browser.urlbar.onionRewrites.enabled",
+   browser_urlbar_onionRewrites_enabled,
+  bool, true
+)
+
 //---------------------------------------------------------------------------
 // ChannelClassifier prefs
 //---------------------------------------------------------------------------
