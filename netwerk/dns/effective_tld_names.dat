@@ -5495,6 +5495,7 @@ pro.om
 
 // onion : https://tools.ietf.org/html/rfc7686
 onion
+tor.onion
 
 // org : https://en.wikipedia.org/wiki/.org
 org
