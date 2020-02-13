@@ -72,6 +72,7 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   TabCrashHandler: "resource:///modules/ContentCrashHandlers.jsm",
   TelemetryEnvironment: "resource://gre/modules/TelemetryEnvironment.jsm",
   Translation: "resource:///modules/translation/Translation.jsm",
+  OnionAliasStore: "resource:///modules/OnionAliasStore.jsm",
   UITour: "resource:///modules/UITour.jsm",
   UpdateUtils: "resource://gre/modules/UpdateUtils.jsm",
   UrlbarInput: "resource:///modules/UrlbarInput.jsm",
@@ -3349,6 +3350,12 @@ function URLBarSetURI(aURI, updatePopupNotifications) {
     ) {
       value = "";
     } else {
+      if (
+        gBrowser.selectedBrowser.allowOnionUrlbarRewrites &&
+        (uri.schemeIs("http") || uri.schemeIs("https"))
+      ) {
+        uri = OnionAliasStore.getShortURI(uri) || uri;
+      }
       // We should deal with losslessDecodeURI throwing for exotic URIs
       try {
         value = losslessDecodeURI(uri);
@@ -7627,6 +7634,21 @@ function handleLinkClick(event, href, linkNode) {
     } catch (e) {}
   }
 
+  // Check if the link needs to be opened with .tor.onion urlbar rewrites
+  // allowed. Only when the owner doc has allowOnionUrlbarRewrites = true
+  // and the same origin we should allow this.
+  let persistAllowOnionUrlbarRewritesInChildTab = false;
+  if (where == "tab" && gBrowser.docShell.allowOnionUrlbarRewrites) {
+    const sm = Services.scriptSecurityManager;
+    try {
+      let tURI = makeURI(href);
+      let isPrivateWin =
+        doc.nodePrincipal.originAttributes.privateBrowsingId > 0;
+      sm.checkSameOriginURI(referrerURI, tURI, false, isPrivateWin);
+      persistAllowOnionUrlbarRewritesInChildTab = true;
+    } catch (e) {}
+  }
+
   // first get document wide referrer policy, then
   // get referrer attribute from clicked link and parse it and
   // allow per element referrer to overrule the document wide referrer if enabled
@@ -7659,6 +7681,7 @@ function handleLinkClick(event, href, linkNode) {
     triggeringPrincipal: doc.nodePrincipal,
     csp,
     frameOuterWindowID,
+    allowOnionUrlbarRewrites: persistAllowOnionUrlbarRewritesInChildTab,
   };
 
   // The new tab/window must use the same userContextId
