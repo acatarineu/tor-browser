@@ -56,14 +56,14 @@ const OnionAuthPrompt = (function() {
       };
 
       this._prompt = PopupNotifications.show(this._browser,
-                       OnionAuthUtil.string.notificationID, "",
-                       OnionAuthUtil.string.anchorID,
+                       OnionAuthUtil.domid.notification, "",
+                       OnionAuthUtil.domid.anchor,
                        mainAction, [cancelAction], options);
     },
 
     _onPromptShowing(aWarningMessage) {
       let xulDoc = this._browser.ownerDocument;
-      let descElem = xulDoc.getElementById(OnionAuthUtil.string.descriptionID);
+      let descElem = xulDoc.getElementById(OnionAuthUtil.domid.description);
       if (descElem) {
         // Handle replacement of the onion name within the localized
         // string ourselves so we can show the onion name as bold text.
@@ -89,7 +89,7 @@ const OnionAuthPrompt = (function() {
         span.textContent = prefix;
         descElem.appendChild(span);
         span = xulDoc.createElementNS(kHTMLNS, "span");
-        span.id = OnionAuthUtil.string.onionNameSpanID;
+        span.id = OnionAuthUtil.domid.onionNameSpan;
         span.textContent = this._onionName;
         descElem.appendChild(span);
         span = xulDoc.createElementNS(kHTMLNS, "span");
@@ -98,13 +98,17 @@ const OnionAuthPrompt = (function() {
       }
 
       // Set "Learn More" label and href.
-      let learnMoreElem = xulDoc.getElementById(OnionAuthUtil.string.learnMoreID);
+      let learnMoreElem = xulDoc.getElementById(OnionAuthUtil.domid.learnMore);
       if (learnMoreElem) {
         learnMoreElem.setAttribute("value", TorStrings.onionServices.learnMore);
         learnMoreElem.setAttribute("href", TorStrings.onionServices.learnMoreURL);
       }
 
       this._showWarning(aWarningMessage);
+      let checkboxElem = this._getCheckboxElement();
+      if (checkboxElem) {
+        checkboxElem.checked = false;
+      }
     },
 
     _onPromptShown() {
@@ -170,7 +174,9 @@ const OnionAuthPrompt = (function() {
           this.show(controllerFailureMsg);
         });
         let onionAddr = this._onionName.toLowerCase().replace(/\.onion$/, "");
-        torController.onionAuthAdd(onionAddr, base64key)
+        let checkboxElem = this._getCheckboxElement();
+        let isPermanent = (checkboxElem && checkboxElem.checked);
+        torController.onionAuthAdd(onionAddr, base64key, isPermanent)
         .then(aResponse => {
           // Success! Reload the page.
           this._browser.sendMessageToActor(
@@ -193,19 +199,24 @@ const OnionAuthPrompt = (function() {
     _onCancel() {
       // Arrange for an error page to be displayed.
       this._browser.messageManager.sendAsyncMessage(
-                               OnionAuthUtil.string.authPromptCanceledMessage,
+                               OnionAuthUtil.message.authPromptCanceled,
                                {failedURI: this._failedURI.spec});
     },
 
     _getKeyElement() {
       let xulDoc = this._browser.ownerDocument;
-      return xulDoc.getElementById(OnionAuthUtil.string.keyElementID);
+      return xulDoc.getElementById(OnionAuthUtil.domid.keyElement);
+    },
+
+    _getCheckboxElement() {
+      let xulDoc = this._browser.ownerDocument;
+      return xulDoc.getElementById(OnionAuthUtil.domid.checkboxElement);
     },
 
     _showWarning(aWarningMessage) {
       let xulDoc = this._browser.ownerDocument;
       let warningElem =
-                 xulDoc.getElementById(OnionAuthUtil.string.warningElementID);
+                 xulDoc.getElementById(OnionAuthUtil.domid.warningElement);
       let keyElem = this._getKeyElement();
       if (warningElem) {
         if (aWarningMessage) {
@@ -229,9 +240,12 @@ const OnionAuthPrompt = (function() {
       let base64key;
       if (aKeyString.length == 52) {
         // The key is probably base32-encoded. Attempt to decode.
+        // Although base32 specifies uppercase letters, we accept lowercase
+        // as well because users may type in lowercase or copy a key out of
+        // a tor onion-auth file (which uses lowercase).
         let rawKey;
         try {
-          rawKey = CommonUtils.decodeBase32(aKeyString);
+          rawKey = CommonUtils.decodeBase32(aKeyString.toUpperCase());
         } catch (e) {}
 
         if (rawKey) try {
@@ -251,17 +265,17 @@ const OnionAuthPrompt = (function() {
 
   let retval = {
     init() {
-      Services.obs.addObserver(this, OnionAuthUtil.string.authPromptTopic);
+      Services.obs.addObserver(this, OnionAuthUtil.topic.authPrompt);
     },
 
     uninit() {
-      Services.obs.removeObserver(this, OnionAuthUtil.string.authPromptTopic);
+      Services.obs.removeObserver(this, OnionAuthUtil.topic.authPrompt);
     },
 
     // aSubject is the DOM Window or browser where the prompt should be shown.
     // aData contains the .onion name.
     observe(aSubject, aTopic, aData) {
-      if (aTopic != OnionAuthUtil.string.authPromptTopic) {
+      if (aTopic != OnionAuthUtil.topic.authPrompt) {
         return;
       }
 
