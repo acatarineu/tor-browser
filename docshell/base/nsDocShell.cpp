@@ -6543,6 +6543,18 @@ void nsDocShell::OnRedirectStateChange(nsIChannel* aOldChannel,
     return;
   }
 
+  if (!mAllowOnionUrlbarRewrites) {
+    nsAutoCString oldHost;
+    nsAutoCString newHost;
+    if (oldURI && newURI && NS_SUCCEEDED(oldURI->GetHost(oldHost)) &&
+        StringEndsWith(oldHost, NS_LITERAL_CSTRING(".tor.onion")) &&
+        NS_SUCCEEDED(newURI->GetHost(newHost)) &&
+        StringEndsWith(newHost, NS_LITERAL_CSTRING(".onion")) &&
+        !StringEndsWith(newHost, NS_LITERAL_CSTRING(".tor.onion"))) {
+      mAllowOnionUrlbarRewrites = true;
+    }
+  }
+
   // Below a URI visit is saved (see AddURIVisit method doc).
   // The visit chain looks something like:
   //   ...
@@ -9744,6 +9756,10 @@ nsresult nsDocShell::InternalLoad(nsDocShellLoadState* aLoadState,
       // We're making history navigation or a reload. Make sure our history ID
       // points to the same ID as SHEntry's docshell ID.
       mHistoryID = aLoadState->SHEntry()->DocshellID();
+      // Loading from session history may not call DoURILoad(), so we set this
+      // flag here.
+      mAllowOnionUrlbarRewrites = aLoadState->HasLoadFlags(
+          INTERNAL_LOAD_FLAGS_ALLOW_ONION_URLBAR_REWRITES);
     }
   }
 
@@ -10385,6 +10401,13 @@ nsresult nsDocShell::DoURILoad(nsDocShellLoadState* aLoadState,
       SetMixedContentChannel(nullptr);
     }
   }
+
+  mAllowOnionUrlbarRewrites =
+      aLoadState->HasLoadFlags(
+          INTERNAL_LOAD_FLAGS_ALLOW_ONION_URLBAR_REWRITES) ||
+      (mAllowOnionUrlbarRewrites && GetCurrentDocChannel() &&
+       NS_SUCCEEDED(
+           nsContentUtils::CheckSameOrigin(GetCurrentDocChannel(), channel)));
 
   // hack
   nsCOMPtr<nsIHttpChannel> httpChannel(do_QueryInterface(channel));
@@ -11733,6 +11756,7 @@ nsresult nsDocShell::AddToSessionHistory(nsIURI* aURI, nsIChannel* aChannel,
                 triggeringPrincipal,  // Channel or provided principal
                 principalToInherit, csp, mHistoryID, mDynamicallyCreated);
 
+  entry->SetAllowOnionUrlbarRewrites(mAllowOnionUrlbarRewrites);
   entry->SetOriginalURI(originalURI);
   entry->SetResultPrincipalURI(resultPrincipalURI);
   entry->SetLoadReplace(loadReplace);
@@ -11911,6 +11935,10 @@ nsresult nsDocShell::LoadHistoryEntry(nsISHEntry* aEntry, uint32_t aLoadType) {
     flags |= INTERNAL_LOAD_FLAGS_IS_SRCDOC;
   } else {
     srcdoc = VoidString();
+  }
+
+  if (aEntry->GetAllowOnionUrlbarRewrites()) {
+    flags |= INTERNAL_LOAD_FLAGS_ALLOW_ONION_URLBAR_REWRITES;
   }
 
   // If there is no valid triggeringPrincipal, we deny the load
@@ -13815,5 +13843,12 @@ nsDocShell::GetWatchedByDevtools(bool* aWatched) {
 NS_IMETHODIMP
 nsDocShell::SetWatchedByDevtools(bool aWatched) {
   mWatchedByDevtools = aWatched;
+  return NS_OK;
+}
+
+NS_IMETHODIMP
+nsDocShell::GetAllowOnionUrlbarRewrites(bool* aAllowOnionUrlbarRewrites) {
+  NS_ENSURE_ARG(aAllowOnionUrlbarRewrites);
+  *aAllowOnionUrlbarRewrites = mAllowOnionUrlbarRewrites;
   return NS_OK;
 }

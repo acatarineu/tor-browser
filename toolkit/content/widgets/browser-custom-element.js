@@ -283,6 +283,8 @@
 
       this._mayEnableCharacterEncodingMenu = null;
 
+      this._allowOnionUrlbarRewrites = null;
+
       this._contentPrincipal = null;
 
       this._csp = null;
@@ -675,6 +677,12 @@
       return this.isRemoteBrowser
         ? this._mayEnableCharacterEncodingMenu
         : this.docShell.mayEnableCharacterEncodingMenu;
+    }
+
+    get allowOnionUrlbarRewrites() {
+      return this.isRemoteBrowser
+        ? this._allowOnionUrlbarRewrites
+        : this.docShell.allowOnionUrlbarRewritesu;
     }
 
     get contentPrincipal() {
@@ -1870,6 +1878,7 @@
             "_textZoom",
             "_isSyntheticDocument",
             "_innerWindowID",
+            "_allowOnionUrlbarRewrites",
           ]
         );
       }
