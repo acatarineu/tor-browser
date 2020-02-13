@@ -9,20 +9,25 @@ var EXPORTED_SYMBOLS = [
 var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 const OnionAuthUtil = {
-  string: {
-    authPromptTopic: "tor-onion-services-auth-prompt",
-    authPromptCanceledMessage: "Tor:OnionServicesAuthPromptCanceled",
-    anchorID: "tor-clientauth-notification-icon",
-    notificationID: "tor-clientauth",
-    descriptionID: "tor-clientauth-notification-desc",
-    learnMoreID: "tor-clientauth-notification-learnmore",
-    onionNameSpanID: "tor-clientauth-notification-onionname",
-    keyElementID: "tor-clientauth-notification-key",
-    warningElementID: "tor-clientauth-warning",
+  topic: {
+    authPrompt: "tor-onion-services-auth-prompt",
+  },
+  message: {
+    authPromptCanceled: "Tor:OnionServicesAuthPromptCanceled",
+  },
+  domid: {
+    anchor: "tor-clientauth-notification-icon",
+    notification: "tor-clientauth",
+    description: "tor-clientauth-notification-desc",
+    learnMore: "tor-clientauth-notification-learnmore",
+    onionNameSpan: "tor-clientauth-notification-onionname",
+    keyElement: "tor-clientauth-notification-key",
+    warningElement: "tor-clientauth-warning",
+    checkboxElement: "tor-clientauth-persistkey-checkbox",
   },
 
   addCancelMessageListener(aTabContent, aDocShell) {
-    aTabContent.addMessageListener(this.string.authPromptCanceledMessage,
+    aTabContent.addMessageListener(this.message.authPromptCanceled,
                                    (aMessage) => {
       let failedURI = Services.io.newURI(aMessage.data.failedURI);
       aDocShell.displayLoadError(Cr.NS_ERROR_CONNECTION_REFUSED, failedURI,
