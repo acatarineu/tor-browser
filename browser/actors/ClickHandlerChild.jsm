@@ -156,6 +156,22 @@ class ClickHandlerChild extends ActorChild {
       json.originPrincipal = ownerDoc.nodePrincipal;
       json.triggeringPrincipal = ownerDoc.nodePrincipal;
 
+      if (this.mm.docShell.allowOnionUrlbarRewrites) {
+        const sm = Services.scriptSecurityManager;
+        try {
+          let targetURI = Services.io.newURI(href);
+          let isPrivateWin =
+            ownerDoc.nodePrincipal.originAttributes.privateBrowsingId > 0;
+          sm.checkSameOriginURI(
+            docshell.currentDocumentChannel.URI,
+            targetURI,
+            false,
+            isPrivateWin
+          );
+          json.allowOnionUrlbarRewrites = true;
+        } catch (e) {}
+      }
+
       // If a link element is clicked with middle button, user wants to open
       // the link somewhere rather than pasting clipboard content.  Therefore,
       // when it's clicked with middle button, we should prevent multiple

@@ -494,6 +494,7 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   ShellService: "resource:///modules/ShellService.jsm",
   TabCrashHandler: "resource:///modules/ContentCrashHandlers.jsm",
   TabUnloader: "resource:///modules/TabUnloader.jsm",
+  OnionAliasStore: "resource:///modules/OnionAliasStore.jsm",
   UIState: "resource://services-sync/UIState.jsm",
   UITour: "resource:///modules/UITour.jsm",
   WebChannel: "resource://gre/modules/WebChannel.jsm",
@@ -1839,6 +1840,7 @@ BrowserGlue.prototype = {
 
     Normandy.uninit();
     RFPHelper.uninit();
+    OnionAliasStore.uninit();
   },
 
   // Set up a listener to enable/disable the screenshots extension
@@ -2107,6 +2109,10 @@ BrowserGlue.prototype = {
 
     Services.tm.idleDispatchToMainThread(() => {
       RFPHelper.init();
+    });
+
+    Services.tm.idleDispatchToMainThread(() => {
+      OnionAliasStore.init();
     });
 
     ChromeUtils.idleDispatch(() => {
