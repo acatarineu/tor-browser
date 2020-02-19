@@ -1136,6 +1136,10 @@ with modules["TOR"]:
     errors["NS_ERROR_TOR_ONION_SVC_MISSING_CLIENT_AUTH"] = FAILURE(5)
     # Tor onion service wrong client authorization.
     errors["NS_ERROR_TOR_ONION_SVC_BAD_CLIENT_AUTH"] = FAILURE(6)
+    # Tor onion service bad address.
+    errors["NS_ERROR_TOR_ONION_SVC_BAD_ADDRESS"] = FAILURE(7)
+    # Tor onion service introduction timed out.
+    errors["NS_ERROR_TOR_ONION_SVC_INTRO_TIMEDOUT"] = FAILURE(8)
 
 # =======================================================================
 # 51: NS_ERROR_MODULE_GENERAL

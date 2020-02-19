@@ -719,7 +719,7 @@ class BrowserParent final : public PBrowserParent,
       const nsCString& aOrigin, const bool& aHideDoorHanger);
 
   mozilla::ipc::IPCResult RecvShowOnionServicesAuthPrompt(
-      const nsCString& aOnionName);
+      const nsCString& aOnionName, const nsCString& aTopic);
 
   mozilla::ipc::IPCResult RecvSetSystemFont(const nsCString& aFontName);
   mozilla::ipc::IPCResult RecvGetSystemFont(nsCString* aFontName);

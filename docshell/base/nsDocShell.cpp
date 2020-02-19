@@ -4284,6 +4284,7 @@ nsDocShell::DisplayLoadError(nsresult aError, nsIURI* aURI,
     }
   } else {
     // Errors requiring simple formatting
+    bool isOnionAuthError = false;
     switch (aError) {
       case NS_ERROR_MALFORMED_URI:
         // URI is malformed
@@ -4364,27 +4365,42 @@ nsDocShell::DisplayLoadError(nsresult aError, nsIURI* aURI,
         error = "networkProtocolError";
         break;
       case NS_ERROR_TOR_ONION_SVC_NOT_FOUND:
-      case NS_ERROR_TOR_ONION_SVC_IS_INVALID:
-      case NS_ERROR_TOR_ONION_SVC_INTRO_FAILED:
-      case NS_ERROR_TOR_ONION_SVC_REND_FAILED:
-        // For now, handle these Tor onion service errors the same as
-        // NS_ERROR_CONNECTION_REFUSED.
-        NS_ENSURE_ARG_POINTER(aURI);
-        addHostPort = true;
-        error = "connectionFailure";
+        error = "onionServices.descNotFound";
         break;
-      case NS_ERROR_TOR_ONION_SVC_BAD_CLIENT_AUTH:
-        // For now, we let this fall through but it should be handled in
-        // a special way, e.g., tell the user in our auth prompt that the
-        // key they provided was bad. This will be done as part of #30025.
-        MOZ_FALLTHROUGH;
+      case NS_ERROR_TOR_ONION_SVC_IS_INVALID:
+        error = "onionServices.descInvalid";
+        break;
+      case NS_ERROR_TOR_ONION_SVC_INTRO_FAILED:
+        error = "onionServices.introFailed";
+        break;
+      case NS_ERROR_TOR_ONION_SVC_REND_FAILED:
+        error = "onionServices.rendezvousFailed";
+        break;
       case NS_ERROR_TOR_ONION_SVC_MISSING_CLIENT_AUTH:
         error = "onionServices.clientAuthMissing";
-        // Display about:blank while the Tor client auth prompt is open.
-        errorPage.AssignLiteral("blank");
+        isOnionAuthError = true;
+        break;
+      case NS_ERROR_TOR_ONION_SVC_BAD_CLIENT_AUTH:
+        error = "onionServices.clientAuthIncorrect";
+        isOnionAuthError = true;
+        break;
+      case NS_ERROR_TOR_ONION_SVC_BAD_ADDRESS:
+        error = "onionServices.badAddress";
+        break;
+      case NS_ERROR_TOR_ONION_SVC_INTRO_TIMEDOUT:
+        error = "onionServices.introTimedOut";
         break;
       default:
         break;
+    }
+
+    // The presence of aFailedChannel indicates that we arrived here due to a
+    // failed connection attempt. Note that we will arrive here a second time
+    // if the user cancels the Tor client auth prompt, but in that case we
+    // will not have a failed channel and therefore we will not prompt again.
+    if (isOnionAuthError && aFailedChannel) {
+      // Display about:blank while the Tor client auth prompt is open.
+      errorPage.AssignLiteral("blank");
     }
   }
 
@@ -8415,17 +8431,20 @@ nsresult nsDocShell::CreateContentViewer(const nsACString& aContentType,
          (status == NS_ERROR_TOR_ONION_SVC_BAD_CLIENT_AUTH))) {
       nsAutoCString onionHost;
       failedURI->GetHost(onionHost);
+      const char* topic =
+        (status == NS_ERROR_TOR_ONION_SVC_MISSING_CLIENT_AUTH) ?
+          "tor-onion-services-clientauth-missing" :
+          "tor-onion-services-clientauth-incorrect";
       if (XRE_IsContentProcess()) {
         nsCOMPtr<nsIBrowserChild> browserChild = GetBrowserChild();
         if (browserChild) {
           static_cast<BrowserChild*>(browserChild.get())
-              ->SendShowOnionServicesAuthPrompt(onionHost);
+              ->SendShowOnionServicesAuthPrompt(onionHost, nsCString(topic));
         }
       } else {
         nsCOMPtr<nsPIDOMWindowOuter> browserWin = GetWindow();
         nsCOMPtr<nsIObserverService> obsSvc = services::GetObserverService();
         if (browserWin && obsSvc) {
-          const char* topic = "tor-onion-services-auth-prompt";
           obsSvc->NotifyObservers(browserWin, topic,
                                   NS_ConvertUTF8toUTF16(onionHost).get());
         }

@@ -10,7 +10,8 @@ var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 const OnionAuthUtil = {
   topic: {
-    authPrompt: "tor-onion-services-auth-prompt",
+    clientAuthMissing: "tor-onion-services-clientauth-missing",
+    clientAuthIncorrect: "tor-onion-services-clientauth-incorrect",
   },
   message: {
     authPromptCanceled: "Tor:OnionServicesAuthPromptCanceled",
@@ -29,9 +30,18 @@ const OnionAuthUtil = {
   addCancelMessageListener(aTabContent, aDocShell) {
     aTabContent.addMessageListener(this.message.authPromptCanceled,
                                    (aMessage) => {
+      // Upon cancellation of the client authentication prompt, display
+      // the appropriate error page. When calling the docShell
+      // displayLoadError() function, we pass undefined for the failed
+      // channel so that displayLoadError() can determine that it should
+      // not display the client authentication prompt a second time.
       let failedURI = Services.io.newURI(aMessage.data.failedURI);
-      aDocShell.displayLoadError(Cr.NS_ERROR_CONNECTION_REFUSED, failedURI,
-                                 undefined, undefined);
+      let reasonForPrompt = aMessage.data.reasonForPrompt;
+      let errorCode =
+          (reasonForPrompt === this.topic.clientAuthMissing) ?
+          Cr.NS_ERROR_TOR_ONION_SVC_MISSING_CLIENT_AUTH :
+          Cr.NS_ERROR_TOR_ONION_SVC_BAD_CLIENT_AUTH;
+      aDocShell.displayLoadError(errorCode, failedURI, undefined, undefined);
     });
   },
 };
