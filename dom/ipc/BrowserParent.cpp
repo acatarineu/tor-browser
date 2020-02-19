@@ -3942,7 +3942,7 @@ mozilla::ipc::IPCResult BrowserParent::RecvShowCanvasPermissionPrompt(
 }
 
 mozilla::ipc::IPCResult BrowserParent::RecvShowOnionServicesAuthPrompt(
-    const nsCString& aOnionName) {
+    const nsCString& aOnionName, const nsCString& aTopic) {
   nsCOMPtr<nsIBrowser> browser =
       mFrameElement ? mFrameElement->AsBrowser() : nullptr;
   if (!browser) {
@@ -3954,7 +3954,7 @@ mozilla::ipc::IPCResult BrowserParent::RecvShowOnionServicesAuthPrompt(
   if (!os) {
     return IPC_FAIL_NO_REASON(this);
   }
-  nsresult rv = os->NotifyObservers(browser, "tor-onion-services-auth-prompt",
+  nsresult rv = os->NotifyObservers(browser, aTopic.get(),
                                     NS_ConvertUTF8toUTF16(aOnionName).get());
   if (NS_FAILED(rv)) {
     return IPC_FAIL_NO_REASON(this);
