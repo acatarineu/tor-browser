@@ -328,9 +328,57 @@ var TorStrings = {
       return tsb.getString(key, fallback);
     };
 
+    const kProblemLoadingSiteFallback = "Problem Loading Onionsite";
+    const kLongDescFallback = "Details: %S";
+
     let retval = {
       learnMore: getString("learnMore", "Learn more"),
       learnMoreURL: `https://2019.www.torproject.org/docs/tor-manual-dev.html.${getLocale()}#_client_authorization`,
+      errorPage: {
+        browser: getString("errorPage.browser", "Browser"),
+        network: getString("errorPage.network", "Network"),
+        onionSite: getString("errorPage.onionSite", "Onionsite"),
+      },
+      descNotFound: { // Tor SOCKS error 0xF0
+        pageTitle: getString("descNotFound.pageTitle", kProblemLoadingSiteFallback),
+        header: getString("descNotFound.header", "Onionsite Not Found"),
+        longDescription: getString("descNotFound.longDescription", kLongDescFallback),
+      },
+      descInvalid: { // Tor SOCKS error 0xF1
+        pageTitle: getString("descInvalid.pageTitle", kProblemLoadingSiteFallback),
+        header: getString("descInvalid.header", "Onionsite Cannot Be Reached"),
+        longDescription: getString("descInvalid.longDescription", kLongDescFallback),
+      },
+      introFailed: { // Tor SOCKS error 0xF2
+        pageTitle: getString("introFailed.pageTitle", kProblemLoadingSiteFallback),
+        header: getString("introFailed.header", "Onionsite Has Disconnected"),
+        longDescription: getString("introFailed.longDescription", kLongDescFallback),
+      },
+      rendezvousFailed: { // Tor SOCKS error 0xF3
+        pageTitle: getString("rendezvousFailed.pageTitle", kProblemLoadingSiteFallback),
+        header: getString("rendezvousFailed.header", "Unable to Connect to Onionsite"),
+        longDescription: getString("rendezvousFailed.longDescription", kLongDescFallback),
+      },
+      clientAuthMissing: { // Tor SOCKS error 0xF4
+        pageTitle: getString("clientAuthMissing.pageTitle", "Authorization Required"),
+        header: getString("clientAuthMissing.header", "Onionsite Requires Authentication"),
+        longDescription: getString("clientAuthMissing.longDescription", kLongDescFallback),
+      },
+      clientAuthIncorrect: { // Tor SOCKS error 0xF5
+        pageTitle: getString("clientAuthIncorrect.pageTitle", "Authorization Failed"),
+        header: getString("clientAuthIncorrect.header", "Onionsite Authentication Failed"),
+        longDescription: getString("clientAuthIncorrect.longDescription", kLongDescFallback),
+      },
+      badAddress: { // Tor SOCKS error 0xF6
+        pageTitle: getString("badAddress.pageTitle", kProblemLoadingSiteFallback),
+        header: getString("badAddress.header", "Invalid Onionsite Address"),
+        longDescription: getString("badAddress.longDescription", kLongDescFallback),
+      },
+      introTimedOut: { // Tor SOCKS error 0xF7
+        pageTitle: getString("introTimedOut.pageTitle", kProblemLoadingSiteFallback),
+        header: getString("introTimedOut.header", "Onionsite Circuit Creation Timed Out"),
+        longDescription: getString("introTimedOut.longDescription", kLongDescFallback),
+      },
       authPrompt: {
         description:
           getString("authPrompt.description", "%S is requesting your private key."),
