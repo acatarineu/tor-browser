@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="65px" viewBox="0 0 72 65" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="browser-icon" fill="context-fill" fill-rule="nonzero">
+            <path d="M0,0 L0,65 L72,65 L72,0 L52.9019692,0 L0,0 Z M65,58 L6,58 L6,25 L65,25 L65,58 Z M6,10 L10,10 L10,14 L6,14 L6,10 Z M14,10 L18,10 L18,14 L14,14 L14,10 Z M22,10 L26,10 L26,14 L22,14 L22,10 Z" id="browser-icon"></path>
+        </g>
+    </g>
+</svg>

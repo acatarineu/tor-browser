@@ -1042,6 +1042,17 @@ PRStatus nsSOCKSSocketInfo::ReadV5ConnectResponseTop() {
                   " Tor onion service wrong client authorization."));
         c = static_cast<uint32_t>(NS_ERROR_TOR_ONION_SVC_BAD_CLIENT_AUTH);
         break;
+      case 0xF6:  // Tor SOCKS5_HS_BAD_ADDRESS
+        LOGERROR(("socks5: connect failed: F6,"
+                  " Tor onion service bad address."));
+        c = static_cast<uint32_t>(NS_ERROR_TOR_ONION_SVC_BAD_ADDRESS);
+        break;
+      case 0xF7:  // Tor SOCKS5_HS_INTRO_TIMEDOUT
+        LOGERROR(("socks5: connect failed: F7,"
+                  " Tor onion service introduction timed out."));
+        c = static_cast<uint32_t>(NS_ERROR_TOR_ONION_SVC_INTRO_TIMEDOUT);
+        break;
+
       default:
         LOGERROR(("socks5: connect failed."));
         break;

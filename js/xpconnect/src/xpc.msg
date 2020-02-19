@@ -253,6 +253,8 @@ XPC_MSG_DEF(NS_ERROR_TOR_ONION_SVC_INTRO_FAILED       , "Tor onion service intro
 XPC_MSG_DEF(NS_ERROR_TOR_ONION_SVC_REND_FAILED        , "Tor onion service rendezvous failed")
 XPC_MSG_DEF(NS_ERROR_TOR_ONION_SVC_MISSING_CLIENT_AUTH, "Tor onion service missing client authorization")
 XPC_MSG_DEF(NS_ERROR_TOR_ONION_SVC_BAD_CLIENT_AUTH    , "Tor onion service wrong client authorization")
+XPC_MSG_DEF(NS_ERROR_TOR_ONION_SVC_BAD_ADDRESS        , "Tor onion service bad address")
+XPC_MSG_DEF(NS_ERROR_TOR_ONION_SVC_INTRO_TIMEDOUT     , "Tor onion service introduction timed out")
 
 /* Profile manager error codes */
 XPC_MSG_DEF(NS_ERROR_DATABASE_CHANGED                 , "Flushing the profiles to disk would have overwritten changes made elsewhere.")
