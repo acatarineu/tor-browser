@@ -90,6 +90,7 @@ pref("toolkit.telemetry.enabled", false);
 pref("toolkit.telemetry.updatePing.enabled", false); // Make sure updater telemetry is disabled; see #25909.
 // No experiments, use Tor Browser. See 21797.
 pref("experiments.enabled", false);
+pref("app.normandy.enabled", false);
 pref("browser.syncPromoViewsLeftMap", "{\"addons\":0, \"passwords\":0, \"bookmarks\":0}"); // Don't promote sync
 pref("identity.fxaccounts.enabled", false); // Disable sync by default
 pref("services.sync.engine.prefs", false); // Never sync prefs, addons, or tabs with other browsers
