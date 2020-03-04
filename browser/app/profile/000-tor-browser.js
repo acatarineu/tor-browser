@@ -68,6 +68,7 @@ pref("browser.send_pings", false);
 pref("geo.enabled", false);
 pref("geo.wifi.uri", "");
 pref("browser.search.suggest.enabled", false);
+pref("browser.search.modernConfig", false);
 pref("browser.safebrowsing.malware.enabled", false);
 pref("browser.safebrowsing.phishing.enabled", false);
 pref("browser.safebrowsing.downloads.enabled", false);
