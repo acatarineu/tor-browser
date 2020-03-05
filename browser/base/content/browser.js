@@ -43,6 +43,7 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   NetUtil: "resource://gre/modules/NetUtil.jsm",
   NewTabUtils: "resource://gre/modules/NewTabUtils.jsm",
   OpenInTabsUtils: "resource:///modules/OpenInTabsUtils.jsm",
+  OnionLocationParent: "resource:///modules/OnionLocationParent.jsm",
   PageActions: "resource:///modules/PageActions.jsm",
   PageThumbs: "resource://gre/modules/PageThumbs.jsm",
   PanelMultiView: "resource:///modules/PanelMultiView.jsm",
@@ -5785,6 +5786,9 @@ var XULBrowserWindow = {
       if (aRequest && aWebProgress.isTopLevel) {
         // clear out search-engine data
         browser.engines = null;
+
+        // clear onionlocation UI
+        OnionLocationParent.onStateChange(browser);
       }
 
       this.isBusy = true;
@@ -5934,6 +5938,7 @@ var XULBrowserWindow = {
     Services.obs.notifyObservers(null, "touchbar-location-change", location);
     UpdateBackForwardCommands(gBrowser.webNavigation);
     ReaderParent.updateReaderButton(gBrowser.selectedBrowser);
+    OnionLocationParent.updateOnionLocationBadge(gBrowser.selectedBrowser);
 
     if (!gMultiProcessBrowser) {
       // Bug 1108553 - Cannot rotate images with e10s
