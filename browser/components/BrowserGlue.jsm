@@ -391,6 +391,17 @@ let JSWINDOWACTORS = {
     allFrames: true,
   },
 
+  OnionLocation: {
+    parent: {
+      moduleURI: "resource:///modules/OnionLocationParent.jsm",
+    },
+    child: {
+      module: "resource:///modules/OnionLocationChild.jsm",
+      events: { pageshow: {} },
+      messages: ["OnionLocation:Refresh"],
+    },
+  },
+
   PageInfo: {
     child: {
       moduleURI: "resource:///actors/PageInfoChild.jsm",
@@ -816,6 +827,7 @@ const listeners = {
     "AboutLogins:VulnerableLogins": ["AboutLoginsParent"],
     "Reader:FaviconRequest": ["ReaderParent"],
     "Reader:UpdateReaderButton": ["ReaderParent"],
+    "OnionLocation:Set": ["OnionLocationParent"],
   },
 
   observe(subject, topic, data) {
