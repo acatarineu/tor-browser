@@ -359,6 +359,45 @@ var TorStrings = {
     return retval;
   })() /* Tor Onion Services Strings */,
 
+  /*
+    OnionLocation
+  */
+  onionLocation: (function() {
+    let tsb = new TorPropertyStringBundle(
+      ["chrome://torbutton/locale/torbutton.properties"],
+      "onionLocation."
+    );
+    let getString = function(key, fallback) {
+      return tsb.getString(key, fallback);
+    };
+
+    let retval = {
+      alwaysPrioritize: getString(
+        "alwaysPrioritize",
+        "Always prioritize Onions"
+      ),
+      alwaysPrioritizeAccessKey: getString("alwaysPrioritizeAccessKey", "a"),
+      notNow: getString("notNow", "Not Now"),
+      notNowAccessKey: getString("notNowAccessKey", "n"),
+      description: getString(
+        "description",
+        "Website publishers can protect users by adding a transportation security layer. It prevents eavedroppers from knowing that is you who is visiting that website."
+      ),
+      tryThis: getString("tryThis", "Try this: Onion Services"),
+      onionAvailable: getString("onionAvailable", ".onion available"),
+      learnMore: getString("learnMore", "Learn more"),
+      learnMoreURL: getString("learnMoreURL", "https://www.torproject.org/"),
+      always: getString("always", "Always"),
+      askEverytime: getString("askEverytime", "Ask you everytime"),
+      prioritizeOnionsDescription: getString(
+        "prioritizeOnionsDescription",
+        "Prioritize .onion served websites when it is available."
+      ),
+      onionServicesTitle: getString("onionServicesTitle", "Onion Services"),
+    };
+
+    return retval;
+  })() /* OnionLocation */,
 
   /*
     Tor Deamon Configuration Key Strings

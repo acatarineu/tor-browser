@@ -1,0 +1,3 @@
+browser.jar:
+    content/browser/onionlocation/onionlocationPreferences.js  (content/onionlocationPreferences.js)
+    content/browser/onionlocation/onionlocation.svg            (content/onionlocation.svg)
