@@ -6546,7 +6546,7 @@ void nsDocShell::OnRedirectStateChange(nsIChannel* aOldChannel,
   if (!mAllowOnionUrlbarRewrites) {
     nsAutoCString oldHost;
     nsAutoCString newHost;
-    if (oldURI && newURI && NS_SUCCEEDED(oldURI->GetHost(oldHost)) &&
+    if (NS_SUCCEEDED(oldURI->GetHost(oldHost)) &&
         StringEndsWith(oldHost, NS_LITERAL_CSTRING(".tor.onion")) &&
         NS_SUCCEEDED(newURI->GetHost(newHost)) &&
         StringEndsWith(newHost, NS_LITERAL_CSTRING(".onion")) &&
