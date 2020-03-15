@@ -283,7 +283,7 @@
 
       this._mayEnableCharacterEncodingMenu = null;
 
-      this._allowOnionUrlbarRewrites = null;
+      this._allowOnionUrlbarRewrites = false;
 
       this._contentPrincipal = null;
 
@@ -682,7 +682,7 @@
     get allowOnionUrlbarRewrites() {
       return this.isRemoteBrowser
         ? this._allowOnionUrlbarRewrites
-        : this.docShell.allowOnionUrlbarRewritesu;
+        : this.docShell.allowOnionUrlbarRewrites;
     }
 
     get contentPrincipal() {
