@@ -1,3 +1,5 @@
+// Copyright (c) 2020, The Tor Project, Inc.
+
 "use strict";
 
 const EXPORTED_SYMBOLS = ["OnionAliasStore"];
