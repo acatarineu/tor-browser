@@ -29,25 +29,40 @@ class HttpsEverywhereControl {
     this._extensionMessaging = null;
   }
 
+  async _sendMessage(type, object) {
+    return this._extensionMessaging.sendMessage(
+      {
+        type,
+        object,
+      },
+      EXTENSION_ID
+    );
+  }
+
   static async wait(seconds = 1) {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000));
   }
 
+  /**
+   * Installs the .tor.onion update channel in https-everywhere
+   */
   async installTorOnionUpdateChannel(retries = 5) {
     this._init();
 
-    // FIXME: https-everywhere store is initialized asynchronously, so sending a message
+    // TODO: https-everywhere store is initialized asynchronously, so sending a message
     // immediately results in a `store.get is undefined` error.
-    // For now, let's wait a bit and retry a few times if there is an error.
+    // For now, let's wait a bit and retry a few times if there is an error, but perhaps
+    // we could suggest https-everywhere to send a message when that happens and listen
+    // for that here.
     await HttpsEverywhereControl.wait();
 
     try {
-      await this._extensionMessaging.sendMessage(
-        {
-          type: "create_update_channel",
-          object: SECUREDROP_TOR_ONION_CHANNEL.name,
-        },
-        EXTENSION_ID
+      // TODO: we may want a way to "lock" this update channel, so that it cannot be modified
+      // by the user via UI, but I think this is not possible at the time of writing via
+      // the existing messages in https-everywhere.
+      await this._sendMessage(
+        "create_update_channel",
+        SECUREDROP_TOR_ONION_CHANNEL.name
       );
     } catch (e) {
       if (retries <= 0) {
@@ -57,13 +72,31 @@ class HttpsEverywhereControl {
       return;
     }
 
-    await this._extensionMessaging.sendMessage(
-      {
-        type: "update_update_channel",
-        object: SECUREDROP_TOR_ONION_CHANNEL,
-      },
-      EXTENSION_ID
+    await this._sendMessage(
+      "update_update_channel",
+      SECUREDROP_TOR_ONION_CHANNEL
     );
+  }
+
+  /**
+   * Returns the .tor.onion rulesets available in https-everywhere
+   */
+  async getTorOnionRules() {
+    return this._sendMessage("get_simple_rules_ending_with", ".tor.onion");
+  }
+
+  /**
+   * Returns the timestamp of the last .tor.onion update channel update.
+   */
+  async getRulesetTimestamp() {
+    const rulesets = await this._sendMessage("get_ruleset_timestamps");
+    const securedrop =
+      rulesets &&
+      rulesets.find(([{ name }]) => name === SECUREDROP_TOR_ONION_CHANNEL.name);
+    if (securedrop) {
+      return securedrop[1];
+    }
+    return null;
   }
 
   unload() {
