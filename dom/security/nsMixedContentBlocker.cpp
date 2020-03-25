@@ -637,6 +637,11 @@ nsresult nsMixedContentBlocker::ShouldLoad(bool aHadInsecureImageRedirect,
     return NS_OK;
   }
 
+  if (isHttpScheme && IsPotentiallyTrustworthyOrigin(innerContentLocation)) {
+    *aDecision = ACCEPT;
+    return NS_OK;
+  }
+
   // If https-only mode is enabled we'll upgrade this later anyway
   if (StaticPrefs::dom_security_https_only_mode()) {
     *aDecision = ACCEPT;
