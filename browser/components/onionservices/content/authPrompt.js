@@ -10,9 +10,12 @@ XPCOMUtils.defineLazyModuleGetters(this, {
 
 const OnionAuthPrompt = (function() {
   // OnionServicesAuthPrompt objects run within the main/chrome process.
-  function OnionServicesAuthPrompt(aBrowser, aFailedURI, aOnionName) {
+  // aReason is the topic passed within the observer notification that is
+  // causing this auth prompt to be displayed.
+  function OnionServicesAuthPrompt(aBrowser, aFailedURI, aReason, aOnionName) {
     this._browser = aBrowser;
     this._failedURI = aFailedURI;
+    this._reasonForPrompt = aReason;
     this._onionName = aOnionName;
   }
 
@@ -196,7 +199,8 @@ const OnionAuthPrompt = (function() {
       // Arrange for an error page to be displayed.
       this._browser.messageManager.sendAsyncMessage(
                                OnionAuthUtil.message.authPromptCanceled,
-                               {failedURI: this._failedURI.spec});
+                               {failedURI: this._failedURI.spec,
+                                reasonForPrompt: this._reasonForPrompt});
     },
 
     _getKeyElement() {
@@ -261,17 +265,20 @@ const OnionAuthPrompt = (function() {
 
   let retval = {
     init() {
-      Services.obs.addObserver(this, OnionAuthUtil.topic.authPrompt);
+      Services.obs.addObserver(this, OnionAuthUtil.topic.clientAuthMissing);
+      Services.obs.addObserver(this, OnionAuthUtil.topic.clientAuthIncorrect);
     },
 
     uninit() {
-      Services.obs.removeObserver(this, OnionAuthUtil.topic.authPrompt);
+      Services.obs.removeObserver(this, OnionAuthUtil.topic.clientAuthMissing);
+      Services.obs.removeObserver(this, OnionAuthUtil.topic.clientAuthIncorrect);
     },
 
     // aSubject is the DOM Window or browser where the prompt should be shown.
     // aData contains the .onion name.
     observe(aSubject, aTopic, aData) {
-      if (aTopic != OnionAuthUtil.topic.authPrompt) {
+      if ((aTopic != OnionAuthUtil.topic.clientAuthMissing) &&
+          (aTopic != OnionAuthUtil.topic.clientAuthIncorrect)) {
         return;
       }
 
@@ -288,7 +295,8 @@ const OnionAuthPrompt = (function() {
       }
 
       let failedURI = browser.currentURI;
-      let authPrompt = new OnionServicesAuthPrompt(browser, failedURI, aData);
+      let authPrompt = new OnionServicesAuthPrompt(browser, failedURI,
+                                                   aTopic, aData);
       authPrompt.show(undefined);
     }
   };
