@@ -1,9 +1,9 @@
 JAR_MANIFESTS += ['jar.mn']
 
 EXTRA_JS_MODULES += [
-    'OnionLocationChild.jsm',
-    'OnionLocationParent.jsm',
     'ExtensionMessaging.jsm',
     'HttpsEverywhereControl.jsm',
     'OnionAliasStore.jsm',
+    'OnionLocationChild.jsm',
+    'OnionLocationParent.jsm',
 ]
