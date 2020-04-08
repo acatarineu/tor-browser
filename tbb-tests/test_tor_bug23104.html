@@ -6,7 +6,7 @@
   <script type="application/javascript" src="/tests/SimpleTest/SimpleTest.js"></script>
   <script type="application/javascript" src="/tests/SimpleTest/SpawnTask.js"></script>
   <style type="text/css">
-    span {
+    .testdiv {
       background-color: #000;
       color: #fff;
       font-size: 16.5px;
@@ -14,9 +14,9 @@
   </style>
 </head>
 <body>
-<span id="test1">Test1</span>
-<span id="test2">كلمة</span>
-<span id="test3">ação</span>
+  <div class="testdiv" id="test1">Test1</div>
+  <div class="testdiv" id="test2">كلمة</div>
+  <div class="testdiv" id="test3">ação</div>
 <script>
 
 let setPref = async function (key, value) {
@@ -24,15 +24,23 @@ let setPref = async function (key, value) {
 }
 
 function getStyle(el, styleprop) {
-  el = document.getElementById(el);
   return document.defaultView.getComputedStyle(el, null).getPropertyValue(styleprop);
 }
 
+function getLineHeight(el) {
+  var lineHeight = getStyle(el, 'line-height');
+  if (lineHeight === "normal") {
+    return el.getBoundingClientRect().height;
+  }
+  return parseFloat(lineHeight);
+}
+
 function validateElement(elementName, isFingerprintResistent) {
-  var fontSize = getStyle(elementName, 'font-size');
-  var lineHeight = getStyle(elementName, 'line-height');
+  var el = document.getElementById(elementName);
+  var fontSize = getStyle(el, 'font-size');
   var validationCb = isFingerprintResistent ? is : isnot;
-  validationCb(parseFloat(lineHeight), Math.round(parseFloat(fontSize)) * 1.2, 'Line Height validation');
+  var expectedLineHeight = Math.round(parseFloat(fontSize)) * 1.2;
+  validationCb(getLineHeight(el).toFixed(4), expectedLineHeight.toFixed(4), 'Line Height validation');
 }
 
 add_task(async function() {
