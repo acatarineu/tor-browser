@@ -204,6 +204,11 @@ nsresult nsEffectiveTLDService::GetBaseDomainInternal(nsCString& aHostname,
   bool trailingDot = aHostname.Last() == '.';
   if (trailingDot) aHostname.Truncate(aHostname.Length() - 1);
 
+  // Drop '.securedrop.tor.onion' suffix, and keep track of it for later
+  NS_NAMED_LITERAL_CSTRING(dotSDTO, ".securedrop.tor.onion");
+  const bool sdtoSuffix = StringEndsWith(aHostname, dotSDTO);
+  if (sdtoSuffix) aHostname.Truncate(aHostname.Length() - dotSDTO.Length());
+
   // check the edge cases of the host being '.' or having a second trailing '.',
   // since subsequent checks won't catch it.
   if (aHostname.IsEmpty() || aHostname.Last() == '.')
@@ -223,6 +228,9 @@ nsresult nsEffectiveTLDService::GetBaseDomainInternal(nsCString& aHostname,
       aBaseDomain = p.Data().mBaseDomain;
       if (trailingDot) {
         aBaseDomain.Append('.');
+      }
+      if (sdtoSuffix) {
+        aBaseDomain.Append(dotSDTO);
       }
 
       return NS_OK;
@@ -346,6 +354,7 @@ nsresult nsEffectiveTLDService::GetBaseDomainInternal(nsCString& aHostname,
 
   // add on the trailing dot, if applicable
   if (trailingDot) aBaseDomain.Append('.');
+  if (sdtoSuffix) aBaseDomain.Append(dotSDTO);
 
   return NS_OK;
 }
