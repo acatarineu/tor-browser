@@ -16,9 +16,9 @@ const SECUREDROP_TOR_ONION_CHANNEL = {
     kty: "RSA",
     e: "AQAB",
     n:
-      "y0iWTVev1uYDVhLdc5uSHWke-9JlbxzqIsGkS95Pk5NsxdlkdbHpqaPr-5xL5FspX8QGo3HAT5hrUcPV_kz8x-HwGEm2-p9BQ6-yEPtr5QXQGGzNoizmj7HH-b0y5qx8iUFwAJ__PJWK4IwSgjIQqHMjmkOLc9N4bmRPULi6ZZMb-97FdeZsh34dVy2tpIzZaijRfRQSfeZkwRXZzOY-siGfOAzY_UcrHFli5zroTZAyDaetFm1z2-TdFLOvN8fi0o3mBbCB9SqhOUImPwSTNWTp2D6bHhI91mt7gr6fLnzHMGrTMh2DQ4vjt_98pe7WTUzuRCLa9Awb6JJgbYA4ySV1akAU0_iq6oCAE9PZbUgUw9UAH1ctRFml87F3HORUMMj5ZCLwRIrEXqrCJbV4f-Ius-ZO2wwlYTsEv8TmUzISpMwVjGOIpXwFIb65R_EX3_vIopauSoyZkvk3klly0Qe6KTy_gg1CZ_h2ZXPpLMwqlfFTDBPv2q8gyuzgkYXQes3FX-PbJ9Dsl5QO4icuEjV2NQ7iPwwIPAtj9cpqCD8-p9TqTKaZjOFC9-ryJpWsivGCbvN2JotmJ5Ax9rmnAMvQM09muCetFj_ZIgllcpeahaw6gxVXlSYIhb0J9V878KNuRJ2yPJFlBmgpFexvCcz8Jqs6JUfIrmUAGUXG9nE",
+      "p10BbUVc5Xj2S_-MH3bACNBaISo_r9e3PVPyTTjsGsdg2qSXvqUO42fBtpFAy0zUzIGS83v4JjiRdvKJaZTIvbC8AcpymzdsTqujMm8RPTSy3hO_8mXzGa4DEsIB1uNLnUWRBKXvSGCmT9kFyxhTpkYqokNBzafVihTU34tN2Md1xFHnmZGqfYtPtbJLWAa5Z1M11EyR4lIyUxIiPTV9t1XstDbWr3iS83REJrGEFmjG1-BAgx8_lDUTa41799N2yYEhgZud7bL0M3ei8s5OERjiion5uANkUV3-s2QqUZjiVA-XR_HizXjciaUWNd683KqekpNOZ_0STh_UGwpcwU-KwG07QyiCrLrRpz8S_vH8CqGrrcWY3GSzYe9dp34jJdO65oA-G8tK6fMXtvTCFDZI6oNNaXJH71F5J0YbqO2ZqwKYc2WSi0gKVl2wd9roOVjaBmkJqvocntYuNM7t38fDEWHn5KUkmrTbiG68Cy56tDUfpKl3D9Uj4LaMvxJ1tKGvzQ4k_60odT7gIxu6DqYjXUHZpwPsSGBq3njaD7boe4CUXF2K7ViOc87BsKxRNCzDD8OklRjjXzOTOBH3PqFJ93CJ-4ECE5t9STU20aZ8E-2zKB8vjKyCySE4-kcIvBBsnkwVaJTPy9Ft1qYybo-soXEWVEZATANNWklBt8k",
   },
-  update_path_prefix: "https://redshiftzero.github.io/securedrop-httpse/",
+  update_path_prefix: "https://securedrop.org/https-everywhere/",
   scope:
     "^https?:\\/\\/[a-z0-9-]+(?:\\.[a-z0-9-]+)*\\.securedrop\\.tor\\.onion\\/",
   replaces_default_rulesets: false,
