@@ -54,6 +54,7 @@ static const char kPrefDnsCacheGrace[] =
 static const char kPrefIPv4OnlyDomains[] = "network.dns.ipv4OnlyDomains";
 static const char kPrefDisableIPv6[] = "network.dns.disableIPv6";
 static const char kPrefDisablePrefetch[] = "network.dns.disablePrefetch";
+static const char kPrefSocksRemoteDNS[] = "network.proxy.socks_remote_dns";
 static const char kPrefBlockDotOnion[] = "network.dns.blockDotOnion";
 static const char kPrefDnsLocalDomains[] = "network.dns.localDomains";
 static const char kPrefDnsForceResolve[] = "network.dns.forceResolve";
@@ -525,6 +526,8 @@ nsDNSService::nsDNSService()
       mDisableIPv6(false),
       mDisablePrefetch(false),
       mBlockDotOnion(false),
+      mDisableDNS(false),
+      mSocksRemoteDNS(false),
       mNotifyResolution(false),
       mOfflineLocalhost(false),
       mForceResolveOn(false),
@@ -666,6 +669,11 @@ nsresult nsDNSService::ReadPrefs(const char* name) {
       mProxyType = tmpint;
     }
   }
+  if (!name || !strcmp(name, kPrefSocksRemoteDNS)) {
+    if (NS_SUCCEEDED(Preferences::GetBool(kPrefSocksRemoteDNS, &tmpbool))) {
+      mSocksRemoteDNS = tmpbool;
+    }
+  }
   if (!name || !strcmp(name, kPrefIPv4OnlyDomains)) {
     Preferences::GetCString(kPrefIPv4OnlyDomains, mIPv4OnlyDomains);
   }
@@ -691,6 +699,12 @@ nsresult nsDNSService::ReadPrefs(const char* name) {
     // Disable prefetching either by explicit preference or if a
     // manual proxy is configured
     mDisablePrefetch = true;
+
+    // Disable DNS lookups if these should be proxied through SOCKS
+    // and a manual proxy is configured
+    mDisableDNS = mSocksRemoteDNS;
+  } else {
+    mDisableDNS = false;
   }
   return NS_OK;
 }
@@ -736,7 +750,9 @@ nsDNSService::Init() {
 
     // Monitor these to see if there is a change in proxy configuration
     // If a manual proxy is in use, disable prefetch implicitly
-    prefs->AddObserver("network.proxy.type", this, false);
+    // If DNS should be proxied through SOCKS, disable DNS lookups.
+    prefs->AddObserver(kPrefNetworkProxyType, this, false);
+    prefs->AddObserver(kPrefSocksRemoteDNS, this, false);
   }
 
   nsDNSPrefetch::Initialize(this);
@@ -864,6 +880,14 @@ nsresult nsDNSService::AsyncResolveInternal(
 
   if (mNotifyResolution) {
     NS_DispatchToMainThread(new NotifyDNSResolution(aHostname));
+  }
+
+  PRNetAddr tempAddr;
+  if (mDisableDNS) {
+    // Allow IP lookups through, but nothing else.
+    if (PR_StringToNetAddr(aHostname.BeginReading(), &tempAddr) != PR_SUCCESS) {
+      return NS_ERROR_UNKNOWN_HOST;
+    }
   }
 
   if (!res) return NS_ERROR_OFFLINE;
@@ -1171,6 +1195,14 @@ nsresult nsDNSService::ResolveInternal(
   if (GetOffline() &&
       (!mOfflineLocalhost || !hostname.LowerCaseEqualsASCII("localhost"))) {
     flags |= RESOLVE_OFFLINE;
+  }
+
+  PRNetAddr tempAddr;
+  if (mDisableDNS) {
+    // Allow IP lookups through, but nothing else.
+    if (PR_StringToNetAddr(aHostname.BeginReading(), &tempAddr) != PR_SUCCESS) {
+      return NS_ERROR_UNKNOWN_HOST;
+    }
   }
 
   //
