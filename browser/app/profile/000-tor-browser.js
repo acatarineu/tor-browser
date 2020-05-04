@@ -312,6 +312,8 @@ pref("dom.presentation.receiver.enabled", false);
 pref("dom.audiochannel.audioCompeting", false);
 pref("dom.audiochannel.mediaControl", false);
 
+#expand pref("torbrowser.version", __TOR_BROWSER_VERSION_QUOTED__);
+
 // Old torbutton prefs
 
 // debug prefs
