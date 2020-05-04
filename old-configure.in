@@ -2054,6 +2054,15 @@ fi
 dnl ========================================================
 dnl Tor additions
 dnl ========================================================
+MOZ_ARG_WITH_STRING(tor-browser-version,
+[  --with-tor-browser-version=VERSION
+                          Set Tor Browser version, e.g., 7.0a1],
+    TOR_BROWSER_VERSION="$withval")
+
+if test -z "$TOR_BROWSER_VERSION"; then
+    AC_MSG_ERROR([--with-tor-browser-version is required for Tor Browser.])
+fi
+
 MOZ_ARG_ENABLE_BOOL(tor-browser-update,
 [  --enable-tor-browser-update
                           Enable Tor Browser update],
@@ -2074,6 +2083,8 @@ if test -n "$TOR_BROWSER_DATA_OUTSIDE_APP_DIR"; then
     AC_DEFINE(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
 fi
 
+AC_DEFINE_UNQUOTED(TOR_BROWSER_VERSION,$TOR_BROWSER_VERSION)
+AC_DEFINE_UNQUOTED(TOR_BROWSER_VERSION_QUOTED,"$TOR_BROWSER_VERSION")
 AC_SUBST(TOR_BROWSER_UPDATE)
 AC_SUBST(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
 
