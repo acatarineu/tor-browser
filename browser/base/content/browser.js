@@ -6082,7 +6082,8 @@ var XULBrowserWindow = {
   onSecurityChange(aWebProgress, aRequest, aState, aIsSimulated) {
     // Don't need to do anything if the data we use to update the UI hasn't
     // changed
-    let uri = gBrowser.currentURI;
+    let uri =
+      gBrowser.selectedBrowser.currentOnionAliasURI || gBrowser.currentURI;
     let spec = uri.spec;
     if (this._state == aState && this._lastLocation == spec) {
       // Switching to a tab of the same URL doesn't change most security
