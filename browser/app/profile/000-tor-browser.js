@@ -60,7 +60,9 @@ pref("signon.rememberSignons", false);
 pref("browser.formfill.enable", false);
 pref("signon.autofillForms", false);
 pref("browser.sessionstore.privacy_level", 2);
-pref("media.cache_size", 0);
+// Use the in-memory media cache and increase its maximum size (#29120)
+pref("browser.privatebrowsing.forceMediaMemoryCache", true);
+pref("media.memory_cache_max_size", 16384);
 
 // Misc privacy: Remote
 pref("browser.send_pings", false);
