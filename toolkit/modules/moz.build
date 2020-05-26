@@ -263,10 +263,11 @@ if 'Android' != CONFIG['OS_TARGET']:
     ]
 else:
     DEFINES['ANDROID'] = True
-    EXTRA_JS_MODULES += [
-        'secondscreen/RokuApp.jsm',
-        'secondscreen/SimpleServiceDiscovery.jsm',
-    ]
+    if not CONFIG['TOR_BROWSER_VERSION']:
+        EXTRA_JS_MODULES += [
+            'secondscreen/RokuApp.jsm',
+            'secondscreen/SimpleServiceDiscovery.jsm',
+        ]
 
 
 if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'windows':
@@ -298,6 +299,9 @@ for var in ('MOZ_ALLOW_ADDON_SIDELOAD',
             'MOZ_UPDATER'):
     if CONFIG[var]:
         DEFINES[var] = True
+
+if CONFIG['TOR_BROWSER_UPDATE']:
+    DEFINES['TOR_BROWSER_UPDATE'] = 1
 
 JAR_MANIFESTS += ['jar.mn']
 
