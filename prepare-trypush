@@ -1,0 +1,39 @@
+#!/bin/bash
+
+if ! [[ -z $(git status -s) ]]; then
+    echo "Please stash or commit your local repo changes (including untracked files)"
+    exit 1
+fi
+
+# Move to a tmp branch
+new_branch_name=tmp_trypush_$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 6 | head -n 1)
+git checkout -b "$new_branch_name"
+
+# Get first Tor Browser commit
+first_tb_commit=$(git log -500 --format='oneline' | grep "TB3: Tor Browser's official .mozconfigs." \
+                                        | head -1 | cut -d ' ' -f 1)
+
+# Squash all commits and add tor-launcher and torbutton files directly (not submodule or embedded git repo)
+git reset --soft "$first_tb_commit"
+git submodule sync && git submodule update --init toolkit/torproject/torbutton
+git rm -f .gitmodules
+git reset browser/extensions/tor-launcher
+git reset toolkit/torproject/torbutton
+git rm --cached toolkit/torproject/torbutton
+git rm --cached browser/extensions/tor-launcher
+mv browser/extensions/tor-launcher/.git browser/extensions/tor-launcher/.gitbak
+mv toolkit/torproject/torbutton/.git toolkit/torproject/torbutton/.gitbak
+git add -A
+git commit --amend --reset-author -m "Tor Browser squashed patches"
+# git add toolkit/torproject/torbutton/
+# git add browser/extensions/tor-launcher/
+# git add -A
+
+# git commit --amend --reset-author -m "Tor Browser squashed patches"
+
+# # Remove torbutton submodule and commit the folder directly
+# git submodule sync && git submodule update --init toolkit/torproject/torbutton
+# git rm --cached toolkit/torproject/torbutton
+# git rm .gitmodules
+# git add toolkit/torproject/torbutton/
+# git commit --amend --no-edit
