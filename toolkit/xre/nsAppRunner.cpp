@@ -1903,10 +1903,12 @@ static ReturnAbortOnError ProfileErrorDialog(nsIFile* aProfileDir,
                                              nsIProfileLock** aResult) {
   nsresult rv;
 
-  bool exists;
-  aProfileDir->Exists(&exists);
-  if (!exists) {
-    return ProfileMissingDialog(aNative);
+  if (aProfileDir) {
+    bool exists;
+    aProfileDir->Exists(&exists);
+    if (!exists) {
+      return ProfileMissingDialog(aNative);
+    }
   }
 
   ScopedXPCOMStartup xpcom;
