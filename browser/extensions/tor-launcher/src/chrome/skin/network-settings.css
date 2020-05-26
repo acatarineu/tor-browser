@@ -1,0 +1,322 @@
+/*
+ * Copyright (c) 2020, The Tor Project, Inc.
+ * See LICENSE for licensing information.
+ *
+ * vim: set sw=2 sts=2 ts=8 et syntax=css:
+ */
+
+@namespace html "http://www.w3.org/1999/xhtml";
+
+window {
+  width: 45em;
+  height: 41em;
+  font: -moz-dialog;
+}
+
+window.os-windows {
+  width: 49em;
+  height: 42em;
+}
+
+window[torwizard="true"] {
+  width: 45em;
+  height: 38em;
+  font: -moz-dialog;
+  padding-top: 0px;
+}
+
+window[torwizard="true"].os-windows {
+  width: 49em;
+  height: 44em;
+}
+
+#forAssistance {
+  margin-left: 12px;
+  margin-bottom: 6px;
+  -moz-user-select: text;
+  -moz-user-focus: normal;
+  cursor: text;
+}
+
+wizard label {
+  margin: 0px;
+}
+
+.rightAlign {
+  text-align: right;
+}
+
+groupbox {
+  margin-left: 16px;
+  padding: 8px;
+  border: 1px solid GrayText;
+}
+
+.tbb-header groupbox {
+  margin-left: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.firstResponses > label {
+  text-align: center;
+  margin-top: 1.2em;
+}
+
+.firstResponses button {
+  min-width: 85px;
+  margin: 9px 40px;
+}
+
+.firstResponses,
+wizard #bridgeSettings,
+wizard #proxySettings {
+  margin-top: 15px;
+}
+
+.bridgeRadioContainer {
+  min-height: 30px; /* ensure no height change when dropdown menu is hidden */
+  vertical-align: middle;
+}
+
+.help .heading,
+.question {
+  font-weight: bold;
+}
+
+button.firstAnswer {
+  margin-top: 0px;
+}
+
+.tbb-logo {
+  list-style-image: url("chrome://torlauncher/skin/tbb-logo.svg");
+  height: 60px;
+}
+
+wizard[tor_hide_browser_logo="true"] .tbb-logo {
+  display: none;
+}
+
+/* Show menulist placeholder text in gray. */
+#defaultBridgeType:not([value]) .menulist-label,
+#defaultBridgeType[value=""] .menulist-label,
+#proxyType:not([value]) .menulist-label,
+#proxyType[value=""] .menulist-label {
+  color: #777;
+}
+
+#bridgeNote,
+#bridgeDefaultEntry,
+#bridgeDBContainer,
+#bridgeCustomEntry {
+  margin-left: 1.8em;
+}
+
+window.os-mac #bridgeList {
+  font-size: 90%;
+}
+
+#bridgeDBResult {
+  font-size: 90%;
+  white-space: pre;
+}
+
+#bridgeDBResult[value=""] {
+  display: none;
+}
+
+/* reuse Mozilla's help button from the Firefox hamburger menu */
+.helpButton {
+  background: url('chrome://global/skin/icons/help.svg') no-repeat center center;
+  background-size: 16px 16px;
+  cursor: pointer;
+  -moz-appearance: none;
+  height: 16px;
+  width: 16px;
+  min-height: 16px;
+  min-width: 16px;
+  margin: 0;
+  border: none;
+  box-shadow: none;
+}
+
+.helpButton .button-box {
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.helpButton:hover {
+  background-color: rgba(12, 12, 13, 0.1);
+  border-radius: 50%;
+}
+
+.helpButton:hover:active {
+  background-color: rgba(12, 12, 13, 0.15);
+  border-radius: 50%;
+}
+
+#progressContent[isShowingReconfigure] description,
+.messagePanel description {
+  margin: 20px;
+  font-size: 120%;
+  font-weight: bold;
+  white-space: pre-wrap;
+  text-align: center;
+}
+
+wizardpage[pageid="restartPanel"] description,
+#restartPanel description {
+  text-align: start;
+}
+
+#bridgeDBRequestOverlayContent,
+#errorOverlayContent {
+  margin: 50px;
+  min-height: 12em;
+  background-color: rgba(251,251,251,1.0);
+  box-shadow: 0px 0px 50px rgba(0,0,0,0.9);
+}
+
+#bridgeDBRequestOverlayContent > vbox {
+  margin: 20px;
+}
+
+#bridgeDBPrompt {
+  text-align: center;
+}
+
+#bridgeDBCaptchaImage {
+  margin: 16px 0px;
+  width: 400px;
+  /* height is set via code so it can be animated. */
+}
+
+#bridgeDBReloadSpacer {
+  width: 20px;  /* matches the width of #bridgeDBReloadCaptchaButton */
+}
+
+#bridgeDBReloadCaptchaButton {
+  list-style-image: url("chrome://torlauncher/skin/reload.svg");
+  -moz-appearance: none;
+  width: 20px;  /* matches the width of #bridgeDBReloadSpacer */
+  height: 20px;
+  min-height: 20px;
+  min-width: 20px;
+  margin: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+#bridgeDBNetworkActivity {
+  list-style-image: url("chrome://torlauncher/skin/activity.svg");
+  width: 20px;
+  height: 20px;
+}
+
+#bridgeDBCaptchaError {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Hide BridgeDB overlay elements based on the state attribute. */
+#bridgeDBRequestOverlay[state="fetchingCaptcha"] #bridgeDBReloadCaptchaButton,
+#bridgeDBRequestOverlay[state="checkingSolution"] #bridgeDBReloadCaptchaButton,
+#bridgeDBRequestOverlay[state="fetchingCaptcha"] #bridgeDBCaptchaSolution {
+  visibility: hidden;
+}
+
+#bridgeDBRequestOverlay[state="fetchingCaptcha"] #bridgeDBCaptchaError,
+#bridgeDBRequestOverlay[state="fetchingCaptcha"] #bridgeDBSubmitButton,
+#bridgeDBRequestOverlay[state="checkingSolution"] #bridgeDBSubmitButton {
+  display: none;
+}
+
+#errorOverlayContent button[errorElemId="dismissButton"] {
+  margin-bottom: 20px;
+}
+
+#restartButton {
+  margin-top: 20px;
+}
+
+dialog .help {
+  margin: 30px;
+}
+
+.help label {
+  font-size: 120%;
+  font-weight: bold;
+  margin: 0px 0px 12px 0px;
+}
+
+.help div {
+  -moz-user-select: text;
+  -moz-user-focus: normal;
+}
+
+.help description {
+  margin-bottom: 10px;
+  -moz-user-select: text;
+  -moz-user-focus: normal;
+  cursor: text;
+}
+
+.help description.prelist {
+  margin-bottom: 0px;
+}
+
+.help ol {
+  padding-top: 0px;
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+.help li {
+  margin-bottom: 8px;
+}
+
+#copyLogFeedbackPanel {
+  margin: -15px 0px 0px 0px;
+  max-width: 34em;
+}
+
+html|textarea {
+  padding: 4px !important;
+  margin-top: 4px;
+  font-family: inherit;
+}
+
+/* Increase font size on Windows for readability */
+.os-windows div,
+.os-windows label,
+.os-windows description,
+.os-windows html|textarea,
+.os-windows html|input
+{
+  font-size: 120% !important;
+}
+
+.torWarning {
+  list-style-image: url("chrome://torlauncher/skin/warning.png");
+}
+
+/* Ensure that our caution icon is always shown on GTK-based platforms. */
+.torWarning .button-icon {
+  display: inline !important;
+}
+
+#progressContent > vbox {
+  margin-top: 70px;
+}
+
+#progressPleaseWait {
+  margin-bottom: 30px;
+}
+
+#progressDesc {
+  height: 48px;
+  margin: 20px 30px;
+}

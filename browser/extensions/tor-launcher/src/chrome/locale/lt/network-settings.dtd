@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "Tor tinklo nustatymai">
+<!ENTITY torsettings.wizard.title.default "Prisijungti prie Tor">
+<!ENTITY torsettings.wizard.title.configure "Tor tinklo nustatymai">
+<!ENTITY torsettings.wizard.title.connecting "Užmezgiamas ryšys">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "Tor Naršyklės kalba">
+<!ENTITY torlauncher.localePicker.prompt "Pasirinkite kalbą.">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "Norėdami prisijungti prie Tor, spustelėkite &quot;Prisijungti&quot;.">
+<!ENTITY torSettings.configurePrompt "Spustelėkite &quot;Konfigūruoti&quot;, norėdami reguliuoti tinklo nustatymus, jeigu esate šalyje, kuri cenzūruoja Tor (tokioje kaip Egiptas, Kinija, Turkija) arba jeigu jungiatės iš privačiojo tinklo, kuris reikalauja įgaliotojo serverio.">
+<!ENTITY torSettings.configure "Konfigūruoti">
+<!ENTITY torSettings.connect "Prisijungti">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "Laukiama, kol bus paleistas Tor…">
+<!ENTITY torsettings.restartTor "Paleisti Tor iš naujo">
+<!ENTITY torsettings.reconfigTor "Konfigūruoti iš naujo">
+
+<!ENTITY torsettings.discardSettings.prompt "Jūs esate sukofigūravę Tor tinklų tiltus arba esate įrašę vietinio įgaliotojo serverio nustatymus.&#160; Tam, kad galėtumėte tiesiogiai prisijungti prie Tor tinklo, šie nustatymai privalo būti pašalinti.">
+<!ENTITY torsettings.discardSettings.proceed "Šalinti nustatymus ir prisijungti">
+
+<!ENTITY torsettings.optional "Nebūtina">
+
+<!ENTITY torsettings.useProxy.checkbox "Prisijungimui prie interneto aš naudoju įgaliotąjį serverį">
+<!ENTITY torsettings.useProxy.type "Įgaliotojo serverio tipas">
+<!ENTITY torsettings.useProxy.type.placeholder "pasirinkite įgaliotojo serverio tipą">
+<!ENTITY torsettings.useProxy.address "Adresas">
+<!ENTITY torsettings.useProxy.address.placeholder "IP adresas arba serverio vardas">
+<!ENTITY torsettings.useProxy.port "Prievadas">
+<!ENTITY torsettings.useProxy.username "Naudotojo vardas">
+<!ENTITY torsettings.useProxy.password "Slaptažodis">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "Šis kompiuteris jungiasi per užkardą, kuri leidžia jungtis tik prie tam tikrų prievadų">
+<!ENTITY torsettings.firewall.allowedPorts "Leidžiami prievadai">
+<!ENTITY torsettings.useBridges.checkbox "Mano šalyje Tor yra cenzūruojamas">
+<!ENTITY torsettings.useBridges.default "Pasirinkite įtaisytąjį tinklų tiltą">
+<!ENTITY torsettings.useBridges.default.placeholder "pasirinkite tinklų tiltą">
+<!ENTITY torsettings.useBridges.bridgeDB "Prašyti tinklų tilto iš torproject.org">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "Įveskite ženklus iš paveikslėlio">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "Gaukite naują iššūkį">
+<!ENTITY torsettings.useBridges.captchaSubmit "Pateikti">
+<!ENTITY torsettings.useBridges.custom "Pateikti man žinomą tinklų tiltą">
+<!ENTITY torsettings.useBridges.label "Įveskite tinklų tilto informaciją iš patikimo šaltinio.">
+<!ENTITY torsettings.useBridges.placeholder "tipas adresas:prievadas (kiekvienoje eilutėje po vieną)">
+
+<!ENTITY torsettings.copyLog "Kopijuoti Tor žurnalą į iškarpinę">
+
+<!ENTITY torsettings.proxyHelpTitle "Įgaliotojo serverio žinynas">
+<!ENTITY torsettings.proxyHelp1 "Vietinis įgaliotasis serveris gali būti reikalingas, jungiantis per kompanijos, mokyklos ar universiteto tinklą.&#160;Jeigu nesate tikri ar įgaliotasis serveris yra reikalingas, žiūrėkite interneto nustatymus kitoje naršyklėje arba patikrinkite savo sistemos tinklo nustatymus.">
+
+<!ENTITY torsettings.bridgeHelpTitle "Tiltų tinklo retransliavimo žinynas">
+<!ENTITY torsettings.bridgeHelp1 "Tinklų tiltai yra neregistruoti retransliavimai, kurie apsunkina ryšių prie Tor tinklo blokavimą.&#160; Kiekvienas tinklų tilto tipas naudoja kitokį būdą išvengti cenzūros.&#160; Obfs tinklų tiltai paverčia jūsų srautą panašų į atsitiktinį triukšmą, o meek tinklų tiltai paverčia jūsų srautą, kad jis atrodytų taip, lyg jungtumėtės prie tos paslaugos, o ne prie Tor.">
+<!ENTITY torsettings.bridgeHelp2 "Dėl to, kaip tam tikros šalys bando blokuoti Tor, tam tikri tinklų tiltai vienose šalyse veikia, o kitose neveikia.&#160; Jeigu nesate tikri, kurie tinklų tiltai jūsų šalyje veikia, apsilankykite torproject.org/about/contact.html#support">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "Palaukite, kol mes užmegsime ryšį su Tor tinklu.&#160; Tai gali užtrukti kelias minutes.">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "Tor">
+<!ENTITY torPreferences.torSettings "Tor nustatymai">
+<!ENTITY torPreferences.torSettingsDescription "Tor Naršyklė nukreipia jūsų srautą per Tor tinklą, veikiantį po visą pasaulį išsidėsčiusių tūkstančių savanorių dėka." >
+<!ENTITY torPreferences.learnMore "Sužinokite daugiau">
+<!ENTITY torPreferences.bridges "Tinklų tiltai">
+<!ENTITY torPreferences.bridgesDescription "Tinklo tiltai padeda jums pasiekti Tor tinklą, vietose kur Tor užblokuotas. Priklausomai nuo to kur esate, vienas tiltas gali veikti geriau nei kitas.">
+<!ENTITY torPreferences.useBridge "Naudoti tinklų tiltą">
+<!ENTITY torPreferences.requestNewBridge "Užklausti naują tinklų tiltą…">
+<!ENTITY torPreferences.provideBridge "Pateikite tinklų tiltą">
+<!ENTITY torPreferences.advanced "Išplėstiniai">
+<!ENTITY torPreferences.advancedDescription "Sukonfigūruokite kaip Tor Naršyklė jungsis prie interneto.">
+<!ENTITY torPreferences.firewallPortsPlaceholder "Kableliais atskirtos reikšmės">
+<!ENTITY torPreferences.requestBridgeDialogTitle "Užklausti tinklų tiltą…">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "Susisiekiama su BridgeDB. Palaukite.">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "Norėdami užklausti tinklų tiltą, išspręskite saugos kodą.">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "Sprendimas neteisingas. Bandykite dar kartą.">
+<!ENTITY torPreferences.viewTorLogs "Rodyti Tor žurnalus.">
+<!ENTITY torPreferences.viewLogs "Rodyti žurnalus…">
+<!ENTITY torPreferences.torLogsDialogTitle "Tor žurnalai">

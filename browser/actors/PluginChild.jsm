@@ -523,13 +523,15 @@ class PluginChild extends JSWindowActorChild {
         break;
 
       case "PluginDisabled":
-        let manageLink = this.getPluginUI(pluginElement, "managePluginsLink");
-        this.addLinkClickCallback(
-          manageLink,
-          "forwardCallback",
-          "managePlugins"
+        // Screw the disabled message. It messes with HTML5 fallback on YouTube
+        let plugin_overlay = eventDoc.getAnonymousElementByAttribute(
+          pluginElement,
+          "class",
+          "mainBox"
         );
-        shouldShowNotification = true;
+        if (plugin_overlay != null) {
+          plugin_overlay.style.visibility = "hidden";
+        }
         break;
 
       case "PluginInstantiated":

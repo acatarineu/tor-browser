@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "ตั้งค่าเครือข่าย Tor">
+<!ENTITY torsettings.wizard.title.default "เชื่อมต่อกับ Tor">
+<!ENTITY torsettings.wizard.title.configure "ตั้งค่าเครือข่าย Tor">
+<!ENTITY torsettings.wizard.title.connecting "กำลังสร้างการเชื่อมต่อ">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "ภาษาของ Tor Browser">
+<!ENTITY torlauncher.localePicker.prompt "โปรดเลือกภาษา">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "คลิกปุ่ม &quot;เชื่อมต่อ&quot; เพื่อเชื่อมต่อกับ Tor">
+<!ENTITY torSettings.configurePrompt "คลิกปุ่ม &quot;กำหนดค่า&quot; เพื่อปรับการตั้งค่าเครือข่ายถ้าคุณอยู่ในประเทศที่เซ็นเซอร์ Tor (เช่น อียิปต์ จีน ตุรกี) หรือถ้าคุณกำลังเชื่อมต่อจากเครือข่ายส่วนตัวที่จำเป็นต้องใช้พร็อกซี">
+<!ENTITY torSettings.configure "กำหนดค่า">
+<!ENTITY torSettings.connect "เชื่อมต่อ">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "กรุณารอให้ Tor เริ่มทำงาน...">
+<!ENTITY torsettings.restartTor "เริ่มการทำงานของ Tor ใหม่">
+<!ENTITY torsettings.reconfigTor "กำหนดค่าใหม่">
+
+<!ENTITY torsettings.discardSettings.prompt "คุณได้กำหนดค่าสะพานของ Tor หรือคุณได้ใส่การตั้งค่าพร็อกซีท้องถิ่นไว้แล้ว &amp;#160 คุณจำเป็นต้องลบการตั้งค่าเหล่านี้ออกถ้าต้องการสร้างการเชื่อมต่อโดยตรงกับเครือข่ายของ Tor">
+<!ENTITY torsettings.discardSettings.proceed "ลบการตั้งค่าและการเชื่อมต่อ">
+
+<!ENTITY torsettings.optional "ไม่จำเป็น">
+
+<!ENTITY torsettings.useProxy.checkbox "ฉันใช้พร็อกซีเพื่อเชื่อมต่อกับอินเทอร์เน็ต">
+<!ENTITY torsettings.useProxy.type "ชนิดพร็อกซี">
+<!ENTITY torsettings.useProxy.type.placeholder "เลือกชนิดพร็อกซี">
+<!ENTITY torsettings.useProxy.address "ที่อยู่">
+<!ENTITY torsettings.useProxy.address.placeholder "ที่อยู่ IP หรือชื่อโฮสต์">
+<!ENTITY torsettings.useProxy.port "พอร์ต">
+<!ENTITY torsettings.useProxy.username "ชื่อผู้ใช้">
+<!ENTITY torsettings.useProxy.password "รหัสผ่าน">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP หรือ HTTPS">
+<!ENTITY torsettings.firewall.checkbox "คอมพิวเตอร์เครื่องนี้ใช้งานผ่านไฟร์วอลล์ที่อนุญาตให้เชื่อมต่อกับเฉพาะบางพอร์ตเท่านั้น">
+<!ENTITY torsettings.firewall.allowedPorts "Allowed Ports">
+<!ENTITY torsettings.useBridges.checkbox "Tor ถูกเซ็นเซอร์ในประเทศของฉัน">
+<!ENTITY torsettings.useBridges.default "เลือกสะพานที่มีมาให้ในตัว">
+<!ENTITY torsettings.useBridges.default.placeholder "เลือกสะพาน">
+<!ENTITY torsettings.useBridges.bridgeDB "เลือกสะพานจาก torproject.org">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "กรอกตัวอักษรที่อยู่ในภาพ">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "รับการท้าทายใหม่">
+<!ENTITY torsettings.useBridges.captchaSubmit "ส่ง">
+<!ENTITY torsettings.useBridges.custom "จัดหาสะพานที่ฉันรู้จัก">
+<!ENTITY torsettings.useBridges.label "กรอกข้อมูลสะพานจากแหล่งที่น่าเชื่อถือ">
+<!ENTITY torsettings.useBridges.placeholder "พิมพ์ที่อยู่: พอร์ต (บรรทัดละพอร์ต)">
+
+<!ENTITY torsettings.copyLog "คัดลอกล็อก Tor ไปที่คลิปบอร์ด ">
+
+<!ENTITY torsettings.proxyHelpTitle "ความช่วยเหลือเกี่ยวกับพร็อกซี">
+<!ENTITY torsettings.proxyHelp1 "พร็อกซีท้องถิ่นอาจจะมีความจำเป็นหากเชื่อมต่อผ่านเครือข่ายบริษัท โรงเรียน หรือมหาวิทยาลัย &#160; ถ้าคุณไม่แน่ใจว่าจำเป็นจะต้องใช้พร็อกซีหรือไม่ ดูได้ที่การตั้งค่าอินเทอร์เน็ตในเบราวเซอร์อื่น หรือตรวจสอบการตั้งค่าเครือข่ายของระบบของคุณ">
+
+<!ENTITY torsettings.bridgeHelpTitle "การช่วยเหลือเกี่ยวกับรีเลย์สะพาน">
+<!ENTITY torsettings.bridgeHelp1 "สะพานเป็นรีเลย์ที่ไม่อยู่ในรายการ ซึ่งทำให้การบล็อกการเชื่อมต่อกับเครือข่าย Tor ทำได้ยากขึ้น &#160; สะพานแต่ละชนิดใช้วิธีการที่แตกต่างกันเพื่อหลบเลี่ยงการเซ็นเซอร์ &#160; สะพานแบบ obfs ทำให้การรับส่งข้อมูลของคุณเป็นเหมือนเสียงรบกวนที่ไม่มีความหมาย ส่วนสะพานแบบ meek จะทำให้การรับส่งข้อมูลของคุณเหมือนกำลังเชื่อมต่อกับบริการนั้นๆ แทนที่จะเป็น Tor">
+<!ENTITY torsettings.bridgeHelp2 "เนื่องจากบางประเทศบล็อก Tor สะพานบางอันจึงใช้งานได้เฉพาะในบางประเทศเท่านั้น &#160; ถ้าคุณไม่แน่ใจว่าสะพานอันไหนใช้งานได้ในประเทศของคุณบ้าง กรุณาดูที่ torproject.org/about/contact.html#support">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "กรุณรอระหว่างที่เรากำลังสร้างการเชื่อมต่อไปยังเครือข่าย Tor &#160; ซึ่งอาจจะใช้เวลาหลายนาที">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "Tor">
+<!ENTITY torPreferences.torSettings "Tor Settings">
+<!ENTITY torPreferences.torSettingsDescription "Tor Browser routes your traffic over the Tor Network, run by thousands of volunteers around the world." >
+<!ENTITY torPreferences.learnMore "เรียนรู้เพิ่มเติม">
+<!ENTITY torPreferences.bridges "สะพาน">
+<!ENTITY torPreferences.bridgesDescription "Bridges help you access the Tor Network in places where Tor is blocked. Depending on where you are, one bridge may work better than another.">
+<!ENTITY torPreferences.useBridge "Use a bridge">
+<!ENTITY torPreferences.requestNewBridge "ขอสะพานใหม่…">
+<!ENTITY torPreferences.provideBridge "Provide a bridge">
+<!ENTITY torPreferences.advanced "ขั้นสูง">
+<!ENTITY torPreferences.advancedDescription "Configure how Tor Browser connects to the internet.">
+<!ENTITY torPreferences.firewallPortsPlaceholder "Comma-separated values">
+<!ENTITY torPreferences.requestBridgeDialogTitle "Request Bridge">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "Contacting BridgeDB. Please Wait.">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "แก้ปัญหา CAPTCHA เพื่อขอสะพาน">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "วิธีแก้ไขไม่ถูกต้อง กรุณาลองอีกครั้ง">
+<!ENTITY torPreferences.viewTorLogs "View the Tor logs.">
+<!ENTITY torPreferences.viewLogs "View Logs…">
+<!ENTITY torPreferences.torLogsDialogTitle "Tor Logs">

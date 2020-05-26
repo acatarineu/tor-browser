@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "洋蔥路由網路設定">
+<!ENTITY torsettings.wizard.title.default "連線到 Tor">
+<!ENTITY torsettings.wizard.title.configure "Tor 網路設定">
+<!ENTITY torsettings.wizard.title.connecting "建立 Tor 連線">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "洋蔥路由瀏覽器之語言">
+<!ENTITY torlauncher.localePicker.prompt "請選擇一種語言。">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "點擊&quot;連接&quot;來連上 Tor ">
+<!ENTITY torSettings.configurePrompt "如果您處於會監視 tor 網路的國家（例如埃及、中國、土耳其）或者您位於需要代理伺服器的私人網路中，請點擊「設定」來調整網路設定。">
+<!ENTITY torSettings.configure "設定">
+<!ENTITY torSettings.connect "連接">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "正在等待洋蔥路由啟動…">
+<!ENTITY torsettings.restartTor "重新啟動洋蔥路由">
+<!ENTITY torsettings.reconfigTor "重新設定">
+
+<!ENTITY torsettings.discardSettings.prompt "您已經有設定洋蔥路由的橋接器或本地端代理伺服器。&#160; 若想要直接連上洋蔥路由網路的話，必須要先移除這部份的設定。">
+<!ENTITY torsettings.discardSettings.proceed "移除設定值並且連線">
+
+<!ENTITY torsettings.optional "選用">
+
+<!ENTITY torsettings.useProxy.checkbox "使用代理服務連線到網際網路">
+<!ENTITY torsettings.useProxy.type "Proxy類型">
+<!ENTITY torsettings.useProxy.type.placeholder "選擇代理伺服器類型">
+<!ENTITY torsettings.useProxy.address "地址">
+<!ENTITY torsettings.useProxy.address.placeholder "IP 位址或主機名稱">
+<!ENTITY torsettings.useProxy.port "埠">
+<!ENTITY torsettings.useProxy.username "用戶名">
+<!ENTITY torsettings.useProxy.password "密碼">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "這台電腦通過某個只允許連接至特定連接埠的防火牆">
+<!ENTITY torsettings.firewall.allowedPorts "允許的連接埠">
+<!ENTITY torsettings.useBridges.checkbox "我的國家中 Tor 受到審查">
+<!ENTITY torsettings.useBridges.default "選擇內建的橋接">
+<!ENTITY torsettings.useBridges.default.placeholder "選擇橋接">
+<!ENTITY torsettings.useBridges.bridgeDB "從 torproject.org 請求橋接">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "輸入圖片中的文字">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "獲得新的挑戰">
+<!ENTITY torsettings.useBridges.captchaSubmit "提交">
+<!ENTITY torsettings.useBridges.custom "提供一個認識的橋接 ">
+<!ENTITY torsettings.useBridges.label "從信任的來源輸入橋接資訊">
+<!ENTITY torsettings.useBridges.placeholder "輸入地址:連接埠 (一行一個)">
+
+<!ENTITY torsettings.copyLog "將洋蔥路由的訊息記錄複製到剪貼簿">
+
+<!ENTITY torsettings.proxyHelpTitle "代理協助">
+<!ENTITY torsettings.proxyHelp1 "當您透過公司、學校或者大學網路進行連線時，您可能需要一個本地代理伺服器。如果您不確定是否需要代理伺服器，請參考其他瀏覽器的網路設定或者系統網路設定。">
+
+<!ENTITY torsettings.bridgeHelpTitle "橋接中繼器之說明">
+<!ENTITY torsettings.bridgeHelp1 "橋接是未列出的中繼，可以使得 Tor 網路更難被封鎖。&#160; 不同類型的橋接使用不同方法規避審查。&#160; obfs 使您的通訊類似隨機發出的雜音，meek 使您的通訊看起來是訪問他們的服務而不是 Tor。">
+<!ENTITY torsettings.bridgeHelp2 "因為某些國家嘗試封鎖 Tor，一些特定的橋接只能在特定的國家有效，在其他地區則會失效。&#160; 如果您不確定哪些橋接在您的國家有效，請訪問 torproject.org/about/contact.html#support">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "請耐心等候，我們正在建立 Tor 網路連線。&#160; 這個過程可能需要幾分鐘的時間。">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "Tor">
+<!ENTITY torPreferences.torSettings "Tor 設定">
+<!ENTITY torPreferences.torSettingsDescription "Tor Browser 透過 Tor 網路將您的流量進行路由，而 Tor 網路是由世界上數千名志願者所支持。" >
+<!ENTITY torPreferences.learnMore "了解更多">
+<!ENTITY torPreferences.bridges "橋接器">
+<!ENTITY torPreferences.bridgesDescription "橋接能讓您在 Tor 被封鎖的地方正常存取 Tor 網路。取決於您的位置，某個橋接點可能比另一個還要好。">
+<!ENTITY torPreferences.useBridge "使用橋接">
+<!ENTITY torPreferences.requestNewBridge "請求一個新的橋接...">
+<!ENTITY torPreferences.provideBridge "提供橋接">
+<!ENTITY torPreferences.advanced "進階的">
+<!ENTITY torPreferences.advancedDescription "設定 Tor Browser 如何連線到網際網路。">
+<!ENTITY torPreferences.firewallPortsPlaceholder "逗點分隔值">
+<!ENTITY torPreferences.requestBridgeDialogTitle "請求橋接">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "正在連接到 BridgeDB，請稍候。">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "解決驗證碼來請求橋接">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "解答不正確。請再試一次。">
+<!ENTITY torPreferences.viewTorLogs "查看 Tor 紀錄。">
+<!ENTITY torPreferences.viewLogs "查看日誌…">
+<!ENTITY torPreferences.torLogsDialogTitle "Tor 記錄">

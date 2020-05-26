@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "Postavke Tor mreže">
+<!ENTITY torsettings.wizard.title.default "Spoji se na Tor">
+<!ENTITY torsettings.wizard.title.configure "Postavke Tor mreže">
+<!ENTITY torsettings.wizard.title.connecting "Uspostavljanje veze">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "Jezik Tor preglednika">
+<!ENTITY torlauncher.localePicker.prompt "Odaberi jezik">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "Za povezivanje s Torom, pritisni „Poveži se”">
+<!ENTITY torSettings.configurePrompt "Ako si u zemlji koja cenzurira Tor (kao Egipat, Kina, Turska) ili si spojen/a preko privatne mreže za koju je potreban poslužitelj, promijeni postavke mreže pritiskom na „Podesi”.">
+<!ENTITY torSettings.configure "Podesi">
+<!ENTITY torSettings.connect "Poveži se">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "Čekanje na pokretanje Tora …">
+<!ENTITY torsettings.restartTor "Ponovo pokreni Tor">
+<!ENTITY torsettings.reconfigTor "Ponovo podesi">
+
+<!ENTITY torsettings.discardSettings.prompt "Postavio/la si Tor mostove ili si upisao/la postavke lokalnog poslužitelja.&#160; Za ostvarivanje direktne veze s Tor mrežom, moraš ukloniti te postavke.">
+<!ENTITY torsettings.discardSettings.proceed "Ukloni postavke i poveži se">
+
+<!ENTITY torsettings.optional "Neobavezno">
+
+<!ENTITY torsettings.useProxy.checkbox "Koristim poslužitelja za povezivanje na internet">
+<!ENTITY torsettings.useProxy.type "Vrsta poslužitelja">
+<!ENTITY torsettings.useProxy.type.placeholder "odaberi vrstu poslužitelja">
+<!ENTITY torsettings.useProxy.address "Adresa">
+<!ENTITY torsettings.useProxy.address.placeholder "IP adresa ili ime računala">
+<!ENTITY torsettings.useProxy.port "Port">
+<!ENTITY torsettings.useProxy.username "Korisničko ime">
+<!ENTITY torsettings.useProxy.password "Lozinka">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "Ovo računalo ide kroz vatrozid koji dozvoljava veze samo s određenim portovima">
+<!ENTITY torsettings.firewall.allowedPorts "Dozvoljeni portovi">
+<!ENTITY torsettings.useBridges.checkbox "Tor je cenzuriran u mojoj zemlji">
+<!ENTITY torsettings.useBridges.default "Odaberi ugrađeni most">
+<!ENTITY torsettings.useBridges.default.placeholder "odaberi most">
+<!ENTITY torsettings.useBridges.bridgeDB "Zatraži most od torproject.org">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "Upiši znakove sa slike">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "Nabavi novi izazov">
+<!ENTITY torsettings.useBridges.captchaSubmit "Pošalji">
+<!ENTITY torsettings.useBridges.custom "Pruži mi most koji poznam">
+<!ENTITY torsettings.useBridges.label "Upiši podatke o mostu s pouzdanog izvora.">
+<!ENTITY torsettings.useBridges.placeholder "upiši adresa:port (jednu po retku)">
+
+<!ENTITY torsettings.copyLog "Kopiraj Tor zapisnik u međuspremnik">
+
+<!ENTITY torsettings.proxyHelpTitle "Pomoć poslužitelja">
+<!ENTITY torsettings.proxyHelp1 "Ako se povezuješ kroz mrežu tvrtke, škole ili sveučilišta moguće je da ćeš trebati lokalni poslužitelj.&#160;Ako ne znaš točno je li ti poslužitelj treba, pregledaj postavke interneta u jednom drugom pregledniku ili provjeri postavke mreže tvog sustava.">
+
+<!ENTITY torsettings.bridgeHelpTitle "Pomoć s mostovima">
+<!ENTITY torsettings.bridgeHelp1 "Mostovi su nenavedeni releji koji otežavaju blokiranje veza s Tor mrežom.&#160; Svaka vrsta mosta koristi drugačiju metodu kako bi se izbjegla cenzura.&#160; Obfs metode čine da tvoj promet izgleda kao slučajni šum, a meek metode čine da tvoj promet izgleda kao da se povezuje na tu uslugu, umjesto na Tor.">
+<!ENTITY torsettings.bridgeHelp2 "Budući da neke zemlje pokušavaju blokirati Tor, određeni mostovi djeluju u određenim zemljama, ali ne i u drugima.&#160;  Ako ne znaš točno koji mostovi rade u tvojoj zemlji, posjeti torproject.org/about/contact.html#support">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "Pričekaj dok uspostavljamo vezu s Tor mrežom. &#160; Ovo može potrajati nekoliko minuta.">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "Tor">
+<!ENTITY torPreferences.torSettings "Tor postavke">
+<!ENTITY torPreferences.torSettingsDescription "Tor preglednik usmjerava tvoj promet na Tor mrežu, koju pokreću tisuće volontera širom svijeta." >
+<!ENTITY torPreferences.learnMore "Saznaj više">
+<!ENTITY torPreferences.bridges "Mostovi">
+<!ENTITY torPreferences.bridgesDescription "Mostovi pomažu pristupiti Tor-mreži na mjestima gdje je Tor blokiran. Ovisno o tome gdje se nalaziš, neki mostovi rade bolje od drugih.">
+<!ENTITY torPreferences.useBridge "Koristi most">
+<!ENTITY torPreferences.requestNewBridge "Zatraži novi most …">
+<!ENTITY torPreferences.provideBridge "Pruži most">
+<!ENTITY torPreferences.advanced "Napredno">
+<!ENTITY torPreferences.advancedDescription "Podesi način povezivanja Tor preglednika na internet.">
+<!ENTITY torPreferences.firewallPortsPlaceholder "Zarezom odvojene vrijednosti">
+<!ENTITY torPreferences.requestBridgeDialogTitle "Zatraži most">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "Kontaktiranje baze podataka BridgeDB. Pričekaj.">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "Riješi CAPTCHA za traženje mosta.">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "Rješenje nije ispravno. Pokušaj ponovo.">
+<!ENTITY torPreferences.viewTorLogs "Pogledaj log-zapise Tora.">
+<!ENTITY torPreferences.viewLogs "Pogledaj log-zapise …">
+<!ENTITY torPreferences.torLogsDialogTitle "Log-zapisi Tora">

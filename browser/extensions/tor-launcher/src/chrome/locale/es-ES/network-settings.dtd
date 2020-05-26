@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "Configuración de la red Tor">
+<!ENTITY torsettings.wizard.title.default "Conectar a Tor">
+<!ENTITY torsettings.wizard.title.configure "Configuración de la red Tor">
+<!ENTITY torsettings.wizard.title.connecting "Estableciendo una conexión.">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "Idioma del Tor Browser">
+<!ENTITY torlauncher.localePicker.prompt "Por favor, seleccione un idioma.">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "Pincha en &quot;Connect&quot; para conectar con Tor">
+<!ENTITY torSettings.configurePrompt "Pulsa &quot;Configurar&quot; para ajustar la configuración de red si estás en un país que censura Tor (como Egipto, China, Turquía) o si estás conectando desde una red privada que requiera un proxy.">
+<!ENTITY torSettings.configure "Configurar">
+<!ENTITY torSettings.connect "Conectar">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "Esperando a que Tor se inicie...">
+<!ENTITY torsettings.restartTor "Reiniciar Tor">
+<!ENTITY torsettings.reconfigTor "Configurar de nuevo">
+
+<!ENTITY torsettings.discardSettings.prompt "Has configurado los puentes de red (bridges) de Tor o has introducido los ajustes para proxy (interpuesto) local.&#160; Para realizar una conexión directa a la red Tor, estos ajustes se deben borrar.">
+<!ENTITY torsettings.discardSettings.proceed "Elimina ajustes y conecta">
+
+<!ENTITY torsettings.optional "Opcional">
+
+<!ENTITY torsettings.useProxy.checkbox "Utilizo un proxy para conectar a Internet.">
+<!ENTITY torsettings.useProxy.type "Tipo de proxy">
+<!ENTITY torsettings.useProxy.type.placeholder "seleccionar un tipo de proxy">
+<!ENTITY torsettings.useProxy.address "Dirección">
+<!ENTITY torsettings.useProxy.address.placeholder "Dirección IP o nombre de máquina (host)">
+<!ENTITY torsettings.useProxy.port "Puerto">
+<!ENTITY torsettings.useProxy.username "Nombre de usuario">
+<!ENTITY torsettings.useProxy.password "Contraseña">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "Esta computadora va a través de un cortafuegos(firewall) que sólo permite conexiones a ciertos puertos">
+<!ENTITY torsettings.firewall.allowedPorts "Puertos permitidos">
+<!ENTITY torsettings.useBridges.checkbox "En mi país se censura a Tor">
+<!ENTITY torsettings.useBridges.default "Seleccionar un puente construido">
+<!ENTITY torsettings.useBridges.default.placeholder "seleccionar un puente">
+<!ENTITY torsettings.useBridges.bridgeDB "Solicitar un puente de torproject.org">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "Introducir los caracteres de la imagen">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "Obtener un nuevo reto">
+<!ENTITY torsettings.useBridges.captchaSubmit "Enviar">
+<!ENTITY torsettings.useBridges.custom "Proporcionar un puente que conozco">
+<!ENTITY torsettings.useBridges.label "Ingresa la información del puente desde una fuente confiable.">
+<!ENTITY torsettings.useBridges.placeholder "escribe dirección:puerto (uno por línea)">
+
+<!ENTITY torsettings.copyLog "Copiar el registro de mensajes(log) de Tor al portapapeles">
+
+<!ENTITY torsettings.proxyHelpTitle "Ayuda ">
+<!ENTITY torsettings.proxyHelp1 "Es posible que se necesite un proxy local al conectarse a través de una red de una empresa, escuela o universidad.&#160;Si no estás seguro de si se necesita o no un proxy, consulta la configuración de Internet en otro navegador o comprueba la configuración de red de tu sistema.">
+
+<!ENTITY torsettings.bridgeHelpTitle "Ayuda de repetidores puente ('bridge relays')">
+<!ENTITY torsettings.bridgeHelp1 "Los puentes son transmisores no listados que dificultan el bloqueo de las conexiones a la red Tor.&#160; Cada tipo de puente utiliza un método diferente para evitar la censura.&#160; Los obfs hacen que tu tráfico parezca ruido aleatorio, y los modestos hacen que tu tráfico parezca que se está conectando a ese servicio en lugar de a Tor.">
+<!ENTITY torsettings.bridgeHelp2 "Debido a la forma en que ciertos países intentan bloquear a Tor, ciertos puentes funcionan en algunos países pero no en otros. Si no estás segura de qué puentes funcionan en tu país, visita torproject.org/about/contact.html#support">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "Espera mientras establecemos una conexión a la red Tor.&#160; Esto puede durar varios minutos.">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "Tor">
+<!ENTITY torPreferences.torSettings "Configuración de Tor">
+<!ENTITY torPreferences.torSettingsDescription "El Navegador Tor enruta tu tráfico a través de la Red Tor, mantenida por miles de voluntarios alrededor del mundo." >
+<!ENTITY torPreferences.learnMore "Más información">
+<!ENTITY torPreferences.bridges "Puentes">
+<!ENTITY torPreferences.bridgesDescription "Los puentes te ayudan a acceder a la Red Tor en lugares donde Tor está bloqueado. Dependiendo de dónde te encuentres, un puente puede funcionar mejor que otro.">
+<!ENTITY torPreferences.useBridge "Usa un puente">
+<!ENTITY torPreferences.requestNewBridge "Solicitar un nuevo puente...">
+<!ENTITY torPreferences.provideBridge "Proporcionar un puente">
+<!ENTITY torPreferences.advanced "Avanzado">
+<!ENTITY torPreferences.advancedDescription "Configura cómo el Navegador Tor se conecta a Internet.">
+<!ENTITY torPreferences.firewallPortsPlaceholder "Valores separados por comas">
+<!ENTITY torPreferences.requestBridgeDialogTitle "Solicitar Puente">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "Contactando con BridgeDB. Espera por favor.">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "Resuelve el CAPTCHA para solicitar un puente.">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "La solución no es correcta. Por favor, inténtalo de nuevo.">
+<!ENTITY torPreferences.viewTorLogs "Ver los registros de Tor.">
+<!ENTITY torPreferences.viewLogs "Ver registros…">
+<!ENTITY torPreferences.torLogsDialogTitle "Registros de Tor">

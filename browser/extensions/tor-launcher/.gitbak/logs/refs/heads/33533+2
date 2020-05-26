@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 32603f686e3d006d60633a52d0cf9f6cd6cdc2ef Alex Catarineu <acat@torproject.org> 1588780169 +0200	branch: Created from refs/remotes/origin/33533+2
+32603f686e3d006d60633a52d0cf9f6cd6cdc2ef 03a575f07ba525458e1804f20a2a515a97da7813 Alex Catarineu <acat@torproject.org> 1588780189 +0200	cherry-pick: Bug 33906: Fix Tor-Launcher issues for Firefox 75

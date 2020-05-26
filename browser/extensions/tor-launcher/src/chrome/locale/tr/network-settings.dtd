@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "Tor Ağı Ayarları">
+<!ENTITY torsettings.wizard.title.default "Tor Ağına Bağlan">
+<!ENTITY torsettings.wizard.title.configure "Tor Ağı Ayarları">
+<!ENTITY torsettings.wizard.title.connecting "Bağlantı kuruluyor">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "Tor Browser Dili">
+<!ENTITY torlauncher.localePicker.prompt "Lütfen bir dil seçin.">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "Tor ağına bağlanmak için &quot;Bağlan&quot; üzerine tıklayın.">
+<!ENTITY torSettings.configurePrompt "Tor ağını engelleyen bir ülkedeyseniz (Çin, İran, Suriye gibi) ya da vekil sunucu kullanılması gereken özel bir ağdan bağlanıyorsanız, ağ ayarlarını yapmak için &quot;Yapılandır&quot; üzerine tıklayın.">
+<!ENTITY torSettings.configure "Yapılandır">
+<!ENTITY torSettings.connect "Bağlan">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "Tor uygulamasının başlaması bekleniyor…">
+<!ENTITY torsettings.restartTor "Tor Uygulamasını Yeniden Başlat">
+<!ENTITY torsettings.reconfigTor "Yeniden Yapılandır">
+
+<!ENTITY torsettings.discardSettings.prompt "Tor Köprülerini yapılandırdınız ya da yerel vekil sunucu ayarlarını yazdınız.&#160; Tor ağına doğrudan bağlanmak için bu ayarlar kaldırılmalıdır.">
+<!ENTITY torsettings.discardSettings.proceed "Ayarları Kaldır ve Bağlan">
+
+<!ENTITY torsettings.optional "İsteğe bağlı">
+
+<!ENTITY torsettings.useProxy.checkbox "Internete erişmek için vekil sunucu kullanıyorum">
+<!ENTITY torsettings.useProxy.type "Vekil Sunucu Türü">
+<!ENTITY torsettings.useProxy.type.placeholder "vekil sunucu türünü seçin">
+<!ENTITY torsettings.useProxy.address "Adres">
+<!ENTITY torsettings.useProxy.address.placeholder "IP adresi ya da sunucu adı">
+<!ENTITY torsettings.useProxy.port "Kapı No">
+<!ENTITY torsettings.useProxy.username "Kullanıcı Adı">
+<!ENTITY torsettings.useProxy.password "Parola">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "Bu bilgisayarda yalnız belirli kapı numaralarından bağlantı kurulmasına izin veren bir güvenlik duvarı bulunuyor">
+<!ENTITY torsettings.firewall.allowedPorts "Kullanılabilecek Kapı Numaraları">
+<!ENTITY torsettings.useBridges.checkbox "Bulunduğum ülkede Tor ağı engelleniyor">
+<!ENTITY torsettings.useBridges.default "Hazır köprülerden seçilsin">
+<!ENTITY torsettings.useBridges.default.placeholder "bir köprü seçin">
+<!ENTITY torsettings.useBridges.bridgeDB "torproject.org Üzerinden Köprü İstensin">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "Görseldeki karakterleri yazın">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "Yeni bir güvenlik kodu isteyin">
+<!ENTITY torsettings.useBridges.captchaSubmit "Gönder">
+<!ENTITY torsettings.useBridges.custom "Bildiğim Bir Köprüyü Kullanacağım">
+<!ENTITY torsettings.useBridges.label "Güvenli bir kaynaktan aldığınız köprü bilgilerini yazın.">
+<!ENTITY torsettings.useBridges.placeholder "adres:kapı numarası şeklinde yazın (her satıra bir tane)">
+
+<!ENTITY torsettings.copyLog "Tor Günlüğünü Panoya Kopyala">
+
+<!ENTITY torsettings.proxyHelpTitle "Vekil Sunucu Yardımı">
+<!ENTITY torsettings.proxyHelp1 "Bir kurum, okul ya da üniversite ağı aracılığıyla bağlanırken yerel bir vekil sunucu gereklidir.&#160;Bir vekil sunucu kullanıp kullanmamanız gerektiğinden emin değilseniz, bilgisayarınızın ağa bağlantı şeklini anlamak için aynı ağdaki başka bir web tarayıcısının İnternet ayarlarına bakın ya da sisteminizin ağ ayarlarını gözden geçirin.">
+
+<!ENTITY torsettings.bridgeHelpTitle "Köprü Aktarıcı Yardımı">
+<!ENTITY torsettings.bridgeHelp1 "Köprüler, Tor ağına bağlantıların engellenmesini zorlaştıran ve herkese açık olarak listelenmeyen aktarıcılardır. &#160;Her köprü türü engellemeden kaçınmak için farklı bir yöntem kullanır.&#160; Obfs köprüleri, ağ trafiğinizi rastgele gürültü gibi gösterir. Meek köprüleri ise, trafiğinizi Tor ağı yerine o hizmete bağlanmış gibi gösterir.">
+<!ENTITY torsettings.bridgeHelp2 "Bazı ülkelerin Tor ağını engellemeye çalışması nedeniyle bazı köprüler bazı ülkelerde çalışırken başka ülkelerde çalışmayabilir.&#160; Ülkenizde hangi köprülerin çalışacağından emin değilseniz, torproject.org/about/contact.html#support adresine bakabilirsiniz.">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "Lütfen Tor ağı ile bağlantı kurulurken bekleyin. Bu işlem birkaç dakika sürebilir.">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "Tor">
+<!ENTITY torPreferences.torSettings "Tor Ayarları">
+<!ENTITY torPreferences.torSettingsDescription "Tor Browser sizi dünyada binlerce gönüllü tarafından işletilen Tor ağına bağlar." >
+<!ENTITY torPreferences.learnMore "Ayrıntılı Bilgi Alın">
+<!ENTITY torPreferences.bridges "Köprüler">
+<!ENTITY torPreferences.bridgesDescription "Köprüler Tor bağlantısının engellendiği yerlerden Tor ağına erişmek için kullanılır.. Bulunduğunuz konuma göre bir köprü türü diğerinden daha uygun olabilir.">
+<!ENTITY torPreferences.useBridge "Bir köprü kullanılsın">
+<!ENTITY torPreferences.requestNewBridge "Yeni Köprü İsteğinde Bulun...">
+<!ENTITY torPreferences.provideBridge "Bir köprü adresi yazın">
+<!ENTITY torPreferences.advanced "Gelişmiş">
+<!ENTITY torPreferences.advancedDescription "Tor Browser uygulamasının İnternet bağlantısını yapılandırın.">
+<!ENTITY torPreferences.firewallPortsPlaceholder "Virgül ile ayrılmış değerler">
+<!ENTITY torPreferences.requestBridgeDialogTitle "Köprü İsteğinde Bulunun">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "Köprü veritabanına bağlanılıyor. Lütfen bekleyin.">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "Köprü isteğinde bulunmak için güvenlik kodunu çözün.">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "Çözüm doğru değil. Lütfen yeniden deneyin.">
+<!ENTITY torPreferences.viewTorLogs "Tor günlüğü kayıtlarına bakın.">
+<!ENTITY torPreferences.viewLogs "Günlüğü Görüntüle…">
+<!ENTITY torPreferences.torLogsDialogTitle "Tor Günlüğü Kayıtları">

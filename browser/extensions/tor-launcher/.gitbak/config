@@ -1,0 +1,35 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "upstream"]
+	url = https://git.torproject.org/tor-launcher.git
+	fetch = +refs/heads/*:refs/remotes/upstream/*
+[branch "master"]
+	remote = upstream
+	merge = refs/heads/master
+[remote "kathy"]
+	url = https://git.torproject.org/user/brade/tor-launcher.git
+	fetch = +refs/heads/*:refs/remotes/kathy/*
+[branch "bug28044-01"]
+	remote = kathy
+	merge = refs/heads/bug28044-01
+[branch "bug29197-01"]
+	remote = kathy
+	merge = refs/heads/bug29197-01
+[branch "bug31300-02"]
+	remote = kathy
+	merge = refs/heads/bug31300-02
+[remote "origin"]
+	url = git@github.com:acatarineu/tor-launcher.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "bug19757-01"]
+	remote = kathy
+	merge = refs/heads/bug19757-01
+[branch "33533"]
+	remote = origin
+	merge = refs/heads/33533
+[branch "33533+2"]
+	remote = origin
+	merge = refs/heads/33533+2

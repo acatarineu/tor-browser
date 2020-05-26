@@ -1,0 +1,3 @@
+0000000000000000000000000000000000000000 5e70865ddbfcd5a6fac3d0fc69762570a18d5998 Alex Catarineu <acat@torproject.org> 1568797907 +0200	branch: Created from HEAD
+5e70865ddbfcd5a6fac3d0fc69762570a18d5998 23eb6abfda6ae0af1210c3606e8390b858bbc556 Alex Catarineu <acat@torproject.org> 1568798172 +0200	commit (amend): Bug 31303: Do not launch tor in browser toolbox
+23eb6abfda6ae0af1210c3606e8390b858bbc556 810ba7e93981511765ec1be667689ae2992e8c49 Alex Catarineu <acat@torproject.org> 1568798454 +0200	commit (amend): Bug 31303: Do not launch tor in browser toolbox

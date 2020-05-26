@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "إعدادات شبكة تور">
+<!ENTITY torsettings.wizard.title.default "اتصل بتور">
+<!ENTITY torsettings.wizard.title.configure "إعدادات شبكة تور">
+<!ENTITY torsettings.wizard.title.connecting "يجري إنشاء اتصال">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "لغة متصفح تور">
+<!ENTITY torlauncher.localePicker.prompt "الرجاء اختيار لغة.">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "انقر &quot;اتصل&quot; للاتصال بتور.">
+<!ENTITY torSettings.configurePrompt "انقر &quot;اضبط&quot; لضبط إعدادات الشبكة إن كنت في بلد يحجب تور (مثل مصر، والصين، وتركيا) أو إن كنت تتصل من شبكة خاصة تتطلب وسيط.">
+<!ENTITY torSettings.configure "تكوين">
+<!ENTITY torSettings.connect "اتصل">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "في انتظار تور حتي يبدء بالعمل...">
+<!ENTITY torsettings.restartTor "أعِد تشغيل تور">
+<!ENTITY torsettings.reconfigTor "أعِد ضبط">
+
+<!ENTITY torsettings.discardSettings.prompt "ضبطت جسر تور أو أدخلت إعدادات الوسيط المحلي.&#160; لإنشاء اتصال مباشر بشبكه تور، يجب إزاله هذه الإعدادات.">
+<!ENTITY torsettings.discardSettings.proceed "ازل الاعدادات ثم اتصل">
+
+<!ENTITY torsettings.optional "اختياري">
+
+<!ENTITY torsettings.useProxy.checkbox "أستخدم وسيطا للاتصال بالإنترنت">
+<!ENTITY torsettings.useProxy.type "نوع البروكسي">
+<!ENTITY torsettings.useProxy.type.placeholder "اختر نوع الوسيط">
+<!ENTITY torsettings.useProxy.address "العنوان">
+<!ENTITY torsettings.useProxy.address.placeholder "عنوان الإنترنت IP أو اسم المضيف">
+<!ENTITY torsettings.useProxy.port "منفذ">
+<!ENTITY torsettings.useProxy.username "اسم المستخدم">
+<!ENTITY torsettings.useProxy.password "‮كلمة السّر">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "اتصال الإنترنت لهذا الكمبيوتر يمر بجدار حماية يسمح بالاتصال فقط من خلال منافذ معينة">
+<!ENTITY torsettings.firewall.allowedPorts "المنافذ المسموح بها">
+<!ENTITY torsettings.useBridges.checkbox "تور محجوب في بلدي">
+<!ENTITY torsettings.useBridges.default "اختر جسرا مُدمَجا في البرنامج">
+<!ENTITY torsettings.useBridges.default.placeholder "اختر جسرا">
+<!ENTITY torsettings.useBridges.bridgeDB "اطلب جسرا من torproject.org">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "أدخل الرموز الموجودة في الصورة">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "احصل على تحد جديد">
+<!ENTITY torsettings.useBridges.captchaSubmit "أرسل">
+<!ENTITY torsettings.useBridges.custom "أدخل عنوان جسرٍ أعرفه">
+<!ENTITY torsettings.useBridges.label "أدخل معلومات جسر من مصدر موثوق.">
+<!ENTITY torsettings.useBridges.placeholder "اكتب العنوان:المنفذ (واحد لكل سطر)">
+
+<!ENTITY torsettings.copyLog "نسخ سجل تور إلي الحافظة">
+
+<!ENTITY torsettings.proxyHelpTitle "مساعدة الوسيط">
+<!ENTITY torsettings.proxyHelp1 "قد تكون هناك حاجة إلى وسيط (proxy) محلي عند الاتصال من خلال شركة أو مدرسة أو شبكة جامعية. إذا لم تكن متأكدًا مما إذا كان الوسيط مطلوبًا أم لا، فابحث عن إعدادات الإنترنت في متصفح آخر أو تحقق من إعدادات شبكة النظام لديك.">
+
+<!ENTITY torsettings.bridgeHelpTitle "المساعدة الخاصة بالجسور المُرحلة">
+<!ENTITY torsettings.bridgeHelp1 "الجسور هي تحويلات غير مدرجة تجعل حجب الاتصالات إلى شبكة تور أصعب.&#160; كل نوع من الجسور يستخدم طريقة مختلفة لتجنب الرقابة.&#160; جسور obfs تجعل حركة معلوماتك تبدو كضجيج عشوائي، وجسور meek تجعل حركة معلوماتك تبدوا كأنها تتصل لتلك الخدمة بدلا من تور.">
+<!ENTITY torsettings.bridgeHelp2 "بسبب طريقة حظر بعض البلدان لتور، تعمل بعض الجسور في بلدان معينة لكنها لا تعمل ببعضها الآخر. إن لم تكن متأكدا بشأن أي الجسور تعمل في بلدك، فزر  torproject.org/about/contact.html#support">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "الرجاء الانتظار بينما ننشئ اتصالا لشبكة تور.&#160; قد يستغرق هذا عدة دقائق.">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "تور">
+<!ENTITY torPreferences.torSettings "إعدادات تور Tor">
+<!ENTITY torPreferences.torSettingsDescription "متصفح Tor Browser يوجه حركة بياناتك عبر شبكة تور Tor Network, التي يشغلها آلاف المتطوعون حول العالم." >
+<!ENTITY torPreferences.learnMore "إعرف/ي أكثر ">
+<!ENTITY torPreferences.bridges "الجسور">
+<!ENTITY torPreferences.bridgesDescription "تساعدك الجسور على دخول شبكة تور Tor Network في الأماكن التي تحظر تور Tor. وبالاعتماد على مكان تواجدك فإن أحد الجسور قد يعمل بشكل أفضل من غيره.  ">
+<!ENTITY torPreferences.useBridge "استخدم جِسْر">
+<!ENTITY torPreferences.requestNewBridge "اطلب جسرا جديدا…">
+<!ENTITY torPreferences.provideBridge "أدخل عنوان جِسْر">
+<!ENTITY torPreferences.advanced "متقدم">
+<!ENTITY torPreferences.advancedDescription "قم بإعداد كيفية اتصال متصفح Tor Browser بالانترنت">
+<!ENTITY torPreferences.firewallPortsPlaceholder "قيم مفصولة بالفاصلة">
+<!ENTITY torPreferences.requestBridgeDialogTitle "اطلب جسراً">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "يتصل بقاعدة بيانات الجسور BridgeDB. يرجى الانتظار.">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "حل كاباتشا لطلب جسر.">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "الحل ليس سليمًا. يُرجى إعادة المحاولة.">
+<!ENTITY torPreferences.viewTorLogs "شاهد سجلات تور Tor">
+<!ENTITY torPreferences.viewLogs "شاهد السجلات...">
+<!ENTITY torPreferences.torLogsDialogTitle "سجلات تور Tor">

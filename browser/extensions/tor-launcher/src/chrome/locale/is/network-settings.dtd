@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "Netkerfisstillingar Tor">
+<!ENTITY torsettings.wizard.title.default "Tengjast við Tor-netið">
+<!ENTITY torsettings.wizard.title.configure "Netkerfisstillingar Tor">
+<!ENTITY torsettings.wizard.title.connecting "Kem á tengingu">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "Tungumál Tor-vafra">
+<!ENTITY torlauncher.localePicker.prompt "Veldu tungumál">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "Smelltu á &quot;Tengjast&quot; til að tengjast við Tor.">
+<!ENTITY torSettings.configurePrompt "Smelltu á “Stilla” til að breyta netstillingum ef þú ert í landi sem ritskoðar umferð um Tor (svo sem Egyptalandi, Kína, Tyrklandi) eða ef þú ert að tengjast af einkaneti sem krefst þess að fara um milliþjón.">
+<!ENTITY torSettings.configure "Stilla">
+<!ENTITY torSettings.connect "Tengjast">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "Bíð eftir að Tor ræsist...">
+<!ENTITY torsettings.restartTor "Endurræsa Tor">
+<!ENTITY torsettings.reconfigTor "Endurstilla">
+
+<!ENTITY torsettings.discardSettings.prompt "Þú hefur sett upp brýr fyrir Tor eða að þú hefur farið inn í stillingar milliþjóns á kerfinu.&#160; Til að útbúa beina tengingu inn á Tor-netið, þá verður að fjarlægja þessar stillingar.">
+<!ENTITY torsettings.discardSettings.proceed "Fjarlægja stillingar og tengjast">
+
+<!ENTITY torsettings.optional "Valkvætt">
+
+<!ENTITY torsettings.useProxy.checkbox "Ég nota milliþjón (proxy) til að tengjast við internetið">
+<!ENTITY torsettings.useProxy.type "Tegund milliþjóns (proxy)">
+<!ENTITY torsettings.useProxy.type.placeholder "veldu tegund milliþjóns">
+<!ENTITY torsettings.useProxy.address "Vistfang">
+<!ENTITY torsettings.useProxy.address.placeholder "IP-vistfang eða vélarheiti">
+<!ENTITY torsettings.useProxy.port "Gátt">
+<!ENTITY torsettings.useProxy.username "Notandanafn">
+<!ENTITY torsettings.useProxy.password "Lykilorð">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "Þessi tölva tengist í gegnum eldvegg sem leyfir einungis tengingar í gegnum tilteknar gáttir">
+<!ENTITY torsettings.firewall.allowedPorts "Leyfðar gáttir">
+<!ENTITY torsettings.useBridges.checkbox "Tor er ritskoðað í landinu mínu">
+<!ENTITY torsettings.useBridges.default "Veldu innbyggða brú">
+<!ENTITY torsettings.useBridges.default.placeholder "veldu brú">
+<!ENTITY torsettings.useBridges.bridgeDB "Biðja um brú frá torproject.org">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "Settu inn stafina úr myndinni">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "Fá nýja gátu">
+<!ENTITY torsettings.useBridges.captchaSubmit "Senda inn">
+<!ENTITY torsettings.useBridges.custom "Gefa brú sem ég þekki">
+<!ENTITY torsettings.useBridges.label "Settu inn upplýsingar um brú frá aðila sem þú treystir.">
+<!ENTITY torsettings.useBridges.placeholder "settu inn vistfang:gátt (eitt á hverja línu)">
+
+<!ENTITY torsettings.copyLog "Afrita atvikaskrá Tor á klippispjald">
+
+<!ENTITY torsettings.proxyHelpTitle "Hjálp fyrir milliþjóna">
+<!ENTITY torsettings.proxyHelp1 "Hugsanlega þarf að nota staðværan milliþjón (proxy) þegar tengst er í gegnum net fyrirtækis, skóla eða stofnunar.&#160;Ef þú ert ekki viss hvort þurfi að nota milliþjón, kíktu þá á netstillingarnar í einhverjum öðrum vafra eða á uppsetningu netsins í stýrikerfinu þínu.">
+
+<!ENTITY torsettings.bridgeHelpTitle "Hjálp fyrir brúaendurvarpa">
+<!ENTITY torsettings.bridgeHelp1 "Brýr eru faldir endurvarpar sem gera erfiðara að loka á tengingar á Tor netinu.&#160; Hver tegund af brúm notar mismunandi aðferðir til að forðast ritskoðun.&#160; obfs-brýrnar láta netumferðina þína líta út sem handahófskennt suð og meek-brýr láta netumferðina þína líta út fyrir að tengjast þeirri þjónustu í staðinn fyrir Tor.">
+<!ENTITY torsettings.bridgeHelp2 "Vegna þess hvernig sum lönd reyna að loka á umferð um Tor, munu sumar brýr virka í sumum löndum en aðrar ekki.&#160; Ef þú ert ekki viss um hvaða brýr virka í landinu þínu, skaltu skoða torproject.org/about/contact.html#support">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "Bíddu aðeins á meðan tengingu er komið á við Tor-netið.&#160; Það getur tekið nokkrar mínútur.">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "tor">
+<!ENTITY torPreferences.torSettings "Stillingar Tor">
+<!ENTITY torPreferences.torSettingsDescription "Tor-vafrinn beinir umferðinni þinni um Tor-netið, sem rekið er af þúsundum sjálfboðaliða um víða veröld." >
+<!ENTITY torPreferences.learnMore "Fræðast frekar">
+<!ENTITY torPreferences.bridges "Brýr">
+<!ENTITY torPreferences.bridgesDescription "Brýr hjálpa þér við að fá aðgang að Tor-netkerfinu á stöðum þar sem lokað er á Tor. Það fer eftir því hvar þú ert hvaða brú virkar betur en einhver önnur.">
+<!ENTITY torPreferences.useBridge "Nota brú">
+<!ENTITY torPreferences.requestNewBridge "Biðja um nýja brú…">
+<!ENTITY torPreferences.provideBridge "Útvega brú">
+<!ENTITY torPreferences.advanced "Ítarlegra">
+<!ENTITY torPreferences.advancedDescription "Stilltu hvernig Tor-vafrinn tengist við internetið.">
+<!ENTITY torPreferences.firewallPortsPlaceholder "Gildi aðgreind með kommum">
+<!ENTITY torPreferences.requestBridgeDialogTitle "Biðja um brú">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "Tengist BridgeDB. Bíddu aðeins.">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "Leystu CAPTCHA-þrautina til að biðja um brú.">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "Þessi lausn er ekki rétt. Reyndu aftur.">
+<!ENTITY torPreferences.viewTorLogs "Skoða atvikaskrár Tor.">
+<!ENTITY torPreferences.viewLogs "Skoða atvikaskrár…">
+<!ENTITY torPreferences.torLogsDialogTitle "Tor atvikaskrá (log)">

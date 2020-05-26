@@ -1,0 +1,71 @@
+0000000000000000000000000000000000000000 4e282ad1b27b7f71000b18f98ef934122f97049d Alex Catarineu <acatarineu@mailbox.org> 1554027992 +0200	clone: from https://git.torproject.org/tor-launcher.git
+4e282ad1b27b7f71000b18f98ef934122f97049d 2dd09cb68db2b267cd12db7ce542406791fd6ef7 Alex Catarineu <acat@torproject.org> 1557226999 +0200	checkout: moving from master to bug28044-01
+2dd09cb68db2b267cd12db7ce542406791fd6ef7 4e282ad1b27b7f71000b18f98ef934122f97049d Alex Catarineu <acat@torproject.org> 1557826734 +0200	checkout: moving from bug28044-01 to master
+4e282ad1b27b7f71000b18f98ef934122f97049d 864170b5c1e0626dbfe3707d48037010596c42e5 Alex Catarineu <acat@torproject.org> 1557826743 +0200	pull origin master: Fast-forward
+864170b5c1e0626dbfe3707d48037010596c42e5 cf26f0d0bd5b1e225ca0dd1c95c8f1c0d33663ea Alex Catarineu <acat@torproject.org> 1564666065 +0200	checkout: moving from master to bug29197-01
+cf26f0d0bd5b1e225ca0dd1c95c8f1c0d33663ea 1af54380f289426fea9dfa24c4fd6cf171046723 Alex Catarineu <acat@torproject.org> 1564776190 +0200	checkout: moving from bug29197-01 to bug31300-02
+1af54380f289426fea9dfa24c4fd6cf171046723 864170b5c1e0626dbfe3707d48037010596c42e5 Alex Catarineu <acat@torproject.org> 1568735529 +0200	checkout: moving from bug31300-02 to master
+864170b5c1e0626dbfe3707d48037010596c42e5 784dbc8bc01ff8cd3d510c6429225d4d5232fb96 Alex Catarineu <acat@torproject.org> 1568735549 +0200	pull origin master: Fast-forward
+784dbc8bc01ff8cd3d510c6429225d4d5232fb96 784dbc8bc01ff8cd3d510c6429225d4d5232fb96 Alex Catarineu <acat@torproject.org> 1568739079 +0200	checkout: moving from master to 31303
+784dbc8bc01ff8cd3d510c6429225d4d5232fb96 5e70865ddbfcd5a6fac3d0fc69762570a18d5998 Alex Catarineu <acat@torproject.org> 1568794740 +0200	commit: Bug 31303: Do not launch tor in browser toolbox
+5e70865ddbfcd5a6fac3d0fc69762570a18d5998 5e70865ddbfcd5a6fac3d0fc69762570a18d5998 Alex Catarineu <acat@torproject.org> 1568797907 +0200	checkout: moving from 31303 to 31303+1
+5e70865ddbfcd5a6fac3d0fc69762570a18d5998 23eb6abfda6ae0af1210c3606e8390b858bbc556 Alex Catarineu <acat@torproject.org> 1568798172 +0200	commit (amend): Bug 31303: Do not launch tor in browser toolbox
+23eb6abfda6ae0af1210c3606e8390b858bbc556 810ba7e93981511765ec1be667689ae2992e8c49 Alex Catarineu <acat@torproject.org> 1568798454 +0200	commit (amend): Bug 31303: Do not launch tor in browser toolbox
+810ba7e93981511765ec1be667689ae2992e8c49 784dbc8bc01ff8cd3d510c6429225d4d5232fb96 Alex Catarineu <acat@torproject.org> 1572543437 +0100	checkout: moving from 31303+1 to master
+784dbc8bc01ff8cd3d510c6429225d4d5232fb96 dd8147ceed102f93f246e67c91dcc36139451c8b Alex Catarineu <acat@torproject.org> 1572543441 +0100	pull upstream master: Fast-forward
+dd8147ceed102f93f246e67c91dcc36139451c8b c3f062c5888074cd6e2c3801353106d04f22e95a Alex Catarineu <acat@torproject.org> 1580220958 +0100	checkout: moving from master to bug19757-01
+c3f062c5888074cd6e2c3801353106d04f22e95a dd8147ceed102f93f246e67c91dcc36139451c8b Alex Catarineu <acat@torproject.org> 1582201124 +0100	checkout: moving from bug19757-01 to master
+dd8147ceed102f93f246e67c91dcc36139451c8b 3a38a607d4a5aabc8be29f9d57fa074cacc4c006 Alex Catarineu <acat@torproject.org> 1582201128 +0100	pull upstream master: Fast-forward
+3a38a607d4a5aabc8be29f9d57fa074cacc4c006 2b1424d1a4439e74366f21c0f23d71c36380cf95 Alex Catarineu <acat@torproject.org> 1583426219 +0100	pull upstream master: Fast-forward
+2b1424d1a4439e74366f21c0f23d71c36380cf95 866783776051ee6c1aa1884a0108cc7c460c2b86 Alex Catarineu <acat@torproject.org> 1586359374 +0200	checkout: moving from master to 33533
+866783776051ee6c1aa1884a0108cc7c460c2b86 866783776051ee6c1aa1884a0108cc7c460c2b86 Alex Catarineu <acat@torproject.org> 1586429391 +0200	checkout: moving from 33533 to 33533+1
+866783776051ee6c1aa1884a0108cc7c460c2b86 2b1424d1a4439e74366f21c0f23d71c36380cf95 Alex Catarineu <acat@torproject.org> 1586429501 +0200	reset: moving to HEAD~1
+2b1424d1a4439e74366f21c0f23d71c36380cf95 fa4d2b4c4a0b51def6f861be266bcd3059b0708b Alex Catarineu <acat@torproject.org> 1586429607 +0200	commit: Rename xul files to xhtml
+fa4d2b4c4a0b51def6f861be266bcd3059b0708b ec7509b187996e2903324b0f412b5012d3975d6e Alex Catarineu <acat@torproject.org> 1586430327 +0200	commit: Fix usages of createTransport API
+ec7509b187996e2903324b0f412b5012d3975d6e 83ceea2d8adf3e06c4e953ac1c440aa752817128 Alex Catarineu <acat@torproject.org> 1586431420 +0200	commit: Bug 32174: replace XUL <textbox> with <html:input>
+83ceea2d8adf3e06c4e953ac1c440aa752817128 c5b949e7577456ea7f0c5bc16ee01213c4591e36 Alex Catarineu <acat@torproject.org> 1586431450 +0200	commit (amend): Bug 32174: replace XUL <textbox> with <html:input>
+c5b949e7577456ea7f0c5bc16ee01213c4591e36 fa4d2b4c4a0b51def6f861be266bcd3059b0708b Alex Catarineu <acat@torproject.org> 1586457779 +0200	rebase (start): checkout HEAD~5
+fa4d2b4c4a0b51def6f861be266bcd3059b0708b ec7509b187996e2903324b0f412b5012d3975d6e Alex Catarineu <acat@torproject.org> 1586457780 +0200	rebase: fast-forward
+ec7509b187996e2903324b0f412b5012d3975d6e 39438ac9050b078d6b63eb62e13eae7459b76c77 Alex Catarineu <acat@torproject.org> 1586457780 +0200	rebase (reword): Bug 33862: Fix usages of createTransport API
+39438ac9050b078d6b63eb62e13eae7459b76c77 5209d5c8653ae6e11e2b8c46313b861137684795 Alex Catarineu <acat@torproject.org> 1586457793 +0200	rebase (pick): Bug 32174: replace XUL <textbox> with <html:input>
+5209d5c8653ae6e11e2b8c46313b861137684795 5209d5c8653ae6e11e2b8c46313b861137684795 Alex Catarineu <acat@torproject.org> 1586457793 +0200	rebase (finish): returning to refs/heads/33533+1
+5209d5c8653ae6e11e2b8c46313b861137684795 2b1424d1a4439e74366f21c0f23d71c36380cf95 Alex Catarineu <acat@torproject.org> 1586779739 +0200	rebase (start): checkout HEAD~5
+2b1424d1a4439e74366f21c0f23d71c36380cf95 fa4d2b4c4a0b51def6f861be266bcd3059b0708b Alex Catarineu <acat@torproject.org> 1586779739 +0200	rebase: fast-forward
+fa4d2b4c4a0b51def6f861be266bcd3059b0708b 0bd09322f4af1b36e9ee60411a9fae608132d92a Alex Catarineu <acat@torproject.org> 1586779739 +0200	rebase (reword): Bug 33890: Rename xul files to xhtml
+0bd09322f4af1b36e9ee60411a9fae608132d92a c6a2801b87b0d04fc58f0d47005ce71971b6d41f Alex Catarineu <acat@torproject.org> 1586779746 +0200	rebase (pick): Bug 33862: Fix usages of createTransport API
+c6a2801b87b0d04fc58f0d47005ce71971b6d41f f85556836b5cbda80e1f9bc5fff49da0e7d5a980 Alex Catarineu <acat@torproject.org> 1586779746 +0200	rebase (pick): Bug 32174: replace XUL <textbox> with <html:input>
+f85556836b5cbda80e1f9bc5fff49da0e7d5a980 f85556836b5cbda80e1f9bc5fff49da0e7d5a980 Alex Catarineu <acat@torproject.org> 1586779746 +0200	rebase (finish): returning to refs/heads/33533+1
+f85556836b5cbda80e1f9bc5fff49da0e7d5a980 f85556836b5cbda80e1f9bc5fff49da0e7d5a980 Alex Catarineu <acat@torproject.org> 1586965576 +0200	checkout: moving from 33533+1 to 33533+2
+f85556836b5cbda80e1f9bc5fff49da0e7d5a980 f85556836b5cbda80e1f9bc5fff49da0e7d5a980 Alex Catarineu <acat@torproject.org> 1586965640 +0200	reset: moving to HEAD
+f85556836b5cbda80e1f9bc5fff49da0e7d5a980 2b1424d1a4439e74366f21c0f23d71c36380cf95 Alex Catarineu <acat@torproject.org> 1586965655 +0200	rebase (start): checkout HEAD~5
+2b1424d1a4439e74366f21c0f23d71c36380cf95 0bd09322f4af1b36e9ee60411a9fae608132d92a Alex Catarineu <acat@torproject.org> 1586965655 +0200	rebase: fast-forward
+0bd09322f4af1b36e9ee60411a9fae608132d92a de405aee1a4e5c848905b9f52bccc2764cdbb8c7 Alex Catarineu <acat@torproject.org> 1586965666 +0200	rebase (continue): Bug 33890: Rename xul files to xhtml
+de405aee1a4e5c848905b9f52bccc2764cdbb8c7 c7b35efb2a753d1a9e2cb119c780b5679bab7ca6 Alex Catarineu <acat@torproject.org> 1586965667 +0200	rebase (pick): Bug 33862: Fix usages of createTransport API
+c7b35efb2a753d1a9e2cb119c780b5679bab7ca6 32603f686e3d006d60633a52d0cf9f6cd6cdc2ef Alex Catarineu <acat@torproject.org> 1586965667 +0200	rebase (pick): Bug 32174: replace XUL <textbox> with <html:input>
+32603f686e3d006d60633a52d0cf9f6cd6cdc2ef 32603f686e3d006d60633a52d0cf9f6cd6cdc2ef Alex Catarineu <acat@torproject.org> 1586965667 +0200	rebase (finish): returning to refs/heads/33533+2
+32603f686e3d006d60633a52d0cf9f6cd6cdc2ef f85556836b5cbda80e1f9bc5fff49da0e7d5a980 Alex Catarineu <acat@torproject.org> 1588779937 +0200	checkout: moving from 33533+2 to 33533+1
+f85556836b5cbda80e1f9bc5fff49da0e7d5a980 13028562a860cee881fc26c932d0a6bbede1a22e Alex Catarineu <acat@torproject.org> 1588779949 +0200	cherry-pick: Bug 33906: Fix Tor-Launcher issues for Firefox 75
+13028562a860cee881fc26c932d0a6bbede1a22e 32603f686e3d006d60633a52d0cf9f6cd6cdc2ef Alex Catarineu <acat@torproject.org> 1588779968 +0200	checkout: moving from 33533+1 to 33533+2
+32603f686e3d006d60633a52d0cf9f6cd6cdc2ef 13028562a860cee881fc26c932d0a6bbede1a22e Alex Catarineu <acat@torproject.org> 1588779980 +0200	checkout: moving from 33533+2 to 33533+1
+13028562a860cee881fc26c932d0a6bbede1a22e 32603f686e3d006d60633a52d0cf9f6cd6cdc2ef Alex Catarineu <acat@torproject.org> 1588779985 +0200	checkout: moving from 33533+1 to 33533+2
+32603f686e3d006d60633a52d0cf9f6cd6cdc2ef 32603f686e3d006d60633a52d0cf9f6cd6cdc2ef Alex Catarineu <acat@torproject.org> 1588779989 +0200	checkout: moving from 33533+2 to 33533+1
+32603f686e3d006d60633a52d0cf9f6cd6cdc2ef ca264b76bf5316d9d4e1c0feff82cdc2d873fad2 Alex Catarineu <acat@torproject.org> 1588779993 +0200	cherry-pick: Bug 33906: Fix Tor-Launcher issues for Firefox 75
+ca264b76bf5316d9d4e1c0feff82cdc2d873fad2 32603f686e3d006d60633a52d0cf9f6cd6cdc2ef Alex Catarineu <acat@torproject.org> 1588780065 +0200	checkout: moving from 33533+1 to 33533+2
+32603f686e3d006d60633a52d0cf9f6cd6cdc2ef 13028562a860cee881fc26c932d0a6bbede1a22e Alex Catarineu <acat@torproject.org> 1588780071 +0200	checkout: moving from 33533+2 to 33533+1
+13028562a860cee881fc26c932d0a6bbede1a22e 32603f686e3d006d60633a52d0cf9f6cd6cdc2ef Alex Catarineu <acat@torproject.org> 1588780169 +0200	checkout: moving from 33533+1 to 33533+2
+32603f686e3d006d60633a52d0cf9f6cd6cdc2ef 03a575f07ba525458e1804f20a2a515a97da7813 Alex Catarineu <acat@torproject.org> 1588780189 +0200	cherry-pick: Bug 33906: Fix Tor-Launcher issues for Firefox 75
+03a575f07ba525458e1804f20a2a515a97da7813 03a575f07ba525458e1804f20a2a515a97da7813 Alex Catarineu <acat@torproject.org> 1588780226 +0200	checkout: moving from 33533+2 to 33533+1
+03a575f07ba525458e1804f20a2a515a97da7813 f85556836b5cbda80e1f9bc5fff49da0e7d5a980 Alex Catarineu <acat@torproject.org> 1588780341 +0200	checkout: moving from 33533+1 to f85556836b5cbda80e1f9bc5fff49da0e7d5a980
+f85556836b5cbda80e1f9bc5fff49da0e7d5a980 f85556836b5cbda80e1f9bc5fff49da0e7d5a980 Alex Catarineu <acat@torproject.org> 1588780349 +0200	checkout: moving from f85556836b5cbda80e1f9bc5fff49da0e7d5a980 to 32174
+f85556836b5cbda80e1f9bc5fff49da0e7d5a980 03a575f07ba525458e1804f20a2a515a97da7813 Alex Catarineu <acat@torproject.org> 1588780455 +0200	checkout: moving from 32174 to 33533+1
+03a575f07ba525458e1804f20a2a515a97da7813 03a575f07ba525458e1804f20a2a515a97da7813 Alex Catarineu <acat@torproject.org> 1589532069 +0200	checkout: moving from 33533+1 to 33533+1_testfix
+03a575f07ba525458e1804f20a2a515a97da7813 9aefa8b1ae3a9671bade48e7b6f8b6826e7ee3f4 Alex Catarineu <acat@torproject.org> 1589533409 +0200	cherry-pick: Bug 34164: Tor Launcher deadlocks during startup (Firefox 77)
+9aefa8b1ae3a9671bade48e7b6f8b6826e7ee3f4 8215c59e09516e141f695dea24a0570197dbb529 Alex Catarineu <acat@torproject.org> 1589536145 +0200	cherry-pick: Bug 34206: Tor Launcher button labels are missing (Firefox 76)
+8215c59e09516e141f695dea24a0570197dbb529 7ce65a542bce4997ee7a9ca9d4ea838411bc7b69 Alex Catarineu <acat@torproject.org> 1589536299 +0200	rebase (start): checkout upstream/master
+7ce65a542bce4997ee7a9ca9d4ea838411bc7b69 b57c8529c9f3ec5795ba1df986da9e75014726b2 Alex Catarineu <acat@torproject.org> 1589536299 +0200	rebase (pick): Bug 33890: Rename xul files to xhtml
+b57c8529c9f3ec5795ba1df986da9e75014726b2 2daaeaf02ce3fbce8adb6b499b6b7ea824361306 Alex Catarineu <acat@torproject.org> 1589536299 +0200	rebase (pick): Bug 33862: Fix usages of createTransport API
+2daaeaf02ce3fbce8adb6b499b6b7ea824361306 611103a8b9dc8c64aa82c59d417f196ad3f3604a Alex Catarineu <acat@torproject.org> 1589536299 +0200	rebase (pick): Bug 32174: replace XUL <textbox> with <html:input>
+611103a8b9dc8c64aa82c59d417f196ad3f3604a 906d0d9cef5946a8d5aba6683c254e31df05f438 Alex Catarineu <acat@torproject.org> 1589536299 +0200	rebase (pick): Bug 33906: Fix Tor-Launcher issues for Firefox 75
+906d0d9cef5946a8d5aba6683c254e31df05f438 44d0963e9c2a3d1695217fb7fc71b5ebe991a26a Alex Catarineu <acat@torproject.org> 1589536299 +0200	rebase (pick): Bug 34164: Tor Launcher deadlocks during startup (Firefox 77)
+44d0963e9c2a3d1695217fb7fc71b5ebe991a26a c925354a2d8c5cab1042213b1be122c0e002caab Alex Catarineu <acat@torproject.org> 1589536299 +0200	rebase (pick): Bug 34206: Tor Launcher button labels are missing (Firefox 76)
+c925354a2d8c5cab1042213b1be122c0e002caab c925354a2d8c5cab1042213b1be122c0e002caab Alex Catarineu <acat@torproject.org> 1589536299 +0200	rebase (finish): returning to refs/heads/33533+1_testfix

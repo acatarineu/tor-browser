@@ -1,0 +1,4 @@
+0000000000000000000000000000000000000000 03a575f07ba525458e1804f20a2a515a97da7813 Alex Catarineu <acat@torproject.org> 1589532069 +0200	branch: Created from HEAD
+03a575f07ba525458e1804f20a2a515a97da7813 9aefa8b1ae3a9671bade48e7b6f8b6826e7ee3f4 Alex Catarineu <acat@torproject.org> 1589533409 +0200	cherry-pick: Bug 34164: Tor Launcher deadlocks during startup (Firefox 77)
+9aefa8b1ae3a9671bade48e7b6f8b6826e7ee3f4 8215c59e09516e141f695dea24a0570197dbb529 Alex Catarineu <acat@torproject.org> 1589536145 +0200	cherry-pick: Bug 34206: Tor Launcher button labels are missing (Firefox 76)
+8215c59e09516e141f695dea24a0570197dbb529 c925354a2d8c5cab1042213b1be122c0e002caab Alex Catarineu <acat@torproject.org> 1589536299 +0200	rebase (finish): refs/heads/33533+1_testfix onto 7ce65a542bce4997ee7a9ca9d4ea838411bc7b69

@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "Tor-ის ქსელის პარამეტრები">
+<!ENTITY torsettings.wizard.title.default "Tor-თან დაკავშირება">
+<!ENTITY torsettings.wizard.title.configure "Tor-ის ქსელის პარამეტრები">
+<!ENTITY torsettings.wizard.title.connecting "კავშირის დამყარება">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "Tor-ბრაუზერის ენა">
+<!ENTITY torlauncher.localePicker.prompt "გთხოვთ, აირჩიოთ ენა.">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "Tor-თან დასაკავშირებლად დააწკაპეთ „დაკავშირებაზე“.">
+<!ENTITY torSettings.configurePrompt "დააწკაპეთ „გამართვაზე“ ქსელის სათანადო პარამეტრების შესარჩევად, თუ ისეთ ქვეყანაში იმყოფებით, სადაც შეზღუდულია Tor (ასეთებია ეგვიპტე, ჩინეთი, თურქეთი) ან თუ ისეთი კერძო ქსელიდან ცდილობთ დაკავშირებას, რომელიც საჭიროებს პროქსის.">
+<!ENTITY torSettings.configure "გამართვა">
+<!ENTITY torSettings.connect "დაკავშირება">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "ელოდება Tor-ს გასაშვებად...">
+<!ENTITY torsettings.restartTor "Tor-ის ხელახლა გაშვება">
+<!ENTITY torsettings.reconfigTor "ხელახლა გამართვა">
+
+<!ENTITY torsettings.discardSettings.prompt "თქვენ გამართული გაქვთ Tor-ის გადამცემი ხიდები ან მითითებული გაქვთ ადგილობრივი პროქსის პარამეტრები.&#160; Tor-ქსელთან პირდაპირ დასაკავშირებლად, საჭიროა ამ პარამეტრების მოცილება.">
+<!ENTITY torsettings.discardSettings.proceed "პარამეტრების მოცილება და დაკავშირება">
+
+<!ENTITY torsettings.optional "არასავალდებულო">
+
+<!ENTITY torsettings.useProxy.checkbox "ინტერნეტთან დასაკავშირებლად პროქსის ვიყენებ">
+<!ENTITY torsettings.useProxy.type "პროქსის სახეობა">
+<!ENTITY torsettings.useProxy.type.placeholder "მიუთითეთ პროქსის სახეობა">
+<!ENTITY torsettings.useProxy.address "მისამართი">
+<!ENTITY torsettings.useProxy.address.placeholder "IP-მისამართი ან დასახელება">
+<!ENTITY torsettings.useProxy.port "პორტი">
+<!ENTITY torsettings.useProxy.username "მეტსახელი">
+<!ENTITY torsettings.useProxy.password "პაროლი">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "კომპიუტერი ინტერნეტს უკავშირდება ქსელის ფარის გავლით, რომელშიც მხოლოდ ცალკეული პორტებია დაშვებული">
+<!ENTITY torsettings.firewall.allowedPorts "დაშვებული პორტები">
+<!ENTITY torsettings.useBridges.checkbox "Tor შეზღუდულია ჩემს ქვეყანაში">
+<!ENTITY torsettings.useBridges.default "ჩაშენებული გადამცემი ხიდის მითითება">
+<!ENTITY torsettings.useBridges.default.placeholder "ხიდის მითითება">
+<!ENTITY torsettings.useBridges.bridgeDB "გადამცემი ხიდის მოთხოვნა საიტიდან torproject.org">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "შეიყვანეთ სურათზე მოცემული სიმბოლოები">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "ახალი კოდის მიღება">
+<!ENTITY torsettings.useBridges.captchaSubmit "გაგზავნა">
+<!ENTITY torsettings.useBridges.custom "ნაცნობი გადამცემი ხიდის მითითება">
+<!ENTITY torsettings.useBridges.label "შეიყვანეთ გადამცემი ხიდის მონაცემები სანდო წყაროდან.">
+<!ENTITY torsettings.useBridges.placeholder "აკრიფეთ მისამართი:პორტი (თითო ცალკე ხაზზე)">
+
+<!ENTITY torsettings.copyLog "Tor-ის აღრიცხვის ჩანაწერების ასლი">
+
+<!ENTITY torsettings.proxyHelpTitle "პროქსი — დახმარება">
+<!ENTITY torsettings.proxyHelp1 "ადგილობრივი პროქსი მაშინაა საჭირო, როცა ინტერნეტს უკავშირდებით დაწესებულების, სკოლის ან უმაღლესი სასწავლებლის ქსელის გავლით.&#160;თუ დარწმუნებული არ ხართ პროქსის საჭიროებაში, გადახედეთ ინტერნეტის პარამეტრებს სხვა ბრაუზერში ან იხილეთ სისტემის ქსელის პარამეტრები.">
+
+<!ENTITY torsettings.bridgeHelpTitle "დახმარება გადამცემი ხიდის თაობაზე">
+<!ENTITY torsettings.bridgeHelp1 "ხიდები წარმოადგენს აღუნუსხავ გადამცემებს, რომელთა გამოყენებაც ართულებს Tor-ქსელთან კავშირის შეზღუდვას.&#160; თითოეული სახის ხიდი იყენებს განსხვავებულ საშუალებებს, ცენზურის ასარიდებლად.&#160; obfs-გადამყვანი, გადაცემულ მონაცემებს წარმოადგენს შემთხვევითი ხმაურის სახით, ხოლო meek-გადამყვანი კი თქვენს მონაცემთა მიმოცვლას წარმოაჩენს ისე, თითქოს ცალკეულ მომსახურებას უკავშირდებით და არა Tor-ს.">
+<!ENTITY torsettings.bridgeHelp2 "იმისდა მიხედვით, თუ როგორ ზღუდავს ცალკეული ქვეყანა Tor-ს, გარკვეული სახის გადამცემი ხიდები, მხოლოდ შესაბამის ქვეყნებში იმუშავებს და არა სხვაგან.&#160; თუ დანამდვილებით არ იცით, რომელი გადამცემი მუშაობს თქვენს ქვეყანაში, ეწვიეთ დახმარების გვერდს torproject.org/about/contact.html#support">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "გთხოვთ, მოითმინოთ სანამ დაუკავშირდება Tor-ქსელს.&#160; რამდენიმე წუთს შეიძლება გასტანოს.">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "Tor">
+<!ENTITY torPreferences.torSettings "Tor-ის პარამეტრები">
+<!ENTITY torPreferences.torSettingsDescription "Tor-ბრაუზერი თქვენს კავშირს ატარებს Tor-ქსელის გავლით, რომლის მუშაობასაც უზრუნველყოფს ათასობით მოხალისე მთელი მსოფლიოდან." >
+<!ENTITY torPreferences.learnMore "იხილეთ ვრცლად">
+<!ENTITY torPreferences.bridges "გადამცემი ხიდები">
+<!ENTITY torPreferences.bridgesDescription "გადამცემი ხიდების მეშვეობით შეგიძლიათ დაუკავშირდეთ Tor-ქსელს იქ, სადაც Tor-ს ზღუდავენ. იმისდა მიხედვით, თუ სად იმყოფებით, ზოგმა ხიდმა უკეთ შეიძლება იმუშაოს, ვიდრე სხვამ.">
+<!ENTITY torPreferences.useBridge "ხიდის გამოყენება">
+<!ENTITY torPreferences.requestNewBridge "ახალი გადამცემი ხიდის მოთხოვნა...">
+<!ENTITY torPreferences.provideBridge "გადამცემი ხიდის მითითება">
+<!ENTITY torPreferences.advanced "დამატებით">
+<!ENTITY torPreferences.advancedDescription "მიუთითეთ, თუ როგორ დაუკავშირდეს Tor-ბრაუზერი ინტერნეტს.">
+<!ENTITY torPreferences.firewallPortsPlaceholder "მძიმით გამოყოფილი მნიშვნელობები">
+<!ENTITY torPreferences.requestBridgeDialogTitle "ხიდის მოთხოვნა">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "უკავშირდება BridgeDB-ს. გთხოვთ, მოითმინოთ.">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "გაიარეთ CAPTCHA, გადამცემი ხიდის მოთხოვნისთვის.">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "გადაწყვეტა არასწორია. გთხოვთ სცადოთ ხელახლა.">
+<!ENTITY torPreferences.viewTorLogs "იხილეთ Tor-ის ჩანაწერები.">
+<!ENTITY torPreferences.viewLogs "ჩანაწერების ნახვა...">
+<!ENTITY torPreferences.torLogsDialogTitle "Tor-ის ჩანაწერები">

@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "Tor ネットワーク設定">
+<!ENTITY torsettings.wizard.title.default "Tor に接続する">
+<!ENTITY torsettings.wizard.title.configure "Tor ネットワーク設定">
+<!ENTITY torsettings.wizard.title.connecting "接続を確立しています">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "Tor Browser 言語">
+<!ENTITY torlauncher.localePicker.prompt "言語を選択してください。">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "「接続」をクリックすると Tor に接続します。">
+<!ENTITY torSettings.configurePrompt "Tor による通信を検閲する国（エジプト、中国、トルコ等）にいる場合やプロキシを要求するプライベートネットワークから接続する場合、「設定」をクリックしてネットワーク設定を調整します。">
+<!ENTITY torSettings.configure "設定">
+<!ENTITY torSettings.connect "接続">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "Torの開始を待っています...">
+<!ENTITY torsettings.restartTor "Torを再起動する">
+<!ENTITY torsettings.reconfigTor "再設定">
+
+<!ENTITY torsettings.discardSettings.prompt "Tor ブリッジが設定されるか、ローカルプロキシ設定が入力されるかしました。&#160; Tor ネットワークに直接接続するためには、これらの設定は削除する必要があります。">
+<!ENTITY torsettings.discardSettings.proceed "設定と接続を削除">
+
+<!ENTITY torsettings.optional "オプション">
+
+<!ENTITY torsettings.useProxy.checkbox "インターネットに接続するのにプロキシを使用します">
+<!ENTITY torsettings.useProxy.type "プロキシの種類">
+<!ENTITY torsettings.useProxy.type.placeholder "プロキシの種類を選択">
+<!ENTITY torsettings.useProxy.address "アドレス">
+<!ENTITY torsettings.useProxy.address.placeholder "IP アドレスまたはホスト名">
+<!ENTITY torsettings.useProxy.port "ポート">
+<!ENTITY torsettings.useProxy.username "ユーザー名">
+<!ENTITY torsettings.useProxy.password "パスワード">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "このコンピューターは特定のポートへの接続のみ許可するファイアーウォールを通します。">
+<!ENTITY torsettings.firewall.allowedPorts "許可されたポート">
+<!ENTITY torsettings.useBridges.checkbox "Tor は私の国では検閲されています">
+<!ENTITY torsettings.useBridges.default "内蔵ブリッジを選択する">
+<!ENTITY torsettings.useBridges.default.placeholder "ブリッジを選択">
+<!ENTITY torsettings.useBridges.bridgeDB "torproject.org からブリッジの要求をする">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "画像の文字を入力してください">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "チャレンジを更新する">
+<!ENTITY torsettings.useBridges.captchaSubmit "送信">
+<!ENTITY torsettings.useBridges.custom "知っているブリッジを使う">
+<!ENTITY torsettings.useBridges.label "信頼できる情報源からのブリッジ情報を入力してください。">
+<!ENTITY torsettings.useBridges.placeholder "アドレス:ポート の形式で入力 (1 行ずつ)">
+
+<!ENTITY torsettings.copyLog "Torのログをクリップボードにコピー">
+
+<!ENTITY torsettings.proxyHelpTitle "プロキシヘルプ">
+<!ENTITY torsettings.proxyHelp1 "会社、学校、大学等のネットワークを通して接続する場合、ローカルプロキシが必要になる場合があります。&#160;プロキシが必要であるかどうかわからない場合は、他のブラウザのインターネット設定を見るか、システムのネットワーク設定を確認してください。">
+
+<!ENTITY torsettings.bridgeHelpTitle "ブリッジリレーのヘルプ">
+<!ENTITY torsettings.bridgeHelp1 "ブリッジとはTorネットワークへの接続をブロックすることを難しくするためのリストされていないリレーです。&#160; それぞれの種類のブリッジは検閲を避けるための異なる手法を利用しています。&#160; obfsのものはあなたのトラフィックをランダムなノイズのように見せかけ，meekのものはあなたのトラフィックをTorではなくそのサービスへの接続であるように見せかけます。">
+<!ENTITY torsettings.bridgeHelp2 "その国がどのようにしてTorをブロックしようと試みているかによって、あるブリッジがある国では機能しても他の国では動かない場合があります。&#160; もしどのブリッジがあなたの国で機能するかわからない場合は torproject.org/about/contact.html#support にアクセスしてください。">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "Tor ネットワークへの接続が確立されるまでお待ちください。&#160; これには数分間かかることがあります。">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "Tor">
+<!ENTITY torPreferences.torSettings "Tor の設定">
+<!ENTITY torPreferences.torSettingsDescription "Tor Browser は通信トラフィックを Tor ネットワークを経由させて送信します。Tor ネットワークは世界中の何千ものボランティアによって運用されています。" >
+<!ENTITY torPreferences.learnMore "詳細情報">
+<!ENTITY torPreferences.bridges "Bridge">
+<!ENTITY torPreferences.bridgesDescription "ブリッジは Tor がブロックされる地域から Tor ネットワークにアクセスすることを手助けします。地域によって、あるブリッジが他のものよりうまく動作する可能性があります。">
+<!ENTITY torPreferences.useBridge "ブリッジを使用する">
+<!ENTITY torPreferences.requestNewBridge "新しいブリッジを要求…">
+<!ENTITY torPreferences.provideBridge "ブリッジを指定する">
+<!ENTITY torPreferences.advanced "詳細">
+<!ENTITY torPreferences.advancedDescription "Tor Browser がインターネットに接続する方法を設定します。">
+<!ENTITY torPreferences.firewallPortsPlaceholder "コンマ区切りの値">
+<!ENTITY torPreferences.requestBridgeDialogTitle "ブリッジの要求">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "BridgeDB に接続しています。しばらくお待ちください。">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt " ブリッジをリクエストするにはCAPTCHAを解いて下さい。">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "その解答は正しくありません。再度実行してください。">
+<!ENTITY torPreferences.viewTorLogs "Tor のログを表示する。">
+<!ENTITY torPreferences.viewLogs "ログを表示…">
+<!ENTITY torPreferences.torLogsDialogTitle "Tor ログ">

@@ -1,0 +1,138 @@
+<!--
+   - Copyright (c) 2020, The Tor Project, Inc.
+   - See LICENSE for licensing information.
+   - vim: set sw=2 sts=2 ts=8 et syntax=xml:
+  -->
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?> 
+<?xml-stylesheet href="chrome://torlauncher/skin/network-settings.css"
+                 type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://torlauncher/locale/network-settings.dtd">
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        torwizard="true"
+        windowtype="TorLauncher:NetworkSettings"
+        persist="screenX screenY"
+        onload="initDialog();"
+        onunload="deinitDialog();">
+
+<!-- Work around a fluent bug in the wizard code (see Mozilla bug 1625938) -->
+<linkset>
+  <html:link rel="localization" href="toolkit/global/wizard.ftl"/>
+</linkset>
+
+<wizard id="TorNetworkSettings"
+        defaulttitle="&torsettings.wizard.title.default;"
+        buttonlabelextra2="&torsettings.copyLog;">
+  <script type="application/x-javascript"
+          src="chrome://torlauncher/content/network-settings.js"/>
+
+  <wizardpage pageid="first" next="configureSettings"
+              torShowNavButtons="false">
+    <hbox class="tbb-header" pack="center">
+      <image class="tbb-logo"/>
+    </hbox>
+
+    <vbox class="firstResponses" align="center">
+      <label>&torSettings.connectPrompt;</label>
+      <label>&torSettings.configurePrompt;</label>
+      <separator/>
+      <hbox>
+        <button label="&torSettings.connect;"
+                oncommand="onWizardFirstPanelConnect();"/>
+        <button label="&torSettings.configure;"
+                oncommand="onWizardConfigure();"/>
+      </hbox>
+    </vbox>
+  </wizardpage>
+
+  <wizardpage pageid="configureSettings"
+              windowtitle="&torsettings.wizard.title.configure;"
+              torShowNavButtons="true">
+    <stack flex="1">
+      <vbox>
+        <vbox id="bridgeSettings"/>
+        <vbox id="proxySettings"/>
+      </vbox>
+      <vbox id="bridgeDBRequestOverlay" class="messagePanel" pack="center"
+            hidden="true">
+        <vbox id="bridgeDBRequestOverlayContent"/>
+      </vbox>
+      <vbox id="configErrorOverlay" class="messagePanel" pack="center"
+            hidden="true">
+        <vbox id="errorOverlayContent"/>
+      </vbox>
+    </stack>
+  </wizardpage>
+
+  <wizardpage pageid="progress"
+              windowtitle="&torsettings.wizard.title.connecting;"
+              torShowNavButtons="false">
+    <vbox id="progressContent"/>
+  </wizardpage>
+
+  <wizardpage pageid="startingTor" class="messagePanel" next="notUsed"
+              torShowNavButtons="false">
+    <hbox class="tbb-header" pack="center">
+      <image class="tbb-logo"/>
+    </hbox>
+    <spring flex="1"/>
+    <hbox>
+      <spring flex="1"/>
+      <description>&torsettings.startingTor;</description>
+      <spring flex="1"/>
+    </hbox>
+    <spring flex="1"/>
+  </wizardpage>
+
+  <wizardpage pageid="restartPanel" class="messagePanel" next="notUsed"
+              pack="center" torShowNavButtons="false">
+    <vbox id="restartContent"/>
+  </wizardpage>
+
+  <wizardpage pageid="errorPanel" class="messagePanel" next="notUsed"
+              torShowNavButtons="false">
+    <spring flex="1"/>
+    <hbox pack="center">
+      <description errorElemId="message" flex="1"/>
+    </hbox>
+    <separator/>
+    <hbox pack="center">
+      <button errorElemId="reconfigButton" label="&torsettings.reconfigTor;"
+              hidden="true" oncommand="onWizardReconfig()"/>
+    </hbox>
+    <spring flex="1"/>
+  </wizardpage>
+
+  <wizardpage pageid="discardSettings" next="notUsed"
+              torShowNavButtons="false">
+    <hbox class="tbb-header" pack="center">
+      <image class="tbb-logo"/>
+    </hbox>
+    <spring flex="1"/>
+    <hbox pack="center">
+      <description flex="1">&torsettings.discardSettings.prompt;</description>
+    </hbox>
+    <separator/>
+    <hbox pack="center">
+      <button id="discardSettingsGoBack" oncommand="showPanel();"/>
+      <separator/>
+      <button label="&torsettings.discardSettings.proceed;"
+              oncommand="removeSettingsAndConnect()"/>
+    </hbox>
+    <spring flex="1"/>
+  </wizardpage>
+
+  <wizardpage class="help" pageid="helpPanel" next="notUsed">
+    <vbox id="bridgeHelpContent"/>
+    <vbox id="proxyHelpContent"/>
+  </wizardpage>
+
+  <hbox pack="start">
+    <label id="forAssistance"/>
+  </hbox>
+  <panel id="copyLogFeedbackPanel"/>
+</wizard>
+</window>

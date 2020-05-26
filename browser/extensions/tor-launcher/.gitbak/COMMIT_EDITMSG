@@ -1,0 +1,23 @@
+Bug 33890: Rename xul files to xhtml
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Date:      Thu Apr 9 12:53:27 2020 +0200
+#
+# interactive rebase in progress; onto 227d33e
+# Last commands done (3 commands done):
+#    pick 2b1424d Release preparations for 0.2.21.3
+#    edit 0bd0932 Bug 33890: Rename xul files to xhtml
+# Next commands to do (2 remaining commands):
+#    pick c6a2801 Bug 33862: Fix usages of createTransport API
+#    pick f855568 Bug 32174: replace XUL <textbox> with <html:input>
+# You are currently editing a commit while rebasing branch '33533+2' on '227d33e'.
+#
+# Changes to be committed:
+#	renamed:    src/chrome/content/localePicker.xul -> src/chrome/content/localePicker.xhtml
+#	renamed:    src/chrome/content/network-settings-wizard.xul -> src/chrome/content/network-settings-wizard.xhtml
+#	renamed:    src/chrome/content/network-settings.xul -> src/chrome/content/network-settings.xhtml
+#	modified:   src/components/tl-process.js
+#	modified:   src/install.rdf
+#

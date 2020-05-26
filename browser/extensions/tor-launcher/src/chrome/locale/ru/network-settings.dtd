@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "Настройки сети Tor">
+<!ENTITY torsettings.wizard.title.default "Подключиться к Tor">
+<!ENTITY torsettings.wizard.title.configure "Сетевые настройки Tor">
+<!ENTITY torsettings.wizard.title.connecting "Создать подключение">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "Язык браузера Tor">
+<!ENTITY torlauncher.localePicker.prompt "Выберите язык.">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "Нажмите &quot;Подключиться&quot;, чтобы подключиться к Tor.">
+<!ENTITY torSettings.configurePrompt "Нажмите &quot;Настроить&quot;, чтобы уточнить настройки сети, если вы находитесь в стране, запрещающей Tor (такие как Египет, Китай, Турция), или если вы подключаетесь из приватной сети, требующей прокси.">
+<!ENTITY torSettings.configure "Настроить">
+<!ENTITY torSettings.connect "Соединиться">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "Ожидание запуска Tor...">
+<!ENTITY torsettings.restartTor "Перезапустить Tor">
+<!ENTITY torsettings.reconfigTor "Изменить конфигурацию">
+
+<!ENTITY torsettings.discardSettings.prompt "Вы настроили мосты Tor или ввели локальные настройки прокси-сервера.&#160; Для прямого подключения к сети Tor эти параметры должны быть удалены.">
+<!ENTITY torsettings.discardSettings.proceed "Удалить настройки и подключиться">
+
+<!ENTITY torsettings.optional "Необязательно">
+
+<!ENTITY torsettings.useProxy.checkbox "Я использую прокси для подключения к интернету">
+<!ENTITY torsettings.useProxy.type "Тип прокси">
+<!ENTITY torsettings.useProxy.type.placeholder "выбор типа прокси">
+<!ENTITY torsettings.useProxy.address "Адрес">
+<!ENTITY torsettings.useProxy.address.placeholder "IP-адрес или имя узла">
+<!ENTITY torsettings.useProxy.port "Порт">
+<!ENTITY torsettings.useProxy.username "Имя пользователя">
+<!ENTITY torsettings.useProxy.password "Пароль">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "Мой брандмауэр разрешает подключения только к определенным портам">
+<!ENTITY torsettings.firewall.allowedPorts "Разрешенные порты">
+<!ENTITY torsettings.useBridges.checkbox "Tor запрещён в моей стране">
+<!ENTITY torsettings.useBridges.default "Выбрать встроенный мост">
+<!ENTITY torsettings.useBridges.default.placeholder "выбор моста">
+<!ENTITY torsettings.useBridges.bridgeDB "Запросить мост от torproject.org">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "Введите символы с изображения">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "Перезагрузить защитный код">
+<!ENTITY torsettings.useBridges.captchaSubmit "Передать">
+<!ENTITY torsettings.useBridges.custom "Указать мост, который я знаю">
+<!ENTITY torsettings.useBridges.label "Введите информацию о мосте от доверенного источника.">
+<!ENTITY torsettings.useBridges.placeholder "адрес:порт (по одному в строке)">
+
+<!ENTITY torsettings.copyLog "Скопировать журнал Tor в буфер обмена">
+
+<!ENTITY torsettings.proxyHelpTitle "Помощь по прокси">
+<!ENTITY torsettings.proxyHelp1 "Локальный прокси-сервер может понадобиться при подключении через сеть компаний, школ или университетов.&#160;Если вы не уверены в необходимости прокси-сервера, посмотрите настройки Интернета в другом браузере или проверьте сетевые настройки вашей системы.">
+
+<!ENTITY torsettings.bridgeHelpTitle "Помощь по ретрансляторам типа мост">
+<!ENTITY torsettings.bridgeHelp1 "Мосты - это непубличные реле, которые затрудняют блокировку соединений с сетью Tor.&amp;#160 Каждый тип моста использует отличный от других метод, чтобы избежать блокировки цезорами. Мосты типа obfs делают ваш трафик похожим на случайный шум, в то время, как мосты типа meed имитируют подключение к службе, отличной от Tor.">
+<!ENTITY torsettings.bridgeHelp2 "Из-за того, как именно страны пытаются блокировать Tor, определённые мосты работают в одних странах, но не работают в других.&#160; Если вы не уверены в том, какие мосты сработает в вашей стране, посетите torproject.org/about/contact.html#support">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "Пожалуйста, подождите, пока мы установим подключение к сети Tor.&#160; Это может занять несколько минут.">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "Tor">
+<!ENTITY torPreferences.torSettings "Настройки Tor">
+<!ENTITY torPreferences.torSettingsDescription "Tor Browser перенаправляет ваш трафик через сеть Tor. Ее поддерживают тысячи добровольцев по всему миру." >
+<!ENTITY torPreferences.learnMore "Подробнее">
+<!ENTITY torPreferences.bridges "Мосты">
+<!ENTITY torPreferences.bridgesDescription "Мосты помогают получить доступ к сети Tor там, где он заблокирован. В зависимости от вашего местонахождения один мост может работать лучше другого.">
+<!ENTITY torPreferences.useBridge "Использовать мост">
+<!ENTITY torPreferences.requestNewBridge "Запрос нового моста…">
+<!ENTITY torPreferences.provideBridge "Указать свой мост">
+<!ENTITY torPreferences.advanced "Дополнительно">
+<!ENTITY torPreferences.advancedDescription "Настройка подключения Tor Browser к интернету.">
+<!ENTITY torPreferences.firewallPortsPlaceholder "Значения, разделённые запятыми">
+<!ENTITY torPreferences.requestBridgeDialogTitle "Запрос моста">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "Обращение к BridgeDB. Пожалуйста, подождите.">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "Решите CAPTCHA для запроса моста.">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "Решение не является правильным. Попробуйте ещё раз.">
+<!ENTITY torPreferences.viewTorLogs "Просмотр журнала Tor">
+<!ENTITY torPreferences.viewLogs "Просмотр журнала…">
+<!ENTITY torPreferences.torLogsDialogTitle "Журнал Tor">

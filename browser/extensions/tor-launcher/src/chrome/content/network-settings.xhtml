@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+   - Copyright (c) 2020, The Tor Project, Inc.
+   - See LICENSE for licensing information.
+   - vim: set sw=2 sts=2 ts=8 et syntax=xml:
+  -->
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://torlauncher/skin/network-settings.css"
+                 type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://torlauncher/locale/network-settings.dtd">
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        title="&torsettings.dialog.title;"
+        windowtype="TorLauncher:NetworkSettings"
+        persist="screenX screenY"
+        onload="initDialog();"
+        onunload="deinitDialog();">
+
+<dialog id="TorNetworkSettings"
+        buttons="accept,cancel,extra2"
+        buttonlabelextra2="&torsettings.copyLog;">
+  <script type="application/x-javascript"
+          src="chrome://torlauncher/content/network-settings.js"/>
+
+  <stack flex="1">
+    <vbox>
+      <deck id="deck" onselect="onDeckSelect();">
+        <vbox id="settings">
+          <vbox id="bridgeSettings"/>
+          <separator orient="horizontal" class="thin"/>
+          <vbox id="proxySettings"/>
+          <vbox>
+            <checkbox id="useFirewallPorts"
+                      groupboxID="firewallSpecificSettings"
+                      label="&torsettings.firewall.checkbox;"
+                      oncommand="toggleElemUI(this)"/>
+            <groupbox id="firewallSpecificSettings">
+              <hbox align="center">
+                <label value="&torsettings.firewall.allowedPorts;"
+                       control="firewallAllowedPorts"/>
+                <html:input id="firewallAllowedPorts" value="80,443"/>
+              </hbox>
+            </groupbox>
+          </vbox>
+        </vbox>
+
+        <vbox id="startingTor" class="messagePanel">
+          <spring flex="1"/>
+          <hbox>
+            <spring flex="1"/>
+            <description>&torsettings.startingTor;</description>
+            <spring flex="1"/>
+          </hbox>
+          <spring flex="1"/>
+        </vbox>
+
+        <vbox id="progressPanel">
+          <vbox id="progressContent"/>
+        </vbox>
+
+        <vbox id="helpPanel" class="help">
+          <vbox id="bridgeHelpContent"/>
+          <vbox id="proxyHelpContent"/>
+        </vbox>
+
+        <vbox id="restartPanel" class="messagePanel" pack="center">
+          <vbox id="restartContent"/>
+        </vbox>
+      </deck>
+
+      <spring flex="1"/>
+      <label id="forAssistance"/>
+      <panel id="copyLogFeedbackPanel"/>
+    </vbox>
+
+    <vbox id="bridgeDBRequestOverlay" class="messagePanel" pack="center"
+          hidden="true">
+      <vbox id="bridgeDBRequestOverlayContent"/>
+    </vbox>
+
+    <vbox id="errorOverlay" class="messagePanel" pack="center" hidden="true">
+      <vbox id="errorOverlayContent"/>
+    </vbox>
+  </stack>
+</dialog>
+</window>

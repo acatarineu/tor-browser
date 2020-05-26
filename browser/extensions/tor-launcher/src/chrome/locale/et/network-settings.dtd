@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "Tor\'i võrgu seaded">
+<!ENTITY torsettings.wizard.title.default "Ühendu Tor\'i">
+<!ENTITY torsettings.wizard.title.configure "Tor\'i võrgu seaded">
+<!ENTITY torsettings.wizard.title.connecting "Ühenduse loomine">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "Tor\'i brauseri keel">
+<!ENTITY torlauncher.localePicker.prompt "Palun valige keel.">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "Klikkige &quot;Ühendu&quot; et ühenduda Tor\'i.">
+<!ENTITY torSettings.configurePrompt "Kliki &quot;Seadista&quot; et muuta võrgusätteid kui te viibite riigis, mis tsensoreerib Tor\'i (näiteks Egiptus, Hiina, Türgi) või kui te ühendute eravõrgust millel on vaja proksit.">
+<!ENTITY torSettings.configure "Seadista">
+<!ENTITY torSettings.connect "Ühendu">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "Ootan et Tor käivituks...">
+<!ENTITY torsettings.restartTor "Taaskäivita Tor">
+<!ENTITY torsettings.reconfigTor "Seadista uuesti">
+
+<!ENTITY torsettings.discardSettings.prompt "Te olete seadistanud kohalikud Tor\'i sillad või olete sisestanud kohalikud proksi sätted.&#160; Et luua otseühendus Tor\'i võrguga, tuleb need sätted eemaldada.">
+<!ENTITY torsettings.discardSettings.proceed "Eemalda seaded ja ühendu">
+
+<!ENTITY torsettings.optional "Valikuline">
+
+<!ENTITY torsettings.useProxy.checkbox "Ma kasutan proksit et ühenduda internetti">
+<!ENTITY torsettings.useProxy.type "Proxy Type">
+<!ENTITY torsettings.useProxy.type.placeholder "valige proksi tüüp">
+<!ENTITY torsettings.useProxy.address "Address">
+<!ENTITY torsettings.useProxy.address.placeholder "IP aadress või haldaja nimi">
+<!ENTITY torsettings.useProxy.port "Port">
+<!ENTITY torsettings.useProxy.username "Kasutajanimi">
+<!ENTITY torsettings.useProxy.password "Salasõna">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "See arvuti läheb läbi tulemüüri mis lubab ainult ühendusi kindlatesse portidesse.">
+<!ENTITY torsettings.firewall.allowedPorts "Allowed Ports">
+<!ENTITY torsettings.useBridges.checkbox "Tor on minu riigis tsensoreeritud">
+<!ENTITY torsettings.useBridges.default "Valige sisseehitatud sild">
+<!ENTITY torsettings.useBridges.default.placeholder "valige sild">
+<!ENTITY torsettings.useBridges.bridgeDB "Saatke päring torproject.org\'i et saada sild">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "Sisestage pildil olevad tähemärgid">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "Võta uus väljakutse">
+<!ENTITY torsettings.useBridges.captchaSubmit "Esita">
+<!ENTITY torsettings.useBridges.custom "Sisesta enda sild">
+<!ENTITY torsettings.useBridges.label "Sisesta sillainfo usaldusväärsest allikast.">
+<!ENTITY torsettings.useBridges.placeholder "tüüp aadress:port (üks iga rea kohta)">
+
+<!ENTITY torsettings.copyLog "Kopeeri Tor\'i logi lõikepuhvrisse">
+
+<!ENTITY torsettings.proxyHelpTitle "Proksi abi">
+<!ENTITY torsettings.proxyHelp1 "Kohalik proksi võib olla vajalik kui ühenduda läbi firma, kooli või ülikooli võrgu.&#160;Kui te ei ole kindlad kas proksi on vajalik, tutvuge internetisätetega teises brauseris või kontrollige oma süsteemi võrgusätteid.">
+
+<!ENTITY torsettings.bridgeHelpTitle "Silla relee abi">
+<!ENTITY torsettings.bridgeHelp1 "Sillad on järjendamata releed mis teevad Tor\'i võrku ühenduvate ühenduste blokeerimise raskemaks.&#160; Kõik sillatüübid kasutavad erinevat meetodit et tsensorlust vältida.&#160; Obfs sillad obfuskeerivad teie andmeliikluse suvaliseks andmemüraks, ja meek tüüpi sillad tekitavad illusiooni et te ühendute sellesse teenusesse, mitte Tor\'i.">
+<!ENTITY torsettings.bridgeHelp2 "Kuna erinevad riigid üritavad erinevate meetoditega Tor\'i blokeerida, töötavad osad sillad osades riikides, kuid mitte teistes.&#160; Kui Te ei ole kindlad millised sillad teie riigis töötavad, külastage torproject.org/about/contact.html#support">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "Palun oodake kuni loome ühenduse Tor\'i võrguga.&#160; See võib võtta mitu minutit.">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "Tor">
+<!ENTITY torPreferences.torSettings "Tor Settings">
+<!ENTITY torPreferences.torSettingsDescription "Tor Browser routes your traffic over the Tor Network, run by thousands of volunteers around the world." >
+<!ENTITY torPreferences.learnMore "Loe lähemalt">
+<!ENTITY torPreferences.bridges "Sillad">
+<!ENTITY torPreferences.bridgesDescription "Bridges help you access the Tor Network in places where Tor is blocked. Depending on where you are, one bridge may work better than another.">
+<!ENTITY torPreferences.useBridge "Kasuta silda">
+<!ENTITY torPreferences.requestNewBridge "Taotle uut silda…">
+<!ENTITY torPreferences.provideBridge "Paku silda">
+<!ENTITY torPreferences.advanced "Peenhäälestus">
+<!ENTITY torPreferences.advancedDescription "Configure how Tor Browser connects to the internet.">
+<!ENTITY torPreferences.firewallPortsPlaceholder "Comma-separated values">
+<!ENTITY torPreferences.requestBridgeDialogTitle "Taotle silda">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "Contacting BridgeDB. Please Wait.">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "Lahenda CAPTCHA, et taotleda silda.">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "The solution is not correct. Please try again.">
+<!ENTITY torPreferences.viewTorLogs "View the Tor logs.">
+<!ENTITY torPreferences.viewLogs "View Logs…">
+<!ENTITY torPreferences.torLogsDialogTitle "Tor Logs">

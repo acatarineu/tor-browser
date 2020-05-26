@@ -1,0 +1,83 @@
+<!ENTITY torsettings.dialog.title "Impostazioni rete Tor">
+<!ENTITY torsettings.wizard.title.default "Connetti a Tor">
+<!ENTITY torsettings.wizard.title.configure "Impostazioni della rete Tor">
+<!ENTITY torsettings.wizard.title.connecting "Connessione in corso">
+
+<!-- For locale picker: -->
+<!ENTITY torlauncher.localePicker.title "Lingua per il Tor Browser">
+<!ENTITY torlauncher.localePicker.prompt "Selezionare una lingua.">
+
+<!-- For "first run" wizard: -->
+
+<!ENTITY torSettings.connectPrompt "Clicca &quot;Connetti&quot; per connetterti a Tor">
+<!ENTITY torSettings.configurePrompt "Clicca &quot;Configura&quot; per regolare le impostazioni di rete se ti trovi in un Paese che censura Tor (come Egitto, Cina, Turchia) o se ti stai connettendo da una rete privata che richiede un proxy.">
+<!ENTITY torSettings.configure "Configura">
+<!ENTITY torSettings.connect "Connetti">
+
+<!-- Other: -->
+
+<!ENTITY torsettings.startingTor "In attesa di avviare Tor...">
+<!ENTITY torsettings.restartTor "Riavvia Tor">
+<!ENTITY torsettings.reconfigTor "Riconfigura">
+
+<!ENTITY torsettings.discardSettings.prompt "Tu hai configurato i bridge Tor o hai inserito le impostazioni per il proxy locale.&#160; Per effettuare una connessione diretta alla rete Tor, queste impostazioni devono essere rimosse.">
+<!ENTITY torsettings.discardSettings.proceed "Rimuovi Impostazioni e Connetti">
+
+<!ENTITY torsettings.optional "Facoltativo">
+
+<!ENTITY torsettings.useProxy.checkbox "Uso un proxy per connettermi a internet">
+<!ENTITY torsettings.useProxy.type "Tipo di proxy">
+<!ENTITY torsettings.useProxy.type.placeholder "Seleziona un tipo di proxy">
+<!ENTITY torsettings.useProxy.address "Indirizzo">
+<!ENTITY torsettings.useProxy.address.placeholder "Indirizzo IP oppure hostname">
+<!ENTITY torsettings.useProxy.port "Porta">
+<!ENTITY torsettings.useProxy.username "Username">
+<!ENTITY torsettings.useProxy.password "Password">
+<!ENTITY torsettings.useProxy.type.socks4 "SOCKS 4">
+<!ENTITY torsettings.useProxy.type.socks5 "SOCKS 5">
+<!ENTITY torsettings.useProxy.type.http "HTTP / HTTPS">
+<!ENTITY torsettings.firewall.checkbox "Questo computer passa attraverso un firewall che permette le connessioni solo ad alcune porte">
+<!ENTITY torsettings.firewall.allowedPorts "Porte consentite">
+<!ENTITY torsettings.useBridges.checkbox "Tor viene censurato nel mio Paese">
+<!ENTITY torsettings.useBridges.default "Seleziona un bridge integrato">
+<!ENTITY torsettings.useBridges.default.placeholder "seleziona un bridge">
+<!ENTITY torsettings.useBridges.bridgeDB "Richiedi un bridge da torproject.org">
+<!ENTITY torsettings.useBridges.captchaSolution.placeholder "Inserisci i caratteri dell'immagine">
+<!ENTITY torsettings.useBridges.reloadCaptcha.tooltip "Carica una nuova verifica">
+<!ENTITY torsettings.useBridges.captchaSubmit "Invia">
+<!ENTITY torsettings.useBridges.custom "Fornisci un bridge che conosco">
+<!ENTITY torsettings.useBridges.label "Inserisci le informazioni del bridge da una fonte fidata.">
+<!ENTITY torsettings.useBridges.placeholder "digita indirizzo:porta (uno per riga)">
+
+<!ENTITY torsettings.copyLog "Copia il log di Tor negli &quot;appunti&quot; di sistema">
+
+<!ENTITY torsettings.proxyHelpTitle "Aiuto proxy">
+<!ENTITY torsettings.proxyHelp1 "Potrebbe essere necessario utilizzare un proxy locale quando ci si connette dalla rete di un'azienda, scuola o università.&#160;Se non sei sicuro sulla necessità di utilizzare un proxy, confronta le impostazioni internet in un altro browser o controlla le impostazioni di rete del sistema.">
+
+<!ENTITY torsettings.bridgeHelpTitle "Aiuto per i ponti relé">
+<!ENTITY torsettings.bridgeHelp1 "I bridge sono relay non elencati che rendono più difficile bloccare le connessioni alla rete Tor.&#160; Ogni tipo di bridge usa un metodo diverso per evitare la censura.&#160; Quelli obfs mascherano il tuo traffico come rumore casuale, quelli meek lo mascherano come se si connettesse a quel servizio al posto di Tor.">
+<!ENTITY torsettings.bridgeHelp2 "A causa dei tentativi di blocco di Tor in alcuni Paesi, certi bridge funzionano in certi Paesi, ma non in altri.&#160; Se non sei sicuro di quali bridge funzionino nel tuo Paese, visita torproject.org/about/contact.html#support">
+
+<!-- Progress -->
+<!ENTITY torprogress.pleaseWait "Attendi mentre stabiliamo una connessione alla rete Tor.&#160; Potrebbe richiedere qualche minuto.">
+
+<!-- #31286 about:preferences strings  -->
+<!ENTITY torPreferences.categoryTitle "Tor">
+<!ENTITY torPreferences.torSettings "Impostazioni di Tor">
+<!ENTITY torPreferences.torSettingsDescription "Tor Browser indirizza il tuo traffico nella rete Tor, gestita da migliaia di volontari in tutto il mondo." >
+<!ENTITY torPreferences.learnMore "Maggiori informazioni">
+<!ENTITY torPreferences.bridges "Bridges">
+<!ENTITY torPreferences.bridgesDescription "I bridge ti aiutano ad accedere alla rete Tor in luoghi dove Tor viene bloccato. A seconda di dove ti trovi, un bridge può funzionare meglio di un altro.">
+<!ENTITY torPreferences.useBridge "Usa un bridge">
+<!ENTITY torPreferences.requestNewBridge "Richiedi un nuovo bridge...">
+<!ENTITY torPreferences.provideBridge "Fornisci un bridge">
+<!ENTITY torPreferences.advanced "Avanzate">
+<!ENTITY torPreferences.advancedDescription "Configura come Tor Browser si connette a internet.">
+<!ENTITY torPreferences.firewallPortsPlaceholder "Valori separati da una virgola">
+<!ENTITY torPreferences.requestBridgeDialogTitle "Richiedi bridge">
+<!ENTITY torPreferences.requestBridgeDialogWaitPrompt "Contattando BridgeDB. Attendere, prego.">
+<!ENTITY torPreferences.requestBridgeDialogSolvePrompt "Risolvi il CAPTCHA per richiedere un bridge.">
+<!ENTITY torPreferences.requestBridgeErrorBadSolution "La soluzione è sbagliata. Riprova.">
+<!ENTITY torPreferences.viewTorLogs "Visualizza i log di Tor.">
+<!ENTITY torPreferences.viewLogs "Visualizza log...">
+<!ENTITY torPreferences.torLogsDialogTitle "Log di Tor">
