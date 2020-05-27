@@ -168,81 +168,8 @@ nsHttpNTLMAuth::ChallengeReceived(nsIHttpAuthenticableChannel* channel,
 
   *identityInvalid = false;
 
-  // Start a new auth sequence if the challenge is exactly "NTLM".
-  // If native NTLM auth apis are available and enabled through prefs,
-  // try to use them.
-  if (PL_strcasecmp(challenge, "NTLM") == 0) {
-    nsCOMPtr<nsIAuthModule> module;
-
-    // Check to see if we should default to our generic NTLM auth module
-    // through UseGenericNTLM. (We use native auth by default if the
-    // system provides it.) If *sessionState is non-null, we failed to
-    // instantiate a native NTLM module the last time, so skip trying again.
-    bool forceGeneric = ForceGenericNTLM();
-    if (!forceGeneric && !*sessionState) {
-      // Check for approved default credentials hosts and proxies. If
-      // *continuationState is non-null, the last authentication attempt
-      // failed so skip default credential use.
-      if (!*continuationState &&
-          CanUseDefaultCredentials(channel, isProxyAuth)) {
-        // Try logging in with the user's default credentials. If
-        // successful, |identityInvalid| is false, which will trigger
-        // a default credentials attempt once we return.
-        module = nsIAuthModule::CreateInstance("sys-ntlm");
-      }
-#ifdef XP_WIN
-      else {
-        // Try to use native NTLM and prompt the user for their domain,
-        // username, and password. (only supported by windows nsAuthSSPI
-        // module.) Note, for servers that use LMv1 a weak hash of the user's
-        // password will be sent. We rely on windows internal apis to decide
-        // whether we should support this older, less secure version of the
-        // protocol.
-        module = nsIAuthModule::CreateInstance("sys-ntlm");
-        *identityInvalid = true;
-      }
-#endif  // XP_WIN
-      if (!module) LOG(("Native sys-ntlm auth module not found.\n"));
-    }
-
-#ifdef XP_WIN
-    // On windows, never fall back unless the user has specifically requested
-    // so.
-    if (!forceGeneric && !module) return NS_ERROR_UNEXPECTED;
-#endif
-
-    // If no native support was available. Fall back on our internal NTLM
-    // implementation.
-    if (!module) {
-      if (!*sessionState) {
-        // Remember the fact that we cannot use the "sys-ntlm" module,
-        // so we don't ever bother trying again for this auth domain.
-        RefPtr<nsNTLMSessionState> state = new nsNTLMSessionState();
-        state.forget(sessionState);
-      }
-
-      // Use our internal NTLM implementation. Note, this is less secure,
-      // see bug 520607 for details.
-      LOG(("Trying to fall back on internal ntlm auth.\n"));
-      module = nsIAuthModule::CreateInstance("ntlm");
-
-      mUseNative = false;
-
-      // Prompt user for domain, username, and password.
-      *identityInvalid = true;
-    }
-
-    // If this fails, then it means that we cannot do NTLM auth.
-    if (!module) {
-      LOG(("No ntlm auth modules available.\n"));
-      return NS_ERROR_UNEXPECTED;
-    }
-
-    // A non-null continuation state implies that we failed to authenticate.
-    // Blow away the old authentication state, and use the new one.
-    module.forget(continuationState);
-  }
-  return NS_OK;
+  /* Always fail Negotiate auth for Tor Browser. We don't need it. */
+  return NS_ERROR_ABORT;
 }
 
 NS_IMETHODIMP

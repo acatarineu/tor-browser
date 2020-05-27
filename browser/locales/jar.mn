@@ -19,6 +19,9 @@
 
     locale/browser/accounts.properties             (%chrome/browser/accounts.properties)
     locale/browser/app-extension-fields.properties (%chrome/browser/app-extension-fields.properties)
+#ifdef TOR_BROWSER_UPDATE
+    locale/browser/aboutTBUpdate.dtd               (%chrome/browser/aboutTBUpdate.dtd)
+#endif
     locale/browser/browser.dtd                     (%chrome/browser/browser.dtd)
     locale/browser/baseMenuOverlay.dtd             (%chrome/browser/baseMenuOverlay.dtd)
     locale/browser/browser.properties              (%chrome/browser/browser.properties)
@@ -56,10 +59,3 @@
     locale/browser/newInstall.dtd                  (%chrome/browser/newInstall.dtd)
     locale/browser/brandings.dtd                   (%chrome/browser/brandings.dtd)
     locale/browser/fxmonitor.properties            (%chrome/browser/fxmonitor.properties)
-
-#ifdef XPI_NAME
-# Bug 1240628, restructure how l10n repacks work with feature addons
-# This is hacky, but ensures the chrome.manifest chain is complete
-[.] chrome.jar:
-% manifest features/chrome.manifest
-#endif
