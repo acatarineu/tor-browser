@@ -21,3 +21,5 @@ ac_add_options --disable-eme
 
 # Disable telemetry
 ac_add_options MOZ_TELEMETRY_REPORTING=
+
+ac_add_options --disable-warnings-as-errors
