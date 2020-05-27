@@ -1433,8 +1433,10 @@ static void DumpHelp() {
       "  --migration        Start with migration wizard.\n"
       "  --ProfileManager   Start with ProfileManager.\n"
 #ifdef MOZ_HAS_REMOTE
-      "  --no-remote        Do not accept or send remote commands; implies\n"
+      "  --no-remote        (default) Do not accept or send remote commands; "
+      "implies\n"
       "                     --new-instance.\n"
+      "  --allow-remote     Accept and send remote commands.\n"
       "  --new-instance     Open new instance, not a new window in running "
       "instance.\n"
 #endif
@@ -1735,6 +1737,91 @@ nsresult LaunchChild(bool aBlankCommandLine) {
   return NS_ERROR_LAUNCHED_CHILD_PROCESS;
 }
 
+static nsresult GetOverrideStringBundleForLocale(nsIStringBundleService* aSBS,
+                                                 const char* aTorbuttonURI,
+                                                 const char* aLocale,
+                                                 nsIStringBundle** aResult) {
+  NS_ENSURE_ARG(aSBS);
+  NS_ENSURE_ARG(aTorbuttonURI);
+  NS_ENSURE_ARG(aLocale);
+  NS_ENSURE_ARG(aResult);
+
+  const char* kFormatStr =
+      "jar:%s!/chrome/torbutton/locale/%s/torbutton.properties";
+  nsPrintfCString strBundleURL(kFormatStr, aTorbuttonURI, aLocale);
+  nsresult rv = aSBS->CreateBundle(strBundleURL.get(), aResult);
+  NS_ENSURE_SUCCESS(rv, rv);
+
+  // To ensure that we have a valid string bundle, try to retrieve a string
+  // that we know exists.
+  nsAutoString val;
+  rv = (*aResult)->GetStringFromName("profileProblemTitle", val);
+  if (!NS_SUCCEEDED(rv)) *aResult = nullptr;  // No good.  Discard it.
+
+  return rv;
+}
+
+static void GetOverrideStringBundle(nsIStringBundleService* aSBS,
+                                    nsIStringBundle** aResult) {
+  if (!aSBS || !aResult) return;
+
+  *aResult = nullptr;
+
+  // Build Torbutton file URI string by starting from GREDir.
+  RefPtr<nsXREDirProvider> dirProvider = nsXREDirProvider::GetSingleton();
+  if (!dirProvider) return;
+
+  nsCOMPtr<nsIFile> greDir = dirProvider->GetGREDir();
+  if (!greDir) return;
+
+  // Create file URI, extract as string, and append omni.ja relative path.
+  nsCOMPtr<nsIURI> uri;
+  nsAutoCString uriString;
+  if (NS_FAILED(NS_NewFileURI(getter_AddRefs(uri), greDir)) ||
+      NS_FAILED(uri->GetSpec(uriString))) {
+    return;
+  }
+
+  uriString.Append("omni.ja");
+
+  nsAutoCString userAgentLocale;
+  if (!NS_SUCCEEDED(
+          Preferences::GetCString("intl.locale.requested", userAgentLocale))) {
+    return;
+  }
+
+  nsresult rv = GetOverrideStringBundleForLocale(
+      aSBS, uriString.get(), userAgentLocale.get(), aResult);
+  if (NS_FAILED(rv)) {
+    // Try again using base locale, e.g., "en" vs. "en-US".
+    int16_t offset = userAgentLocale.FindChar('-', 1);
+    if (offset > 0) {
+      nsAutoCString shortLocale(Substring(userAgentLocale, 0, offset));
+      rv = GetOverrideStringBundleForLocale(aSBS, uriString.get(),
+                                            shortLocale.get(), aResult);
+    }
+  }
+}
+
+static nsresult GetFormattedString(nsIStringBundle* aOverrideBundle,
+                                   nsIStringBundle* aMainBundle,
+                                   const char* aName,
+                                   const nsTArray<nsString>& aParams,
+                                   nsAString& aResult) {
+  NS_ENSURE_ARG(aName);
+
+  nsresult rv = NS_ERROR_FAILURE;
+  if (aOverrideBundle) {
+    rv = aOverrideBundle->FormatStringFromName(aName, aParams, aResult);
+  }
+
+  // If string was not found in override bundle, use main (browser) bundle.
+  if (NS_FAILED(rv) && aMainBundle)
+    rv = aMainBundle->FormatStringFromName(aName, aParams, aResult);
+
+  return rv;
+}
+
 static const char kProfileProperties[] =
     "chrome://mozapps/locale/profile/profileSelection.properties";
 
@@ -1783,7 +1870,7 @@ static nsresult ProfileMissingDialog(nsINativeAppSupport* aNative) {
     sbs->CreateBundle(kProfileProperties, getter_AddRefs(sb));
     NS_ENSURE_TRUE_LOG(sbs, NS_ERROR_FAILURE);
 
-    NS_ConvertUTF8toUTF16 appName(gAppData->name);
+    NS_ConvertUTF8toUTF16 appName(MOZ_APP_DISPLAYNAME);
     AutoTArray<nsString, 2> params = {appName, appName};
 
     // profileMissing
@@ -1805,11 +1892,14 @@ static nsresult ProfileMissingDialog(nsINativeAppSupport* aNative) {
   }
 }
 
-static ReturnAbortOnError ProfileLockedDialog(nsIFile* aProfileDir,
-                                              nsIFile* aProfileLocalDir,
-                                              nsIProfileUnlocker* aUnlocker,
-                                              nsINativeAppSupport* aNative,
-                                              nsIProfileLock** aResult) {
+// If aUnlocker is NULL, it is also OK for the following arguments to be NULL:
+//   aProfileDir, aProfileLocalDir, aResult.
+static ReturnAbortOnError ProfileErrorDialog(nsIFile* aProfileDir,
+                                             nsIFile* aProfileLocalDir,
+                                             ProfileStatus aStatus,
+                                             nsIProfileUnlocker* aUnlocker,
+                                             nsINativeAppSupport* aNative,
+                                             nsIProfileLock** aResult) {
   nsresult rv;
 
   bool exists;
@@ -1822,7 +1912,7 @@ static ReturnAbortOnError ProfileLockedDialog(nsIFile* aProfileDir,
   rv = xpcom.Initialize();
   NS_ENSURE_SUCCESS(rv, rv);
 
-  mozilla::Telemetry::WriteFailedProfileLock(aProfileDir);
+  if (aProfileDir) mozilla::Telemetry::WriteFailedProfileLock(aProfileDir);
 
   rv = xpcom.SetWindowCreator(aNative);
   NS_ENSURE_SUCCESS(rv, NS_ERROR_FAILURE);
@@ -1837,24 +1927,39 @@ static ReturnAbortOnError ProfileLockedDialog(nsIFile* aProfileDir,
     sbs->CreateBundle(kProfileProperties, getter_AddRefs(sb));
     NS_ENSURE_TRUE_LOG(sbs, NS_ERROR_FAILURE);
 
-    NS_ConvertUTF8toUTF16 appName(gAppData->name);
+    nsCOMPtr<nsIStringBundle> overrideSB;
+    GetOverrideStringBundle(sbs, getter_AddRefs(overrideSB));
+
+    NS_ConvertUTF8toUTF16 appName(MOZ_APP_DISPLAYNAME);
     AutoTArray<nsString, 3> params = {appName, appName, appName};
 
     nsAutoString killMessage;
 #ifndef XP_MACOSX
-    rv = sb->FormatStringFromName(
-        aUnlocker ? "restartMessageUnlocker" : "restartMessageNoUnlocker2",
-        params, killMessage);
+    static const char kRestartUnlocker[] = "restartMessageUnlocker";
+    static const char kRestartNoUnlocker[] = "restartMessageNoUnlocker2";
+    static const char kReadOnly[] = "profileReadOnly";
 #else
-    rv = sb->FormatStringFromName(
-        aUnlocker ? "restartMessageUnlockerMac" : "restartMessageNoUnlockerMac",
-        params, killMessage);
+    static const char kRestartUnlocker[] = "restartMessageUnlockerMac";
+    static const char kRestartNoUnlocker[] = "restartMessageNoUnlockerMac";
+    static const char kReadOnly[] = "profileReadOnlyMac";
 #endif
+    static const char kAccessDenied[] = "profileAccessDenied";
+
+    const char* errorKey = aUnlocker ? kRestartUnlocker : kRestartNoUnlocker;
+    if (PROFILE_STATUS_READ_ONLY == aStatus)
+      errorKey = kReadOnly;
+    else if (PROFILE_STATUS_ACCESS_DENIED == aStatus)
+      errorKey = kAccessDenied;
+    rv = GetFormattedString(overrideSB, sb, errorKey, params, killMessage);
     NS_ENSURE_SUCCESS(rv, NS_ERROR_FAILURE);
 
+    const char* titleKey = ((PROFILE_STATUS_READ_ONLY == aStatus) ||
+                            (PROFILE_STATUS_ACCESS_DENIED == aStatus))
+                               ? "profileProblemTitle"
+                               : "restartTitle";
     params.SetLength(1);
     nsAutoString killTitle;
-    rv = sb->FormatStringFromName("restartTitle", params, killTitle);
+    rv = sb->FormatStringFromName(titleKey, params, killTitle);
     NS_ENSURE_SUCCESS(rv, NS_ERROR_FAILURE);
 
     if (gfxPlatform::IsHeadless()) {
@@ -1897,7 +2002,8 @@ static ReturnAbortOnError ProfileLockedDialog(nsIFile* aProfileDir,
       }
     } else {
 #ifdef MOZ_WIDGET_ANDROID
-      if (java::GeckoAppShell::UnlockProfile()) {
+      if (aProfileDir && aProfileLocalDir && aResult &&
+          java::GeckoAppShell::UnlockProfile()) {
         return NS_LockProfilePath(aProfileDir, aProfileLocalDir, nullptr,
                                   aResult);
       }
@@ -2005,6 +2111,23 @@ static ReturnAbortOnError ShowProfileManager(
   return LaunchChild(false);
 }
 
+#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+static ProfileStatus CheckTorBrowserDataWriteAccess(nsIFile* aAppDir) {
+  // Check whether we can write to the directory that will contain
+  // TorBrowser-Data.
+  nsCOMPtr<nsIFile> tbDataDir;
+  RefPtr<nsXREDirProvider> dirProvider = nsXREDirProvider::GetSingleton();
+  if (!dirProvider) return PROFILE_STATUS_OTHER_ERROR;
+  nsresult rv =
+      dirProvider->GetTorBrowserUserDataDir(getter_AddRefs(tbDataDir));
+  NS_ENSURE_SUCCESS(rv, PROFILE_STATUS_OTHER_ERROR);
+  nsCOMPtr<nsIFile> tbDataDirParent;
+  rv = tbDataDir->GetParent(getter_AddRefs(tbDataDirParent));
+  NS_ENSURE_SUCCESS(rv, PROFILE_STATUS_OTHER_ERROR);
+  return nsToolkitProfileService::CheckProfileWriteAccess(tbDataDirParent);
+}
+#endif
+
 static bool gDoMigration = false;
 static bool gDoProfileReset = false;
 static nsCOMPtr<nsIToolkitProfile> gResetOldProfile;
@@ -2012,6 +2135,13 @@ static nsCOMPtr<nsIToolkitProfile> gResetOldProfile;
 static nsresult LockProfile(nsINativeAppSupport* aNative, nsIFile* aRootDir,
                             nsIFile* aLocalDir, nsIToolkitProfile* aProfile,
                             nsIProfileLock** aResult) {
+  ProfileStatus status =
+      (aProfile ? nsToolkitProfileService::CheckProfileWriteAccess(aProfile)
+                : nsToolkitProfileService::CheckProfileWriteAccess(aRootDir));
+  if (PROFILE_STATUS_OK != status)
+    return ProfileErrorDialog(aRootDir, aLocalDir, status, nullptr, aNative,
+                              aResult);
+
   // If you close Firefox and very quickly reopen it, the old Firefox may
   // still be closing down. Rather than immediately showing the
   // "Firefox is running but is not responding" message, we spend a few
@@ -2038,7 +2168,8 @@ static nsresult LockProfile(nsINativeAppSupport* aNative, nsIFile* aRootDir,
   } while (TimeStamp::Now() - start <
            TimeDuration::FromSeconds(kLockRetrySeconds));
 
-  return ProfileLockedDialog(aRootDir, aLocalDir, unlocker, aNative, aResult);
+  return ProfileErrorDialog(aRootDir, aLocalDir, PROFILE_STATUS_IS_LOCKED,
+                            unlocker, aNative, aResult);
 }
 
 // Pick a profile. We need to end up with a profile root dir, local dir and
@@ -2053,7 +2184,8 @@ static nsresult LockProfile(nsINativeAppSupport* aNative, nsIFile* aRootDir,
 static nsresult SelectProfile(nsToolkitProfileService* aProfileSvc,
                               nsINativeAppSupport* aNative, nsIFile** aRootDir,
                               nsIFile** aLocalDir, nsIToolkitProfile** aProfile,
-                              bool* aWasDefaultSelection) {
+                              bool* aWasDefaultSelection,
+                              nsIProfileLock** aResult) {
   StartupTimeline::Record(StartupTimeline::SELECT_PROFILE);
 
   nsresult rv;
@@ -2089,9 +2221,14 @@ static nsresult SelectProfile(nsToolkitProfileService* aProfileSvc,
 
   // Ask the profile manager to select the profile directories to use.
   bool didCreate = false;
-  rv = aProfileSvc->SelectStartupProfile(&gArgc, gArgv, gDoProfileReset,
-                                         aRootDir, aLocalDir, aProfile,
-                                         &didCreate, aWasDefaultSelection);
+  ProfileStatus profileStatus = PROFILE_STATUS_OK;
+  rv = aProfileSvc->SelectStartupProfile(
+      &gArgc, gArgv, gDoProfileReset, aRootDir, aLocalDir, aProfile, &didCreate,
+      aWasDefaultSelection, profileStatus);
+  if (PROFILE_STATUS_OK != profileStatus) {
+    return ProfileErrorDialog(*aRootDir, *aLocalDir, profileStatus, nullptr,
+                              aNative, aResult);
+  }
 
   if (rv == NS_ERROR_SHOW_PROFILE_MANAGER) {
     return ShowProfileManager(aProfileSvc, aNative);
@@ -2518,6 +2655,11 @@ static bool CheckCompatibility(nsIFile* aProfileDir, const nsCString& aVersion,
   gLastAppBuildID.Assign(gAppData->buildID);
 
   nsAutoCString buf;
+
+  nsAutoCString tbVersion(TOR_BROWSER_VERSION_QUOTED);
+  rv = parser.GetString("Compatibility", "LastTorBrowserVersion", buf);
+  if (NS_FAILED(rv) || !tbVersion.Equals(buf)) return false;
+
   rv = parser.GetString("Compatibility", "LastOSABI", buf);
   if (NS_FAILED(rv) || !aOSABI.Equals(buf)) return false;
 
@@ -2602,6 +2744,12 @@ static void WriteVersion(nsIFile* aProfileDir, const nsCString& aVersion,
 
   PR_Write(fd, kHeader, sizeof(kHeader) - 1);
   PR_Write(fd, aVersion.get(), aVersion.Length());
+
+  nsAutoCString tbVersion(TOR_BROWSER_VERSION_QUOTED);
+  static const char kTorBrowserVersionHeader[] =
+      NS_LINEBREAK "LastTorBrowserVersion=";
+  PR_Write(fd, kTorBrowserVersionHeader, sizeof(kTorBrowserVersionHeader) - 1);
+  PR_Write(fd, tbVersion.get(), tbVersion.Length());
 
   static const char kOSABIHeader[] = NS_LINEBREAK "LastOSABI=";
   PR_Write(fd, kOSABIHeader, sizeof(kOSABIHeader) - 1);
@@ -3053,6 +3201,14 @@ int XREMain::XRE_mainInit(bool* aExitFlag) {
   if (PR_GetEnv("XRE_MAIN_BREAK")) NS_BREAK();
 #endif
 
+#if defined(XP_MACOSX) && defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+  bool hideDockIcon = (CheckArg("invisible") == ARG_FOUND);
+  if (hideDockIcon) {
+    ProcessSerialNumber psn = {0, kCurrentProcess};
+    TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+  }
+#endif
+
   IncreaseDescriptorLimits();
 
 #ifdef USE_GLX_TEST
@@ -3172,7 +3328,7 @@ int XREMain::XRE_mainInit(bool* aExitFlag) {
   if ((mAppData->flags & NS_XRE_ENABLE_CRASH_REPORTER) &&
       NS_SUCCEEDED(CrashReporter::SetExceptionHandler(xreBinDirectory))) {
     nsCOMPtr<nsIFile> file;
-    rv = nsXREDirProvider::GetUserAppDataDirectory(getter_AddRefs(file));
+    rv = mDirProvider.GetUserAppDataDirectory(getter_AddRefs(file));
     if (NS_SUCCEEDED(rv)) {
       CrashReporter::SetUserAppDataDirectory(file);
     }
@@ -3388,16 +3544,25 @@ int XREMain::XRE_mainInit(bool* aExitFlag) {
                                      gSafeMode);
 
 #if defined(MOZ_HAS_REMOTE)
+  // In Tor Browser, remoting is disabled by default unless -osint is used.
+  bool allowRemote = (CheckArg("allow-remote") == ARG_FOUND);
+  bool isOsint = (CheckArg("osint", nullptr, CheckArgFlag::None) == ARG_FOUND);
+  if (!allowRemote && !isOsint) {
+    SaveToEnv("MOZ_NO_REMOTE=1");
+  }
   // Handle --no-remote and --new-instance command line arguments. Setup
   // the environment to better accommodate other components and various
   // restart scenarios.
   ar = CheckArg("no-remote");
-  if (ar == ARG_FOUND || EnvHasValue("MOZ_NO_REMOTE")) {
+  if ((ar == ARG_FOUND) && allowRemote) {
+    PR_fprintf(PR_STDERR,
+               "Error: argument --no-remote is invalid when argument "
+               "--allow-remote is specified\n");
+    return 1;
+  }
+  if (EnvHasValue("MOZ_NO_REMOTE")) {
     mDisableRemoteClient = true;
     mDisableRemoteServer = true;
-    if (!EnvHasValue("MOZ_NO_REMOTE")) {
-      SaveToEnv("MOZ_NO_REMOTE=1");
-    }
   }
 
   ar = CheckArg("new-instance");
@@ -3870,7 +4035,34 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
     return 0;
   }
 
+#if (defined(MOZ_UPDATER) && !defined(MOZ_WIDGET_ANDROID)) || \
+    defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+  nsCOMPtr<nsIFile> exeFile, exeDir;
+  bool persistent;
+  rv = mDirProvider.GetFile(XRE_EXECUTABLE_FILE, &persistent,
+                            getter_AddRefs(exeFile));
+  NS_ENSURE_SUCCESS(rv, 1);
+  rv = exeFile->GetParent(getter_AddRefs(exeDir));
+  NS_ENSURE_SUCCESS(rv, 1);
+#endif
+
   rv = NS_NewToolkitProfileService(getter_AddRefs(mProfileSvc));
+#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+  if (NS_FAILED(rv)) {
+    // NS_NewToolkitProfileService() returns a generic NS_ERROR_FAILURE error
+    // if creation of the TorBrowser-Data directory fails due to access denied
+    // or because of a read-only disk volume. Do an extra check here to detect
+    // these errors so we can display an informative error message.
+    ProfileStatus status = CheckTorBrowserDataWriteAccess(exeDir);
+    if ((PROFILE_STATUS_ACCESS_DENIED == status) ||
+        (PROFILE_STATUS_READ_ONLY == status)) {
+      ProfileErrorDialog(nullptr, nullptr, status, nullptr, mNativeApp,
+                         nullptr);
+      return 1;
+    }
+  }
+ #endif
+
   if (rv == NS_ERROR_FILE_ACCESS_DENIED) {
     PR_fprintf(PR_STDERR,
                "Error: Access was denied while trying to open files in "
@@ -3886,7 +4078,7 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
   nsCOMPtr<nsIToolkitProfile> profile;
   rv = SelectProfile(mProfileSvc, mNativeApp, getter_AddRefs(mProfD),
                      getter_AddRefs(mProfLD), getter_AddRefs(profile),
-                     &wasDefaultSelection);
+                     &wasDefaultSelection, getter_AddRefs(mProfileLock));
   if (rv == NS_ERROR_LAUNCHED_CHILD_PROCESS || rv == NS_ERROR_ABORT) {
     *aExitFlag = true;
     return 0;
@@ -3939,7 +4131,6 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
 #if defined(MOZ_UPDATER) && !defined(MOZ_WIDGET_ANDROID)
   // Check for and process any available updates
   nsCOMPtr<nsIFile> updRoot;
-  bool persistent;
   rv = mDirProvider.GetFile(XRE_UPDATE_ROOT_DIR, &persistent,
                             getter_AddRefs(updRoot));
   // XRE_UPDATE_ROOT_DIR may fail. Fallback to appDir if failed
@@ -3975,14 +4166,17 @@ int XREMain::XRE_mainStartup(bool* aExitFlag) {
   if (CheckArg("test-process-updates")) {
     SaveToEnv("MOZ_TEST_PROCESS_UPDATES=1");
   }
-  nsCOMPtr<nsIFile> exeFile, exeDir;
-  rv = mDirProvider.GetFile(XRE_EXECUTABLE_FILE, &persistent,
-                            getter_AddRefs(exeFile));
-  NS_ENSURE_SUCCESS(rv, 1);
-  rv = exeFile->GetParent(getter_AddRefs(exeDir));
-  NS_ENSURE_SUCCESS(rv, 1);
+#  ifdef TOR_BROWSER_UPDATE
+  nsAutoCString compatVersion(TOR_BROWSER_VERSION_QUOTED);
+#  endif
   ProcessUpdates(mDirProvider.GetGREDir(), exeDir, updRoot, gRestartArgc,
-                 gRestartArgv, mAppData->version);
+                 gRestartArgv,
+#  ifdef TOR_BROWSER_UPDATE
+                 compatVersion.get()
+#  else
+                 mAppData->version
+#  endif
+  );
   if (EnvHasValue("MOZ_TEST_PROCESS_UPDATES")) {
     SaveToEnv("MOZ_TEST_PROCESS_UPDATES=");
     *aExitFlag = true;
