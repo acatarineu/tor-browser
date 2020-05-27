@@ -149,91 +149,11 @@ nsHttpNegotiateAuth::ChallengeReceived(nsIHttpAuthenticableChannel* authChannel,
                                        nsISupports** sessionState,
                                        nsISupports** continuationState,
                                        bool* identityInvalid) {
-  nsIAuthModule* rawModule = (nsIAuthModule*)*continuationState;
 
   *identityInvalid = false;
 
   /* Always fail Negotiate auth for Tor Browser. We don't need it. */
   return NS_ERROR_ABORT;
-
-  if (rawModule) {
-    return NS_OK;
-  }
-
-  nsresult rv;
-  nsCOMPtr<nsIAuthModule> module;
-
-  nsCOMPtr<nsIURI> uri;
-  rv = authChannel->GetURI(getter_AddRefs(uri));
-  if (NS_FAILED(rv)) return rv;
-
-  uint32_t req_flags = nsIAuthModule::REQ_DEFAULT;
-  nsAutoCString service;
-
-  if (isProxyAuth) {
-    if (!TestBoolPref(kNegotiateAuthAllowProxies)) {
-      LOG(("nsHttpNegotiateAuth::ChallengeReceived proxy auth blocked\n"));
-      return NS_ERROR_ABORT;
-    }
-
-    req_flags |= nsIAuthModule::REQ_PROXY_AUTH;
-    nsCOMPtr<nsIProxyInfo> proxyInfo;
-    authChannel->GetProxyInfo(getter_AddRefs(proxyInfo));
-    NS_ENSURE_STATE(proxyInfo);
-
-    proxyInfo->GetHost(service);
-  } else {
-    bool allowed =
-        TestNotInPBMode(authChannel, isProxyAuth) &&
-        (TestNonFqdn(uri) || mozilla::net::auth::URIMatchesPrefPattern(
-                                 uri, kNegotiateAuthTrustedURIs));
-    if (!allowed) {
-      LOG(("nsHttpNegotiateAuth::ChallengeReceived URI blocked\n"));
-      return NS_ERROR_ABORT;
-    }
-
-    bool delegation = mozilla::net::auth::URIMatchesPrefPattern(
-        uri, kNegotiateAuthDelegationURIs);
-    if (delegation) {
-      LOG(("  using REQ_DELEGATE\n"));
-      req_flags |= nsIAuthModule::REQ_DELEGATE;
-    }
-
-    rv = uri->GetAsciiHost(service);
-    if (NS_FAILED(rv)) return rv;
-  }
-
-  LOG(("  service = %s\n", service.get()));
-
-  //
-  // The correct service name for IIS servers is "HTTP/f.q.d.n", so
-  // construct the proper service name for passing to "gss_import_name".
-  //
-  // TODO: Possibly make this a configurable service name for use
-  // with non-standard servers that use stuff like "khttp/f.q.d.n"
-  // instead.
-  //
-  service.InsertLiteral("HTTP@", 0);
-
-  const char* authType;
-  if (TestBoolPref(kNegotiateAuthSSPI)) {
-    LOG(("  using negotiate-sspi\n"));
-    authType = "negotiate-sspi";
-  } else {
-    LOG(("  using negotiate-gss\n"));
-    authType = "negotiate-gss";
-  }
-
-  MOZ_ALWAYS_TRUE(module = nsIAuthModule::CreateInstance(authType));
-
-  rv = module->Init(service.get(), req_flags, nullptr, nullptr, nullptr);
-
-  if (NS_FAILED(rv)) {
-    return rv;
-  }
-
-  module.forget(continuationState);
-  return NS_OK;
 }
 
 NS_IMPL_ISUPPORTS(nsHttpNegotiateAuth, nsIHttpAuthenticator)
