@@ -49,9 +49,9 @@ pref("extensions.recommendations.themeRecommendationUrl", "https://color.firefox
 
 pref("extensions.update.autoUpdateDefault", true);
 
-// Check AUS for system add-on updates.
-pref("extensions.systemAddon.update.url", "https://aus5.mozilla.org/update/3/SystemAddons/%VERSION%/%BUILD_ID%/%BUILD_TARGET%/%LOCALE%/%CHANNEL%/%OS_VERSION%/%DISTRIBUTION%/%DISTRIBUTION_VERSION%/update.xml");
-pref("extensions.systemAddon.update.enabled", true);
+// No AUS check for system add-on updates for Tor Browser users.
+pref("extensions.systemAddon.update.url", "");
+pref("extensions.systemAddon.update.enabled", false);
 
 // Disable add-ons that are not installed by the user in all scopes by default.
 // See the SCOPE constants in AddonManager.jsm for values to use here.
@@ -128,14 +128,8 @@ pref("app.update.download.promptMaxAttempts", 2);
 pref("app.update.elevation.promptMaxAttempts", 2);
 
 // If set to true, the Update Service will automatically download updates if the
-// user can apply updates. This pref is no longer used on Windows, except as the
-// default value to migrate to the new location that this data is now stored
-// (which is in a file in the update directory). Because of this, this pref
-// should no longer be used directly. Instead, getAppUpdateAutoEnabled and
-// getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
-#ifndef XP_WIN
-  pref("app.update.auto", true);
-#endif
+// user can apply updates.
+pref("app.update.auto", true);
 
 // If set to true, the Update Service will apply updates in the background
 // when it finishes downloading them.
@@ -1803,6 +1797,22 @@ pref("toolkit.osKeyStore.loglevel", "Warn");
 pref("browser.sessionstore.restore_tabs_lazily", true);
 
 pref("browser.suppress_first_window_animation", true);
+
+// Preferences for Photon onboarding system extension
+pref("browser.onboarding.enabled", true);
+// Mark this as an upgraded profile so we don't offer the initial new user onboarding tour.
+pref("browser.onboarding.tourset-version", 2);
+pref("browser.onboarding.state", "default");
+// On the Activity-Stream page, the snippet's position overlaps with our notification.
+// So use `browser.onboarding.notification.finished` to let the AS page know
+// if our notification is finished and safe to show their snippet.
+pref("browser.onboarding.notification.finished", false);
+pref("browser.onboarding.notification.mute-duration-on-first-session-ms", 300000); // 5 mins
+pref("browser.onboarding.notification.max-life-time-per-tour-ms", 432000000); // 5 days
+pref("browser.onboarding.notification.max-life-time-all-tours-ms", 1209600000); // 14 days
+pref("browser.onboarding.notification.max-prompt-count-per-tour", 8);
+pref("browser.onboarding.newtour", "performance,private,screenshots,addons,customize,default");
+pref("browser.onboarding.updatetour", "performance,library,screenshots,singlesearch,customize,sync");
 
 // Preference that allows individual users to disable Screenshots.
 pref("extensions.screenshots.disabled", false);

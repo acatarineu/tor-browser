@@ -32,6 +32,7 @@
 #include "nsArrayEnumerator.h"
 #include "nsEnumeratorUtils.h"
 #include "nsReadableUtils.h"
+#include "nsXPCOMPrivate.h"  // for XPCOM_FILE_PATH_SEPARATOR
 
 #include "SpecialSystemDirectory.h"
 
@@ -44,6 +45,8 @@
 #include "mozilla/Preferences.h"
 #include "mozilla/Telemetry.h"
 #include "nsPrintfCString.h"
+
+#include "TorFileUtils.h"
 
 #include <stdlib.h>
 
@@ -244,9 +247,6 @@ nsresult nsXREDirProvider::GetUserProfilesRootDir(nsIFile** aResult) {
   nsresult rv = GetUserDataDirectory(getter_AddRefs(file), false);
 
   if (NS_SUCCEEDED(rv)) {
-#if !defined(XP_UNIX) || defined(XP_MACOSX)
-    rv = file->AppendNative(NS_LITERAL_CSTRING("Profiles"));
-#endif
     // We must create the profile directory here if it does not exist.
     nsresult tmp = EnsureDirectoryExists(file);
     if (NS_FAILED(tmp)) {
@@ -262,9 +262,6 @@ nsresult nsXREDirProvider::GetUserProfilesLocalDir(nsIFile** aResult) {
   nsresult rv = GetUserDataDirectory(getter_AddRefs(file), true);
 
   if (NS_SUCCEEDED(rv)) {
-#if !defined(XP_UNIX) || defined(XP_MACOSX)
-    rv = file->AppendNative(NS_LITERAL_CSTRING("Profiles"));
-#endif
     // We must create the profile directory here if it does not exist.
     nsresult tmp = EnsureDirectoryExists(file);
     if (NS_FAILED(tmp)) {
@@ -1243,6 +1240,41 @@ nsresult nsXREDirProvider::GetUpdateRootDir(nsIFile** aResult,
   }
 #endif
   nsCOMPtr<nsIFile> updRoot;
+#if defined(TOR_BROWSER_UPDATE)
+  // For Tor Browser, we store update history, etc. within the UpdateInfo
+  // directory under the user data directory.
+  nsresult rv = GetTorBrowserUserDataDir(getter_AddRefs(updRoot));
+  NS_ENSURE_SUCCESS(rv, rv);
+  rv = updRoot->AppendNative(NS_LITERAL_CSTRING("UpdateInfo"));
+  NS_ENSURE_SUCCESS(rv, rv);
+#  if defined(XP_MACOSX) && defined(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
+  // Since the TorBrowser-Data directory may be shared among different
+  // installations of the application, embed the app path in the update dir
+  // so that the update history is partitioned. This is much less likely to
+  // be an issue on Linux or Windows because the Tor Browser packages for
+  // those platforms include a "container" folder that provides partitioning
+  // by default, and we do not support use of a shared, OS-recommended area
+  // for user data on those platforms.
+  nsCOMPtr<nsIFile> appFile;
+  bool per = false;
+  rv = GetFile(XRE_EXECUTABLE_FILE, &per, getter_AddRefs(appFile));
+  NS_ENSURE_SUCCESS(rv, rv);
+  nsCOMPtr<nsIFile> appRootDirFile;
+  nsAutoString appDirPath;
+  if (NS_FAILED(appFile->GetParent(getter_AddRefs(appRootDirFile))) ||
+      NS_FAILED(appRootDirFile->GetPath(appDirPath))) {
+    return NS_ERROR_FAILURE;
+  }
+
+  int32_t dotIndex = appDirPath.RFind(".app");
+  if (dotIndex == kNotFound) {
+    dotIndex = appDirPath.Length();
+  }
+  appDirPath = Substring(appDirPath, 1, dotIndex - 1);
+  rv = updRoot->AppendRelativePath(appDirPath);
+  NS_ENSURE_SUCCESS(rv, rv);
+#  endif
+#else  // ! TOR_BROWSER_UPDATE
   nsCOMPtr<nsIFile> appFile;
   bool per = false;
   nsresult rv = GetFile(XRE_EXECUTABLE_FILE, &per, getter_AddRefs(appFile));
@@ -1250,7 +1282,7 @@ nsresult nsXREDirProvider::GetUpdateRootDir(nsIFile** aResult,
   rv = appFile->GetParent(getter_AddRefs(updRoot));
   NS_ENSURE_SUCCESS(rv, rv);
 
-#ifdef XP_MACOSX
+#  ifdef XP_MACOSX
   nsCOMPtr<nsIFile> appRootDirFile;
   nsCOMPtr<nsIFile> localDir;
   nsAutoString appDirPath;
@@ -1284,7 +1316,7 @@ nsresult nsXREDirProvider::GetUpdateRootDir(nsIFile** aResult,
   localDir.forget(aResult);
   return NS_OK;
 
-#elif XP_WIN
+#  elif XP_WIN
   nsAutoString installPath;
   rv = updRoot->GetPath(installPath);
   NS_ENSURE_SUCCESS(rv, rv);
@@ -1313,7 +1345,8 @@ nsresult nsXREDirProvider::GetUpdateRootDir(nsIFile** aResult,
   nsAutoString updatePathStr;
   updatePathStr.Assign(updatePath.get());
   updRoot->InitWithPath(updatePathStr);
-#endif  // XP_WIN
+#  endif  // XP_WIN
+#endif    // ! TOR_BROWSER_UPDATE
   updRoot.forget(aResult);
   return NS_OK;
 }
@@ -1378,7 +1411,7 @@ nsresult nsXREDirProvider::SetUserDataProfileDirectory(nsCOMPtr<nsIFile>& aFile,
 nsresult nsXREDirProvider::GetUserDataDirectoryHome(nsIFile** aFile,
                                                     bool aLocal) {
   // Copied from nsAppFileLocationProvider (more or less)
-  nsresult rv;
+  NS_ENSURE_ARG_POINTER(aFile);
   nsCOMPtr<nsIFile> localDir;
 
   if (aLocal && gDataDirHomeLocal) {
@@ -1388,81 +1421,23 @@ nsresult nsXREDirProvider::GetUserDataDirectoryHome(nsIFile** aFile,
     return gDataDirHome->Clone(aFile);
   }
 
-#if defined(XP_MACOSX)
-  FSRef fsRef;
-  OSType folderType;
-  if (aLocal) {
-    folderType = kCachedDataFolderType;
-  } else {
-#  ifdef MOZ_THUNDERBIRD
-    folderType = kDomainLibraryFolderType;
-#  else
-    folderType = kApplicationSupportFolderType;
-#  endif
-  }
-  OSErr err = ::FSFindFolder(kUserDomain, folderType, kCreateFolder, &fsRef);
-  NS_ENSURE_FALSE(err, NS_ERROR_FAILURE);
-
-  rv = NS_NewNativeLocalFile(EmptyCString(), true, getter_AddRefs(localDir));
+  nsresult rv = GetTorBrowserUserDataDir(getter_AddRefs(localDir));
   NS_ENSURE_SUCCESS(rv, rv);
 
-  nsCOMPtr<nsILocalFileMac> dirFileMac = do_QueryInterface(localDir);
-  NS_ENSURE_TRUE(dirFileMac, NS_ERROR_UNEXPECTED);
-
-  rv = dirFileMac->InitWithFSRef(&fsRef);
-  NS_ENSURE_SUCCESS(rv, rv);
-
-  localDir = dirFileMac;
-#elif defined(XP_IOS)
-  nsAutoCString userDir;
-  if (GetUIKitDirectory(aLocal, userDir)) {
-    rv = NS_NewNativeLocalFile(userDir, true, getter_AddRefs(localDir));
-  } else {
-    rv = NS_ERROR_FAILURE;
-  }
-  NS_ENSURE_SUCCESS(rv, rv);
-#elif defined(XP_WIN)
-  nsString path;
-  if (aLocal) {
-    rv = GetShellFolderPath(FOLDERID_LocalAppData, path);
-    if (NS_FAILED(rv)) rv = GetRegWindowsAppDataFolder(aLocal, path);
-  }
-  if (!aLocal || NS_FAILED(rv)) {
-    rv = GetShellFolderPath(FOLDERID_RoamingAppData, path);
-    if (NS_FAILED(rv)) {
-      if (!aLocal) rv = GetRegWindowsAppDataFolder(aLocal, path);
-    }
-  }
-  NS_ENSURE_SUCCESS(rv, rv);
-
-  rv = NS_NewLocalFile(path, true, getter_AddRefs(localDir));
-#elif defined(XP_UNIX)
-  const char* homeDir = getenv("HOME");
-  if (!homeDir || !*homeDir) return NS_ERROR_FAILURE;
-
-#  ifdef ANDROID /* We want (ProfD == ProfLD) on Android. */
-  aLocal = false;
-#  endif
-
-  if (aLocal) {
-    // If $XDG_CACHE_HOME is defined use it, otherwise use $HOME/.cache.
-    const char* cacheHome = getenv("XDG_CACHE_HOME");
-    if (cacheHome && *cacheHome) {
-      rv = NS_NewNativeLocalFile(nsDependentCString(cacheHome), true,
-                                 getter_AddRefs(localDir));
-    } else {
-      rv = NS_NewNativeLocalFile(nsDependentCString(homeDir), true,
-                                 getter_AddRefs(localDir));
-      if (NS_SUCCEEDED(rv))
-        rv = localDir->AppendNative(NS_LITERAL_CSTRING(".cache"));
-    }
-  } else {
-    rv = NS_NewNativeLocalFile(nsDependentCString(homeDir), true,
-                               getter_AddRefs(localDir));
-  }
+#if !defined(ANDROID)
+#ifdef TOR_BROWSER_DATA_OUTSIDE_APP_DIR
+  rv = localDir->AppendNative(NS_LITERAL_CSTRING("Browser"));
 #else
-#  error "Don't know how to get product dir on your platform"
+  rv = localDir->AppendRelativeNativePath(
+      NS_LITERAL_CSTRING("Data" XPCOM_FILE_PATH_SEPARATOR "Browser"));
 #endif
+  NS_ENSURE_SUCCESS(rv, rv);
+#endif
+
+  if (aLocal) {
+    rv = localDir->AppendNative(NS_LITERAL_CSTRING("Caches"));
+    NS_ENSURE_SUCCESS(rv, rv);
+  }
 
   NS_IF_ADDREF(*aFile = localDir);
   return rv;
@@ -1563,6 +1538,15 @@ nsresult nsXREDirProvider::GetUserDataDirectory(nsIFile** aFile, bool aLocal) {
   return NS_OK;
 }
 
+nsresult nsXREDirProvider::GetTorBrowserUserDataDir(nsIFile** aFile) {
+  NS_ENSURE_ARG_POINTER(aFile);
+  nsCOMPtr<nsIFile> exeFile;
+  bool per = false;
+  nsresult rv = GetFile(XRE_EXECUTABLE_FILE, &per, getter_AddRefs(exeFile));
+  NS_ENSURE_SUCCESS(rv, rv);
+  return TorBrowser_GetUserDataDir(exeFile, aFile);
+}
+
 nsresult nsXREDirProvider::EnsureDirectoryExists(nsIFile* aDirectory) {
   nsresult rv = aDirectory->Create(nsIFile::DIRECTORY_TYPE, 0700);
 
@@ -1645,39 +1629,23 @@ nsresult nsXREDirProvider::AppendProfilePath(nsIFile* aFile, bool aLocal) {
   }
 
   nsAutoCString profile;
-  nsAutoCString appName;
-  nsAutoCString vendor;
   if (gAppData->profile) {
     profile = gAppData->profile;
-  } else {
-    appName = gAppData->name;
-    vendor = gAppData->vendor;
   }
 
-  nsresult rv = NS_OK;
+  nsresult rv = NS_ERROR_FAILURE;
 
 #if defined(XP_MACOSX)
   if (!profile.IsEmpty()) {
     rv = AppendProfileString(aFile, profile.get());
-  } else {
-    // Note that MacOS ignores the vendor when creating the profile hierarchy -
-    // all application preferences directories live alongside one another in
-    // ~/Library/Application Support/
-    rv = aFile->AppendNative(appName);
+    NS_ENSURE_SUCCESS(rv, rv);
   }
-  NS_ENSURE_SUCCESS(rv, rv);
 
 #elif defined(XP_WIN)
   if (!profile.IsEmpty()) {
     rv = AppendProfileString(aFile, profile.get());
-  } else {
-    if (!vendor.IsEmpty()) {
-      rv = aFile->AppendNative(vendor);
-      NS_ENSURE_SUCCESS(rv, rv);
-    }
-    rv = aFile->AppendNative(appName);
+    NS_ENSURE_SUCCESS(rv, rv);
   }
-  NS_ENSURE_SUCCESS(rv, rv);
 
 #elif defined(ANDROID)
   // The directory used for storing profiles
@@ -1687,11 +1655,6 @@ nsresult nsXREDirProvider::AppendProfilePath(nsIFile* aFile, bool aLocal) {
   rv = aFile->AppendNative(nsDependentCString("mozilla"));
   NS_ENSURE_SUCCESS(rv, rv);
 #elif defined(XP_UNIX)
-  nsAutoCString folder;
-  // Make it hidden (by starting with "."), except when local (the
-  // profile is already under ~/.cache or XDG_CACHE_HOME).
-  if (!aLocal) folder.Assign('.');
-
   if (!profile.IsEmpty()) {
     // Skip any leading path characters
     const char* profileStart = profile.get();
@@ -1699,32 +1662,16 @@ nsresult nsXREDirProvider::AppendProfilePath(nsIFile* aFile, bool aLocal) {
 
     // On the off chance that someone wanted their folder to be hidden don't
     // let it become ".."
-    if (*profileStart == '.' && !aLocal) profileStart++;
+    if (*profileStart == '.') profileStart++;
 
+    // Make it hidden (by starting with ".").
+    nsAutoCString folder(".");
     folder.Append(profileStart);
     ToLowerCase(folder);
 
     rv = AppendProfileString(aFile, folder.BeginReading());
-  } else {
-    if (!vendor.IsEmpty()) {
-      folder.Append(vendor);
-      ToLowerCase(folder);
-
-      rv = aFile->AppendNative(folder);
-      NS_ENSURE_SUCCESS(rv, rv);
-
-      folder.Truncate();
-    }
-
-    // This can be the case in tests.
-    if (!appName.IsEmpty()) {
-      folder.Append(appName);
-      ToLowerCase(folder);
-
-      rv = aFile->AppendNative(folder);
-    }
+    NS_ENSURE_SUCCESS(rv, rv);
   }
-  NS_ENSURE_SUCCESS(rv, rv);
 
 #else
 #  error "Don't know how to get profile path on your platform"

@@ -128,6 +128,7 @@ EXTRA_JS_MODULES += [
     'AboutNewTab.jsm',
     'AppUpdater.jsm',
     'AsyncTabSwitcher.jsm',
+    'BridgeDB.jsm',
     'BrowserUsageTelemetry.jsm',
     'BrowserWindowTracker.jsm',
     'ContentCrashHandlers.jsm',
@@ -153,10 +154,17 @@ EXTRA_JS_MODULES += [
     'TabsList.jsm',
     'TabUnloader.jsm',
     'ThemeVariableMap.jsm',
+    'TorProtocolService.jsm',
+    'TorStrings.jsm',
     'TransientPrefs.jsm',
     'webrtcUI.jsm',
     'ZoomUI.jsm',
 ]
+
+if CONFIG['TOR_BROWSER_UPDATE']:
+    EXTRA_PP_JS_MODULES += [
+        'AboutTBUpdate.jsm',
+    ]
 
 if CONFIG['MOZ_ASAN_REPORTER']:
     EXTRA_JS_MODULES += [
