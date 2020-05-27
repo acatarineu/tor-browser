@@ -13,3 +13,11 @@
 if test -n "$USE_ARTIFACT"; then
 . "$topsrcdir/build/mozconfig.artifact"
 fi
+
+ac_add_options --disable-crashreporter
+ac_add_options --disable-webrtc
+ac_add_options --enable-proxy-bypass-protection
+ac_add_options --disable-eme
+
+# Disable telemetry
+ac_add_options MOZ_TELEMETRY_REPORTING=

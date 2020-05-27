@@ -57,7 +57,7 @@ var gIdentityHandler = {
    * RegExp used to decide if an about url should be shown as being part of
    * the browser UI.
    */
-  _secureInternalUIWhitelist: /^(?:accounts|addons|cache|certificate|config|crashes|downloads|license|logins|preferences|protections|rights|sessionrestore|support|welcomeback)(?:[?#]|$)/i,
+  _secureInternalUIWhitelist: (AppConstants.TOR_BROWSER_UPDATE ? /^(?:accounts|addons|cache|certificate|config|crashes|downloads|license|logins|preferences|protections|rights|sessionrestore|support|welcomeback|tor|tbupdate)(?:[?#]|$)/i : /^(?:accounts|addons|cache|certificate|config|crashes|downloads|license|logins|preferences|protections|rights|sessionrestore|support|welcomeback|tor)(?:[?#]|$)/i),
 
   /**
    * Whether the established HTTPS connection is considered "broken".
@@ -129,6 +129,10 @@ var gIdentityHandler = {
       gBrowser.selectedBrowser.documentURI.scheme == "about" &&
       gBrowser.selectedBrowser.documentURI.pathQueryRef.startsWith("certerror")
     );
+  },
+
+  get _uriIsOnionHost() {
+    return this._uriHasHost ? this._uri.host.toLowerCase().endsWith(".onion") : false;
   },
 
   // smart getters
@@ -624,9 +628,9 @@ var gIdentityHandler = {
   get pointerlockFsWarningClassName() {
     // Note that the fullscreen warning does not handle _isSecureInternalUI.
     if (this._uriHasHost && this._isSecureConnection) {
-      return "verifiedDomain";
+      return this._uriIsOnionHost ? "onionVerifiedDomain" : "verifiedDomain";
     }
-    return "unknownIdentity";
+    return this._uriIsOnionHost ? "onionUnknownIdentity" : "unknownIdentity";
   },
 
   /**
@@ -634,6 +638,10 @@ var gIdentityHandler = {
    * built-in (returns false) or imported (returns true).
    */
   _hasCustomRoot() {
+    if (!this._secInfo) {
+      return false;
+    }
+
     let issuerCert = null;
     issuerCert = this._secInfo.succeededCertChain[
       this._secInfo.succeededCertChain.length - 1
@@ -676,11 +684,17 @@ var gIdentityHandler = {
         "identity.extension.label",
         [extensionName]
       );
-    } else if (this._uriHasHost && this._isSecureConnection) {
+    } else if (this._uriHasHost && this._isSecureConnection && this._secInfo) {
       // This is a secure connection.
-      this._identityBox.className = "verifiedDomain";
+      // _isSecureConnection implicitly includes onion services, which may not have an SSL certificate
+      let uriIsOnionHost = this._uriIsOnionHost;
+      if (uriIsOnionHost) {
+        this._identityBox.className = this._secInfo.serverCert.isSelfSigned ? "onionSelfSigned" : "onionVerifiedDomain";
+      } else {
+        this._identityBox.className = "verifiedDomain";
+      }
       if (this._isMixedActiveContentBlocked) {
-        this._identityBox.classList.add("mixedActiveBlocked");
+        this._identityBox.classList.add(uriIsOnionHost ? "onionMixedActiveBlocked" : "mixedActiveBlocked");
       }
       if (!this._isCertUserOverridden) {
         // It's a normal cert, verifier is the CA Org.
@@ -691,16 +705,15 @@ var gIdentityHandler = {
       }
     } else if (this._isBrokenConnection) {
       // This is a secure connection, but something is wrong.
-      this._identityBox.className = "unknownIdentity";
+      let uriIsOnionHost = this._uriIsOnionHost;
+      this._identityBox.className = uriIsOnionHost ? "onionUnknownIdentity" : "unknownIdentity";
 
       if (this._isMixedActiveContentLoaded) {
-        this._identityBox.classList.add("mixedActiveContent");
+        this._identityBox.classList.add(uriIsOnionHost ? "onionMixedActiveContent" : "mixedActiveContent");
       } else if (this._isMixedActiveContentBlocked) {
-        this._identityBox.classList.add(
-          "mixedDisplayContentLoadedActiveBlocked"
-        );
+        this._identityBox.classList.add(uriIsOnionHost ? "onionMixedDisplayContentLoadedActiveBlocked" : "mixedDisplayContentLoadedActiveBlocked");
       } else if (this._isMixedPassiveContentLoaded) {
-        this._identityBox.classList.add("mixedDisplayContent");
+        this._identityBox.classList.add(uriIsOnionHost ? "onionMixedDisplayContent" : "mixedDisplayContent");
       } else {
         this._identityBox.classList.add("weakCipher");
       }
@@ -713,8 +726,8 @@ var gIdentityHandler = {
         (gBrowser.selectedBrowser.documentURI.scheme == "about" ||
           gBrowser.selectedBrowser.documentURI.scheme == "chrome"))
     ) {
-      // This is a local resource (and shouldn't be marked insecure).
-      this._identityBox.className = "unknownIdentity";
+      // This is a local resource or an onion site (and shouldn't be marked insecure).
+      this._identityBox.className = this._uriIsOnionHost ? "onionUnknownIdentity" : "unknownIdentity";
     } else {
       // This is an insecure connection.
       let warnOnInsecure =
@@ -836,10 +849,10 @@ var gIdentityHandler = {
 
     this._refreshPermissionIcons();
 
-    // Hide the shield icon if it is a chrome page.
+    // Bug 26345: Hide tracking protection UI.
     gProtectionsHandler._trackingProtectionIconContainer.classList.toggle(
       "chromeUI",
-      this._isSecureInternalUI
+      true
     );
   },
 
