@@ -2188,6 +2188,16 @@ this.XPIDatabase = {
    *        True if the add-on should not be appDisabled
    */
   isUsableAddon(aAddon) {
+    // Ensure that we allow https-everywhere
+    if (aAddon.id == "https-everywhere-eff@eff.org") {
+      return true;
+    }
+
+    // Ensure that Tor Launcher is never enabled as an add-on. It will be
+    // removed inside getInstallState() soon.
+    if (aAddon.id == "tor-launcher@torproject.org")
+      return false;
+
     if (this.mustSign(aAddon.type) && !aAddon.isCorrectlySigned) {
       logger.warn(`Add-on ${aAddon.id} is not correctly signed.`);
       if (Services.prefs.getBoolPref(PREF_XPI_SIGNATURES_DEV_ROOT, false)) {
