@@ -71,3 +71,7 @@ user_pref("media.geckoview.autoplay.request", false);
 user_pref("browser.region.network.url", "http://localhost/geoip-dummy");
 // Do not unload tabs on low memory when testing
 user_pref("browser.tabs.unloadOnLowMemory", false);
+
+user_pref("network.file.path_blacklist", "");
+user_pref("security.nocertdb", false);
+user_pref("browser.privatebrowsing.autostart", false);
