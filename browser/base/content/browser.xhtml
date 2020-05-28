@@ -20,6 +20,8 @@
 <?xml-stylesheet href="chrome://browser/content/browser.css" type="text/css"?>
 <?xml-stylesheet href="chrome://browser/content/tabbrowser.css" type="text/css"?>
 <?xml-stylesheet href="chrome://browser/content/downloads/downloads.css" type="text/css"?>
+<?xml-stylesheet href="chrome://browser/content/securitylevel/securityLevelPanel.css"?>
+<?xml-stylesheet href="chrome://browser/content/securitylevel/securityLevelButton.css"?>
 <?xml-stylesheet href="chrome://browser/content/places/places.css" type="text/css"?>
 <?xml-stylesheet href="chrome://browser/content/usercontext/usercontext.css" type="text/css"?>
 <?xml-stylesheet href="chrome://browser/skin/" type="text/css"?>
@@ -29,6 +31,9 @@
 <?xml-stylesheet href="chrome://browser/skin/searchbar.css" type="text/css"?>
 <?xml-stylesheet href="chrome://browser/skin/places/tree-icons.css" type="text/css"?>
 <?xml-stylesheet href="chrome://browser/skin/places/editBookmark.css" type="text/css"?>
+<?xml-stylesheet href="chrome://torbutton/skin/tor-circuit-display.css" type="text/css"?>
+<?xml-stylesheet href="chrome://torbutton/skin/torbutton.css" type="text/css"?>
+<?xml-stylesheet href="chrome://browser/content/onionservices/onionservices.css" type="text/css"?>
 
 # All DTD information is stored in a separate file so that it can be shared by
 # hiddenWindowMac.xhtml.
@@ -70,7 +75,7 @@
         persist="screenX screenY width height sizemode"
         data-l10n-sync="true">
 <head>
-  <link rel="localization" href="branding/brand.ftl"/>
+  <link rel="localization" href="branding/tor-browser-brand.ftl"/>
   <link rel="localization" href="browser/branding/sync-brand.ftl"/>
   <link rel="localization" href="browser/branding/brandings.ftl"/>
   <link rel="localization" href="toolkit/global/textActions.ftl"/>
@@ -112,10 +117,17 @@
   Services.scriptloader.loadSubScript("chrome://browser/content/places/places-menupopup.js", this);
   Services.scriptloader.loadSubScript("chrome://browser/content/search/autocomplete-popup.js", this);
   Services.scriptloader.loadSubScript("chrome://browser/content/search/searchbar.js", this);
+  Services.scriptloader.loadSubScript("chrome://torbutton/content/tor-circuit-display.js", this);
+  Services.scriptloader.loadSubScript("chrome://torbutton/content/torbutton.js", this);
 
   window.onload = gBrowserInit.onLoad.bind(gBrowserInit);
   window.onunload = gBrowserInit.onUnload.bind(gBrowserInit);
   window.onclose = WindowIsClosing;
+
+  //onLoad Handler
+  try {
+    window.addEventListener("load", torbutton_init, false);
+  } catch (e) {}
 
   window.addEventListener("MozBeforeInitialXULLayout",
     gBrowserInit.onBeforeInitialXULLayout.bind(gBrowserInit), { once: true });
@@ -619,6 +631,8 @@
 #include ../../components/controlcenter/content/protectionsPanel.inc.xhtml
 #include ../../components/downloads/content/downloadsPanel.inc.xhtml
 #include ../../../devtools/startup/enableDevToolsPopup.inc.xhtml
+#include ../../components/securitylevel/content/securityLevelPanel.inc.xhtml
+#include ../../components/onionservices/content/authPopup.inc.xhtml
 #include browser-allTabsMenu.inc.xhtml
 
     <hbox id="downloads-animation-container">
@@ -952,6 +966,7 @@
                          data-l10n-id="urlbar-indexed-db-notification-anchor"/>
                   <image id="password-notification-icon" class="notification-anchor-icon login-icon" role="button"
                          data-l10n-id="urlbar-password-notification-anchor"/>
+#include ../../components/onionservices/content/authNotificationIcon.inc.xhtml
                   <stack id="plugins-notification-icon" class="notification-anchor-icon" role="button" align="center" data-l10n-id="urlbar-plugins-notification-anchor">
                     <image class="plugin-icon" />
                     <image id="plugin-icon-badge" />
@@ -1104,6 +1119,8 @@
             </stack>
           </toolbarbutton>
 
+#include ../../components/securitylevel/content/securityLevelButton.inc.xhtml
+
         <toolbarbutton id="library-button" class="toolbarbutton-1 chromeclass-toolbar-additional subviewbutton-nav"
                        removable="true"
                        onmousedown="PanelUI.showSubView('appMenu-libraryView', this, event);"
@@ -1250,6 +1267,16 @@
                      ondragover="newWindowButtonObserver.onDragOver(event)"
                      ondragenter="newWindowButtonObserver.onDragOver(event)"
                      ondragexit="newWindowButtonObserver.onDragExit(event)"/>
+
+      <toolbarbutton id="new-identity-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
+                     label="&torbutton.context_menu.new_identity;"
+                     oncommand="torbutton_new_identity();"
+                     tooltiptext="&torbutton.context_menu.new_identity;"/>
+
+      <toolbarbutton id="new-circuit-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
+                     label="&torbutton.context_menu.new_circuit;"
+                     oncommand="torbutton_new_circuit();"
+                     tooltiptext="&torbutton.context_menu.new_circuit;"/>
 
       <toolbarbutton id="fullscreen-button" class="toolbarbutton-1 chromeclass-toolbar-additional"
                      observes="View:FullScreen"

@@ -41,6 +41,7 @@ DIRS += [
     'fxmonitor',
     'migration',
     'newtab',
+    'onionservices',
     'originattributes',
     'places',
     'pocket',
@@ -50,12 +51,14 @@ DIRS += [
     'protocolhandler',
     'resistfingerprinting',
     'search',
+    'securitylevel',
     'sessionstore',
     'shell',
     'ssb',
     'syncedtabs',
     'uitour',
     'urlbar',
+    'torpreferences',
     'translation',
 ]
 
@@ -88,9 +91,12 @@ EXTRA_COMPONENTS += [
 ]
 
 EXTRA_JS_MODULES += [
-    'BrowserContentHandler.jsm',
     'BrowserGlue.jsm',
     'distribution.js',
+]
+
+EXTRA_PP_JS_MODULES += [
+    'BrowserContentHandler.jsm',
 ]
 
 BROWSER_CHROME_MANIFESTS += [
