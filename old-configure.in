@@ -2076,7 +2076,8 @@ dnl ========================================================
 MOZ_ARG_WITH_STRING(tor-browser-version,
 [  --with-tor-browser-version=VERSION
                           Set Tor Browser version, e.g., 7.0a1],
-    TOR_BROWSER_VERSION="$withval")
+    TOR_BROWSER_VERSION="$withval",
+    TOR_BROWSER_VERSION="dev-build")
 
 if test -z "$TOR_BROWSER_VERSION"; then
     AC_MSG_ERROR([--with-tor-browser-version is required for Tor Browser.])
@@ -2107,13 +2108,13 @@ AC_DEFINE_UNQUOTED(TOR_BROWSER_VERSION_QUOTED,"$TOR_BROWSER_VERSION")
 AC_SUBST(TOR_BROWSER_UPDATE)
 AC_SUBST(TOR_BROWSER_DATA_OUTSIDE_APP_DIR)
 
-MOZ_ARG_DISABLE_BOOL(tor-launcher,
-[  --disable-tor-launcher
-                          Do not include Tor Launcher],
-   TOR_BROWSER_DISABLE_TOR_LAUNCHER=1,
-   TOR_BROWSER_DISABLE_TOR_LAUNCHER=)
+MOZ_ARG_ENABLE_BOOL(tor-launcher,
+[  --enable-tor-launcher
+                          Include Tor Launcher],
+   _TOR_BROWSER_ENABLE_TOR_LAUNCHER=1)
 
-if test -n "$TOR_BROWSER_DISABLE_TOR_LAUNCHER"; then
+if test ! -n "$_TOR_BROWSER_ENABLE_TOR_LAUNCHER"; then
+    TOR_BROWSER_DISABLE_TOR_LAUNCHER=1
     AC_DEFINE(TOR_BROWSER_DISABLE_TOR_LAUNCHER)
 fi
 
