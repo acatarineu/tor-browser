@@ -44,12 +44,12 @@ if CONFIG['MOZ_BUILD_APP'] != 'tools/update-packaging':
         OS_LIBS += [
             'ws2_32',
         ]
-        if not DEFINES['MAR_NSS']:
+        if not CONFIG['TOR_BROWSER_UPDATE']:
             OS_LIBS += [
                 'crypt32',
                 'advapi32',
             ]
-    elif CONFIG['OS_ARCH'] == 'Darwin' and not DEFINES['MAR_NSS']:
+    elif CONFIG['OS_ARCH'] == 'Darwin' and not CONFIG['TOR_BROWSER_UPDATE']:
         OS_LIBS += [
           '-framework Security',
         ]
