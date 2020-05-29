@@ -3688,6 +3688,26 @@ nsDocShell::DisplayLoadError(nsresult aError, nsIURI* aURI,
         // HTTP/2 or HTTP/3 stack detected a protocol error
         error = "networkProtocolError";
         break;
+      case NS_ERROR_TOR_ONION_SVC_NOT_FOUND:
+      case NS_ERROR_TOR_ONION_SVC_IS_INVALID:
+      case NS_ERROR_TOR_ONION_SVC_INTRO_FAILED:
+      case NS_ERROR_TOR_ONION_SVC_REND_FAILED:
+        // For now, handle these Tor onion service errors the same as
+        // NS_ERROR_CONNECTION_REFUSED.
+        NS_ENSURE_ARG_POINTER(aURI);
+        addHostPort = true;
+        error = "connectionFailure";
+        break;
+      case NS_ERROR_TOR_ONION_SVC_BAD_CLIENT_AUTH:
+        // For now, we let this fall through but it should be handled in
+        // a special way, e.g., tell the user in our auth prompt that the
+        // key they provided was bad. This will be done as part of #30025.
+        [[fallthrough]];
+      case NS_ERROR_TOR_ONION_SVC_MISSING_CLIENT_AUTH:
+        error = "onionServices.clientAuthMissing";
+        // Display about:blank while the Tor client auth prompt is open.
+        errorPage.AssignLiteral("blank");
+        break;
 
       default:
         break;
@@ -3764,6 +3784,20 @@ nsDocShell::DisplayLoadError(nsresult aError, nsIURI* aURI,
     nsAutoString str;
     rv =
         stringBundle->FormatStringFromName(errorDescriptionID, formatStrs, str);
+    if (NS_FAILED(rv)) {
+      // As a fallback, check torbutton.properties for the error string.
+      const char bundleURL[] = "chrome://torbutton/locale/torbutton.properties";
+      nsCOMPtr<nsIStringBundleService> stringBundleService =
+          mozilla::services::GetStringBundleService();
+      if (stringBundleService) {
+        nsCOMPtr<nsIStringBundle> tbStringBundle;
+        if (NS_SUCCEEDED(stringBundleService->CreateBundle(
+                bundleURL, getter_AddRefs(tbStringBundle)))) {
+          rv = tbStringBundle->FormatStringFromName(errorDescriptionID,
+                                                    formatStrs, str);
+        }
+      }
+    }
     NS_ENSURE_SUCCESS(rv, rv);
     messageStr.Assign(str);
   }
@@ -6238,6 +6272,7 @@ nsresult nsDocShell::EndPageLoad(nsIWebProgress* aProgress,
                aStatus == NS_ERROR_NET_INADEQUATE_SECURITY ||
                aStatus == NS_ERROR_NET_HTTP2_SENT_GOAWAY ||
                aStatus == NS_ERROR_NET_HTTP3_PROTOCOL_ERROR ||
+               NS_ERROR_GET_MODULE(aStatus) == NS_ERROR_MODULE_TOR ||
                NS_ERROR_GET_MODULE(aStatus) == NS_ERROR_MODULE_SECURITY) {
       // Errors to be shown for any frame
       DisplayLoadError(aStatus, url, nullptr, aChannel);
@@ -7508,11 +7543,71 @@ nsresult nsDocShell::CreateContentViewer(const nsACString& aContentType,
     aOpenedChannel->GetURI(getter_AddRefs(mLoadingURI));
   }
   FirePageHideNotification(!mSavingOldViewer);
+
   if (mIsBeingDestroyed) {
     // Force to stop the newly created orphaned viewer.
     viewer->Stop();
     return NS_ERROR_DOCSHELL_DYING;
   }
+
+  // Tor bug 16620: Clear window.name of top-level documents if
+  // there is no referrer. We make an exception for new windows,
+  // e.g., window.open(url, "MyName").
+  bool isNewWindowTarget = false;
+  nsCOMPtr<nsIPropertyBag2> props(do_QueryInterface(aRequest, &rv));
+  if (props) {
+    props->GetPropertyAsBool(NS_LITERAL_STRING("docshell.newWindowTarget"),
+                             &isNewWindowTarget);
+  }
+
+  if (!isNewWindowTarget) {
+    nsCOMPtr<nsIHttpChannel> httpChannel(do_QueryInterface(aOpenedChannel));
+    nsCOMPtr<nsIURI> httpReferrer;
+    if (httpChannel) {
+      nsCOMPtr<nsIReferrerInfo> referrerInfo;
+      rv = httpChannel->GetReferrerInfo(getter_AddRefs(referrerInfo));
+      NS_ENSURE_SUCCESS(rv, rv);
+      if (referrerInfo) {
+        // We want GetComputedReferrer() instead of GetOriginalReferrer(), since
+        // the former takes into consideration referrer policy, protocol
+        // whitelisting...
+        httpReferrer = referrerInfo->GetComputedReferrer();
+      }
+    }
+
+    bool isTopFrame = mBrowsingContext->IsTop();
+
+#ifdef DEBUG_WINDOW_NAME
+    printf("DOCSHELL %p CreateContentViewer - possibly clearing window.name:\n",
+           this);
+    printf("  current window.name: \"%s\"\n",
+           NS_ConvertUTF16toUTF8(mName).get());
+
+    nsAutoCString curSpec, loadingSpec;
+    if (this->mCurrentURI) mCurrentURI->GetSpec(curSpec);
+    if (mLoadingURI) mLoadingURI->GetSpec(loadingSpec);
+    printf("  current URI: %s\n", curSpec.get());
+    printf("  loading URI: %s\n", loadingSpec.get());
+    printf("  is top document: %s\n", isTopFrame ? "Yes" : "No");
+
+    if (!httpReferrer) {
+      printf("  referrer: None\n");
+    } else {
+      nsAutoCString refSpec;
+      httpReferrer->GetSpec(refSpec);
+      printf("  referrer: %s\n", refSpec.get());
+    }
+#endif
+
+    bool clearName = isTopFrame && !httpReferrer;
+    if (clearName) SetName(NS_LITERAL_STRING(""));
+
+#ifdef DEBUG_WINDOW_NAME
+    printf("  action taken: %s window.name\n",
+           clearName ? "Cleared" : "Preserved");
+#endif
+  }
+
   mLoadingURI = nullptr;
 
   // Set mFiredUnloadEvent = false so that the unload handler for the
@@ -7727,6 +7822,33 @@ nsresult nsDocShell::CreateContentViewer(const nsACString& aContentType,
     uint32_t locationFlags =
         (mLoadType & LOAD_CMD_RELOAD) ? uint32_t(LOCATION_CHANGE_RELOAD) : 0;
     FireOnLocationChange(this, aRequest, mCurrentURI, locationFlags);
+  }
+
+  // Arrange to show a Tor onion service client authentication prompt if
+  // appropriate.
+  if ((mLoadType == LOAD_ERROR_PAGE) && failedChannel) {
+    nsresult status = NS_OK;
+    if (NS_SUCCEEDED(failedChannel->GetStatus(&status)) &&
+        ((status == NS_ERROR_TOR_ONION_SVC_MISSING_CLIENT_AUTH) ||
+         (status == NS_ERROR_TOR_ONION_SVC_BAD_CLIENT_AUTH))) {
+      nsAutoCString onionHost;
+      failedURI->GetHost(onionHost);
+      if (XRE_IsContentProcess()) {
+        nsCOMPtr<nsIBrowserChild> browserChild = GetBrowserChild();
+        if (browserChild) {
+          static_cast<BrowserChild*>(browserChild.get())
+              ->SendShowOnionServicesAuthPrompt(onionHost);
+        }
+      } else {
+        nsCOMPtr<nsPIDOMWindowOuter> browserWin = GetWindow();
+        nsCOMPtr<nsIObserverService> obsSvc = services::GetObserverService();
+        if (browserWin && obsSvc) {
+          const char* topic = "tor-onion-services-auth-prompt";
+          obsSvc->NotifyObservers(browserWin, topic,
+                                  NS_ConvertUTF8toUTF16(onionHost).get());
+        }
+      }
+    }
   }
 
   return NS_OK;
