@@ -217,6 +217,16 @@ XPCOMUtils.defineLazyScriptGetter(
 );
 XPCOMUtils.defineLazyScriptGetter(
   this,
+  ["SecurityLevelButton"],
+  "chrome://browser/content/securitylevel/securityLevel.js"
+);
+XPCOMUtils.defineLazyScriptGetter(
+  this,
+  ["OnionAuthPrompt"],
+  "chrome://browser/content/onionservices/authPrompt.js"
+);
+XPCOMUtils.defineLazyScriptGetter(
+  this,
   "gEditItemOverlay",
   "chrome://browser/content/places/editBookmark.js"
 );
@@ -614,6 +624,7 @@ var gPageIcons = {
 };
 
 var gInitialPages = [
+  "about:tor",
   "about:blank",
   "about:newtab",
   "about:home",
@@ -623,6 +634,10 @@ var gInitialPages = [
   "about:welcome",
   "about:newinstall",
 ];
+
+if (AppConstants.TOR_BROWSER_UPDATE) {
+  gInitialPages.push("about:tbupdate");
+}
 
 function isInitialPage(url) {
   if (!(url instanceof Ci.nsIURI)) {
@@ -920,7 +935,7 @@ const gStoragePressureObserver = {
     }
     this._lastNotificationTime = Date.now();
 
-    MozXULElement.insertFTLIfNeeded("branding/brand.ftl");
+    MozXULElement.insertFTLIfNeeded("branding/tor-browser-brand.ftl");
     MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
 
     const BYTES_IN_GIGABYTE = 1073741824;
@@ -1850,6 +1865,12 @@ var gBrowserInit = {
     // doesn't flicker as the window is being shown.
     DownloadsButton.init();
 
+    // Init the SecuritySettingsButton
+    SecurityLevelButton.init();
+
+    // Init the OnionAuthPrompt
+    OnionAuthPrompt.init();
+
     // Certain kinds of automigration rely on this notification to complete
     // their tasks BEFORE the browser window is shown. SessionStore uses it to
     // restore tabs into windows AFTER important parts like gMultiProcessBrowser
@@ -2457,6 +2478,10 @@ var gBrowserInit = {
     SidebarUI.uninit();
 
     DownloadsButton.uninit();
+
+    SecurityLevelButton.uninit();
+
+    OnionAuthPrompt.uninit();
 
     gAccessibilityServiceIndicator.uninit();
 
