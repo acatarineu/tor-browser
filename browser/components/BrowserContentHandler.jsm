@@ -48,6 +48,8 @@ XPCOMUtils.defineLazyGlobalGetters(this, [URL]);
 
 const NEWINSTALL_PAGE = "about:newinstall";
 
+const kTBSavedVersionPref = "browser.startup.homepage_override.torbrowser.version";
+
 // One-time startup homepage override configurations
 const ONCE_DOMAINS = ["mozilla.org", "firefox.com"];
 const ONCE_PREF = "browser.startup.homepage_override.once";
@@ -117,7 +119,8 @@ const OVERRIDE_ALTERNATE_PROFILE = 4;
  * Returns:
  *  OVERRIDE_NEW_PROFILE if this is the first run with a new profile.
  *  OVERRIDE_NEW_MSTONE if this is the first run with a build with a different
- *                      Gecko milestone (i.e. right after an upgrade).
+ *                      Gecko milestone or Tor Browser version (i.e. right
+ *                      after an upgrade).
  *  OVERRIDE_NEW_BUILD_ID if this is the first run with a new build ID of the
  *                        same Gecko milestone (i.e. after a nightly upgrade).
  *  OVERRIDE_NONE otherwise.
@@ -140,6 +143,11 @@ function needHomepageOverride(prefb) {
 
   var mstone = Services.appinfo.platformVersion;
 
+  var savedTBVersion = null;
+  try {
+    savedTBVersion = prefb.getCharPref(kTBSavedVersionPref);
+  } catch (e) {}
+
   var savedBuildID = prefb.getCharPref(
     "browser.startup.homepage_override.buildID",
     ""
@@ -158,7 +166,22 @@ function needHomepageOverride(prefb) {
 
     prefb.setCharPref("browser.startup.homepage_override.mstone", mstone);
     prefb.setCharPref("browser.startup.homepage_override.buildID", buildID);
-    return savedmstone ? OVERRIDE_NEW_MSTONE : OVERRIDE_NEW_PROFILE;
+    prefb.setCharPref(kTBSavedVersionPref, AppConstants.TOR_BROWSER_VERSION);
+
+    // After an upgrade from an older release of Tor Browser (<= 5.5a1), the
+    // savedmstone will be undefined because those releases included the
+    // value "ignore" for the browser.startup.homepage_override.mstone pref.
+    // To correctly detect an upgrade vs. a new profile, we check for the
+    // presence of the "app.update.postupdate" pref.
+    let updated = prefb.prefHasUserValue("app.update.postupdate");
+    return (savedmstone || updated) ? OVERRIDE_NEW_MSTONE
+                                    : OVERRIDE_NEW_PROFILE;
+  }
+
+  if (AppConstants.TOR_BROWSER_VERSION != savedTBVersion) {
+    prefb.setCharPref("browser.startup.homepage_override.buildID", buildID);
+    prefb.setCharPref(kTBSavedVersionPref, AppConstants.TOR_BROWSER_VERSION);
+    return OVERRIDE_NEW_MSTONE;
   }
 
   if (buildID != savedBuildID) {
@@ -639,6 +662,23 @@ nsBrowserContentHandler.prototype = {
       }
     }
 
+    // Retrieve the home page early so we can compare it against about:tor
+    // to decide whether or not we need an override page (second tab) after
+    // an update was applied.
+    var startPage = "";
+    try {
+      var choice = prefb.getIntPref("browser.startup.page");
+      if (choice == 1 || choice == 3) {
+        startPage = HomePage.get();
+      }
+    } catch (e) {
+      Cu.reportError(e);
+    }
+
+    if (startPage == "about:blank") {
+      startPage = "";
+    }
+
     var override;
     var overridePage = "";
     var additionalPage = "";
@@ -657,6 +697,13 @@ nsBrowserContentHandler.prototype = {
         "browser.startup.homepage_override.buildID",
         "unknown"
       );
+
+      // We do the same for the Tor Browser version.
+      let old_tbversion = null;
+      try {
+        old_tbversion = prefb.getCharPref(kTBSavedVersionPref);
+      } catch (e) {}
+
       override = needHomepageOverride(prefb);
       if (override != OVERRIDE_NONE) {
         switch (override) {
@@ -683,6 +730,16 @@ nsBrowserContentHandler.prototype = {
             // into account because that requires waiting for the session file
             // to be read. If a crash occurs after updating, before restarting,
             // we may open the startPage in addition to restoring the session.
+            //
+            // Tor Browser: Instead of opening the post-update "override page"
+            // directly, we ensure that about:tor will be opened in a special
+            // mode that notifies the user that their browser was updated.
+            // The about:tor page will provide a link to the override page
+            // where the user can learn more about the update, as well as a
+            // link to the Tor Browser changelog page (about:tbupdate). The
+            // override page URL comes from the openURL attribute within the
+            // updates.xml file or, if no showURL action is present, from the
+            // startup.homepage_override_url pref.
             willRestoreSession = SessionStartup.isAutomaticRestoreEnabled();
 
             overridePage = Services.urlFormatter.formatURLPref(
@@ -699,6 +756,22 @@ nsBrowserContentHandler.prototype = {
             }
 
             overridePage = overridePage.replace("%OLD_VERSION%", old_mstone);
+            overridePage = overridePage.replace("%OLD_TOR_BROWSER_VERSION%",
+                                                old_tbversion);
+#ifdef TOR_BROWSER_UPDATE
+            if (overridePage)
+            {
+              prefb.setCharPref("torbrowser.post_update.url", overridePage);
+              prefb.setBoolPref("torbrowser.post_update.shouldNotify", true);
+              // If the user's homepage is about:tor, we will inform them
+              // about the update on that page; otherwise, we arrange to
+              // open about:tor in a secondary tab.
+              if (startPage === "about:tor")
+                overridePage = "";
+              else
+                overridePage = "about:tor";
+            }
+#endif
             break;
           case OVERRIDE_NEW_BUILD_ID:
             if (UpdateManager.activeUpdate) {
@@ -769,20 +842,6 @@ nsBrowserContentHandler.prototype = {
       } else {
         overridePage = additionalPage;
       }
-    }
-
-    var startPage = "";
-    try {
-      var choice = prefb.getIntPref("browser.startup.page");
-      if (choice == 1 || choice == 3) {
-        startPage = HomePage.get();
-      }
-    } catch (e) {
-      Cu.reportError(e);
-    }
-
-    if (startPage == "about:blank") {
-      startPage = "";
     }
 
     let skipStartPage =
