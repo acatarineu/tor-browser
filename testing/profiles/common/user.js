@@ -69,3 +69,12 @@ user_pref("toolkit.telemetry.coverage.endpoint.base", "http://localhost");
 user_pref("media.geckoview.autoplay.request", false);
 // user_pref("geo.provider.network.url", "http://localhost/geoip-dummy");
 user_pref("geo.provider-country.network.url", "http://localhost/geoip-dummy");
+
+// Without this, SpecialPowers fails with NS_ERROR_FILE_ACCESS_DENIED
+user_pref("network.file.path_blacklist", "");
+// Disable torbutton domain isolator.
+user_pref("extensions.torbutton.use_nontor_proxy", true);
+// See #18087
+user_pref("security.nocertdb", false);
+// Needed so that torbutton doesn't reset nocertdb
+user_pref("browser.privatebrowsing.autostart", false);
