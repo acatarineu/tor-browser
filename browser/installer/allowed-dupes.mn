@@ -99,3 +99,11 @@ browser/chrome/browser/res/activity-stream/data/content/tippytop/favicons/duckdu
 browser/chrome/browser/search-extensions/ddg/favicon.ico
 browser/chrome/browser/res/activity-stream/data/content/tippytop/favicons/google-com.ico
 browser/chrome/browser/search-extensions/google/favicon.ico
+
+# Tor Browser duplicates (needs review)
+browser/chrome/browser/content/browser/torpreferences/torPreferencesIcon.svg
+browser/chrome/devtools/skin/images/aboutdebugging-firefox-logo.svg
+browser/chrome/devtools/skin/images/aboutdebugging-firefox-aurora.svg
+browser/chrome/devtools/skin/images/aboutdebugging-firefox-beta.svg
+browser/chrome/devtools/skin/images/aboutdebugging-firefox-nightly.svg
+browser/chrome/devtools/skin/images/aboutdebugging-firefox-release.svg
