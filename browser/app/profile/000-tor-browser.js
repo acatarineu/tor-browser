@@ -152,6 +152,7 @@ pref("network.proxy.no_proxies_on", ""); // For fingerprinting and local service
 pref("network.proxy.allow_hijacking_localhost", true); // Allow proxies for localhost (#31065)
 pref("network.proxy.type", 1);
 pref("network.security.ports.banned", "9050,9051,9150,9151");
+pref("network.dns.disabled", true);
 pref("network.dns.disablePrefetch", true);
 pref("network.protocol-handler.external-default", false);
 pref("network.protocol-handler.external.mailto", false);
@@ -598,3 +599,5 @@ pref("font.name.serif.zh-HK", "Noto Sans TC Regular");
 pref("font.name.serif.zh-TW", "Noto Sans TC Regular");
 #endif
 #endif
+
+pref("browser.search.modernConfig", false);
