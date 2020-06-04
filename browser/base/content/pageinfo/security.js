@@ -78,6 +78,7 @@ var security = {
         Ci.nsIWebProgressListener.STATE_LOADED_MIXED_DISPLAY_CONTENT);
     var isEV = ui.state & Ci.nsIWebProgressListener.STATE_IDENTITY_EV_TOPLEVEL;
     var isOnion = false;
+    const hostName = this.windowInfo.hostName;
     if (hostName && hostName.endsWith(".onion")) {
       isOnion = true;
     }
