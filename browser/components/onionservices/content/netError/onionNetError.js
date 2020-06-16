@@ -67,8 +67,7 @@ var OnionServicesAboutNetError = {
     if (ld) {
       if (longDescription) {
         const hexErr = this._hexErrorFromName(errName);
-        // eslint-disable-next-line no-unsanitized/property
-        ld.innerHTML = longDescription.replace("%S", hexErr);
+        ld.textContent = longDescription.replace("%S", hexErr);
       } else {
         // This onion service error does not have a long description. Since
         // it is set to a generic error string by the code in
