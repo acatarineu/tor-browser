@@ -74,13 +74,7 @@ class SidebarSearchParent extends JSWindowActorParent {
     }
 
     Services.search
-      .addEngine(
-        engineURL.spec,
-        iconURL ? iconURL.spec : null,
-        true,
-        null,
-        browser.contentPrincipal
-      )
+      .addEngine(engineURL.spec, iconURL ? iconURL.spec : null, true)
       .catch(ex =>
         Cu.reportError(
           "Unable to add search engine to the search service: " + ex
