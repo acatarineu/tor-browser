@@ -258,6 +258,8 @@ pref("browser.uiCustomization.state", "{\"placements\":{\"widget-overflow-fixed-
 pref("browser.search.defaultenginename", "data:text/plain,browser.search.defaultenginename=DuckDuckGo");
 // Make sure we use the same search engine regardless of locale
 pref("browser.search.geoSpecificDefaults", false);
+// Use old search config based on list.json
+pref("browser.search.modernConfig", false);
 
 // Search engine order (order displayed in the search bar dropdown)
 // Somewhat surprisingly we get some random behavior if we specify more than
