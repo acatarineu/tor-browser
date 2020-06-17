@@ -148,13 +148,13 @@ var SearchUtils = {
    * @returns {nsIChannel}
    *   an nsIChannel object, or null if the url is invalid.
    */
-  makeChannel(url, principal) {
+  makeChannel(url) {
     try {
       let uri = typeof url == "string" ? Services.io.newURI(url) : url;
       return Services.io.newChannelFromURI(
         uri,
         null /* loadingNode */,
-        principal || Services.scriptSecurityManager.getSystemPrincipal(),
+        Services.scriptSecurityManager.getSystemPrincipal(),
         null /* triggeringPrincipal */,
         Ci.nsILoadInfo.SEC_ALLOW_CROSS_ORIGIN_DATA_IS_NULL,
         Ci.nsIContentPolicy.TYPE_OTHER
